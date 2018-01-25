@@ -18,16 +18,30 @@ public class ConsoleUI {
 	}
 	
 	public void welcome() {
-		System.out.println("Welcome to Sudoku!");
+		out.println("Welcome to Sudoku!");
 	}
 	
+	//R1
 	public int askSize() {
+		Scanner size = new Scanner(System.in);
+		out.print("What size do you want?");
+		int boardSize = size.nextInt();
+		return boardSize;
 		//FIXME: test this
-		return 0;
+		//return 0;
+	}
+	
+	public void printBoard() {
+		
 	}
 
-	public void showMessage(String string) {
-		out.println("Solved!");
+	public void showSolvedMessage(String string) {
+		out.println(string);
+	}
+	
+	public void showExitMessage(String string) {
+		out.println("You selected 'r'.\n"
+				+ "Game over."));
 	}
 
 }
