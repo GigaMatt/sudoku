@@ -9,7 +9,6 @@
  */
 
 package edu.utep.cs.cs3331.sudoku;
-
 import java.util.*;
 
 public class Main {
@@ -18,7 +17,7 @@ public class Main {
 	private static Scanner userInput;
 
 	public static void main(String[] args) {
-		new Main().play();		
+		play();		
 	}
 
 	private static void play() {
@@ -26,11 +25,14 @@ public class Main {
 
 		//R1: Board supports size 4x4 && 9x9
 		int size = ui.askSize();
-		board = new Board(size);
-
-
+		board = new Board(size);	//creates the backend board
 		userInput = new Scanner(System.in);
 		while(!board.isSolved()) {
+			ui.playGame(size);
+			
+			//print board as-is
+			
+			
 			//Do something
 		}
 	}
