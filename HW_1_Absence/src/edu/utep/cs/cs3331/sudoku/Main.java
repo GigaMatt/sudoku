@@ -23,17 +23,12 @@ public class Main {
 	private static void play() {
 		ui.welcome();
 
-		//R1: Board supports size 4x4 && 9x9
-		int size = ui.askSize();
-		board = new Board(size);	//creates the backend board
+		
+		int size = ui.askSize();	//R1: Board supports size 4x4 && 9x9
+		board = new Board(size);	//creates the backend board && will print the empty board
 		userInput = new Scanner(System.in);
 		while(!board.isSolved()) {
-			ui.playGame(size);
-			
-			//print board as-is
-			
-			
-			//Do something
+			ui.playGame(board, size);						
 		}
 	}
 }
