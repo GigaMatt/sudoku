@@ -9,6 +9,7 @@
  */
 
 package edu.utep.cs.cs3331.sudoku;
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
@@ -16,19 +17,21 @@ public class Main {
 	private static Board board;
 	private static Scanner userInput;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException{
 		play();		
 	}
 
 	private static void play() {
 		ui.welcome();
-
-		
-		int size = ui.askSize();	//R1: Board supports size 4x4 && 9x9
-		board = new Board(size);	//creates the backend board && will print the empty board
+		int size = ui.askSize();
+		board = new Board(size);
+		//FIXME: DO NOT UNCOMMENT THIS OR ELSE
+		//ui.printBoard(size);
 		userInput = new Scanner(System.in);
 		while(!board.isSolved()) {
 			ui.playGame(board, size);						
 		}
+		if(board.isSolved())
+			System.out.println("Thank you for playing.");
 	}
 }

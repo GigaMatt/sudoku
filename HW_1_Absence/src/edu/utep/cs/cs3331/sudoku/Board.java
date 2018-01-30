@@ -11,10 +11,11 @@ package edu.utep.cs.cs3331.sudoku;
 
 import java.util.Random;
 
-public class Board {
-	public int[][] array;
+public class Board extends ConsoleUI {
+	private static int[][] array;
+	private static ConsoleUI ui = new ConsoleUI();
 	private int size;
-	//public boolean isSolved;
+	private static boolean bool;
 
 	public Board() {
 		this(4);	//creates a 4x4 board
@@ -30,23 +31,21 @@ public class Board {
 	}
 		
 	
-	public int[][] editBoard(int size, int x, int y, int value) {
-		
-		array[x-1][y-1] = value;
-		
-		//return to the console UI to print
-		return array;
+	public static void editBoard(int size, int x, int y, int value) {
+		array[x][y] = value;
+		ui.printBoard(size, array);	
 	}
 
-
-	//print the board happens in console UI
-	//public void printBoard(int size, int[][] array) {	
-	//}
 	
 	//FIXME: 
 	private static Random rand = new Random();
 
-	public boolean isSolved() {
-		return rand.nextBoolean();
+	public static void setIsSolved(boolean sentinal) {
+		bool = sentinal;
+	}
+	
+	public static boolean isSolved() {
+		return bool;
+		//return rand.nextBoolean();
 	}
 }

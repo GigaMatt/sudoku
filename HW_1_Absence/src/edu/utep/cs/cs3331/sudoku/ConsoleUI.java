@@ -9,7 +9,7 @@
  */
 package edu.utep.cs.cs3331.sudoku;
 import java.util.*;
-
+///////////////////////////./////////////////////////////////////////////////
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -22,12 +22,13 @@ public class ConsoleUI {
 	private Scanner size;
 
 	public ConsoleUI() {
-		this(System.in, System.out);
+		in = System.in;
+		out = System.out;
 	}
 
 	public ConsoleUI(InputStream in, PrintStream out) {
-		in = System.in;
-		out = System.out;
+		this.in = in;
+		this.out = out;
 	}
 
 	public void welcome() {
@@ -43,10 +44,10 @@ public class ConsoleUI {
 		out.print("What board size do you want?\n"
 				+ "Enter '4' or '9'");
 		int boardSize = size.nextInt();
-		if (boardSize != 4 || boardSize != 9) {
+		if (boardSize != 4 && boardSize != 9) {
 			out.println("Incorrect size.");
 			askSize();
-		}	
+		}
 
 		//return boardSize to the main
 		//main will then call the board to be built
@@ -59,141 +60,121 @@ public class ConsoleUI {
 
 		//STEP 2: Have user select x,y and value, then add value (pass through real values to backendView)
 		input=new Scanner(System.in);
+		int x_coordinate=0, y_coordinate=0, value=0;
 
 		/********************************************************************
-		 ************************GET THE X-COORDINATE*************************
-		 ********************************************************************/		out.println("Select the coordinate you'd like to edit or enter '0 or a negative number' to terminate.\nLet's begin with the X-Value:");
-		 int x_coordinate = input.nextInt();
-		 if(x_coordinate < 1)
-			 showExitMessage();
-		 while(x_coordinate > size) {
-			 out.println("Invalid input.\nPlease enter numbers between 1 & "+size+" or enter '0' or a negative number to terminate.");
-			 x_coordinate = input.nextInt();
-			 if(x_coordinate < 1)
-				 showExitMessage();
-			 if(x_coordinate>0 && x_coordinate<=size) {
-				 break;
-			 }
+		 ************************GET THE X-COORDINATE************************
+		 ********************************************************************/		
+		out.println("Select the coordinate you'd like to edit or enter '0 or a negative number' to terminate.\nLet's begin with the X-Value:");
+		x_coordinate = input.nextInt();
+		if(x_coordinate < 1) {
+			showExitMessage();
+			Board.setIsSolved(true);
+		}
+		while(x_coordinate > size) {
+			out.println("Invalid input.\nPlease enter numbers between 1 & "+size+" or enter '0' or a negative number to terminate.");
+			x_coordinate = input.nextInt();
+			if(x_coordinate < 1)
+				showExitMessage();
+			if(x_coordinate>0 && x_coordinate<=size) {
+				break;
+			}
 
-			 if(x_coordinate > size || x_coordinate < 0) {
-				 out.println("Invalid input.\nPlease enter numbers between 1 & "+size+".");
-				 playGame(board, size);
-			 }
+			if(x_coordinate > size || x_coordinate < 0) {
+				out.println("Invalid input.\nPlease enter numbers between 1 & "+size+".");
+				playGame(board, size);
+			}
+		}
 
-			 /********************************************************************
-			  ************************GET THE Y-COORDINATE*************************
-			  ********************************************************************/
-			 out.println("Great! You chose "+x_coordinate+". Now, for the Y-Value. Select the coordinate you'd like to edit or enter '0' or a negative number to terminate.");
-			 int y_coordinate = input.nextInt();
-			 if(y_coordinate <1)
-				 showExitMessage();
-			 while(y_coordinate > size) {		//if an invalid number is entered
-				 out.println("Invalid input.\nPlease enter numbers between 1 & "+size+" or enter '0' or a negative number to terminate.");
-				 y_coordinate = input.nextInt();
-				 if(y_coordinate < 1)
-					 showExitMessage();
-				 if(y_coordinate>0 && y_coordinate<=size)
-					 break;
-			 }
+		/********************************************************************
+		 ************************GET THE Y-COORDINATE************************
+		 ********************************************************************/
+		if(!Board.isSolved()) {
+			out.println("Great! You chose "+x_coordinate+". Now, for the Y-Value. Select the coordinate you'd like to edit or enter '0' or a negative number to terminate.");
+			y_coordinate = input.nextInt();
+			if(y_coordinate <1)
+				showExitMessage();
+			while(y_coordinate > size) {		//if an invalid number is entered
+				out.println("Invalid input.\nPlease enter numbers between 1 & "+size+" or enter '0' or a negative number to terminate.");
+				y_coordinate = input.nextInt();
+				if(y_coordinate < 1)
+					showExitMessage();
+				if(y_coordinate>0 && y_coordinate<=size)
+					break;
+			}
+		}
 
-			 /********************************************************************
-			  ********************GET THE COORDINATE VALUE*************************
-			  ********************************************************************/		
-			 out.println("Enter the value you wish to put in or enter '0' or a negative number to terminate.");
-			 int value = input.nextInt();
-			 if(value <1)
-				 showExitMessage();
-			 while(value > size) {		//if an invalid number is entered
-				 out.println("Invalid input.\nPlease enter numbers between 1 & "+size+" or enter '0' or a negative number to terminate.");
-				 y_coordinate = input.nextInt();
-				 if(value < 1)
-					 showExitMessage();
-				 if(value>0 && value<=size)
-					 break;
-			 }
-			 /********************************************************************
-			  **************************EDIT THE BOARD****************************
-			  ********************************************************************/	
-			 //Edit the board with the new information
-			 int[][] backendSudoku = board.editBoard(size, x_coordinate, y_coordinate, value);
-			 
-			 /********************************************************************
-			  *************************PRINT THE BOARD****************************
-			  ********************************************************************/	
-			 //STEP 3: Print the new board
-			 printBoard(size, backendSudoku);
-		 }
+		/********************************************************************
+		 ********************GET THE COORDINATE VALUE************************
+		 ********************************************************************/		
+		if(!Board.isSolved()) {
+			out.println("Enter the value you wish to put in or enter '0' or a negative number to terminate.");
+			value = input.nextInt();
+			if(value <1) {
+				showExitMessage();
+				//board.isSolved(true);
+			}
 
-		 //board.editBoard(size, x_coordinate, y_coordinate, value);
-		 //printBoard will be called from board class
+			while(value > size) {		//if an invalid number is entered
+				out.println("Invalid input.\nPlease enter numbers between 1 & "+size+" or enter '0' or a negative number to terminate.");
+				value = input.nextInt();
+				if(value < 1)
+					showExitMessage();
+				if(value>0 && value<=size)
+					break;
+			}
+		}
+		/********************************************************************
+		 ***************** ****EDIT + PRINT THE BOARD************************
+		 ********************************************************************/	
+		Board.editBoard(size, x_coordinate, y_coordinate, value);
+
+
+		/********************************************************************
+		 *************************PRINT THE BOARD****************************
+		 ********************************************************************/	
 	}
-	
-	 /********************************************************************
-	  ***********************PLAYING THE GAME ENDS************************
-	  ********************************************************************/	
 
-	/**
-	 * Initial size of the board
-	 * @param size
-	 */
+	//PLAYING THE GAME ENDS	
+
+
+	/********************************************************************
+	 ********************PRINT INITAL EMPTY BOARD************************
+	 ********************************************************************/
 	public void printBoard(int size){
 		if(size==4) {
-			String[][] array = new String[(size*2)+1][(size*2+1)];
-			for(int i=0; i<array.length; i++) {
-				for(int j=0; j<array[i].length; j++) {
-					if(i%2==0) {
-						if(j%2!=0)		//if j is odd
-							array[i][j] = "---"; //7 IFF using tab
-						if(i==size)
-							array[i][j] = "===";	//7 IFF using tab
-						if(j%2==0)		//if j is even
-							array[i][j] = "+";
-						if(j==size)
-							array[i][j] = "*";
-					}
-					if(i%2!=0) {
-						if(j%2!=0)		//if j is odd
-							array[i][j] = "   ";
-						if(j%2==0)		//if j is even
-							array[i][j] = "|";
-						if(j==size)
-							array[i][j] = "!";
-					}
-				}
-			}
+			out.println("+---+---+---+---+");
+			out.println("|   |   !   |   |");
+			out.println("+---+---*---+---+");
+			out.println("|   |   !   |   |");
+			out.println("+===+===*===+===+");
+			out.println("|   |   !   |   |");
+			out.println("+---+---*---+---+");
+			out.println("|   |   !   |   |");
+			out.println("+---+---+---+---+");
+		}
+		else if(size==9) {
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("|   |   |   !   |   |   !   |   |   |");
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("|   |   |   !   |   |   !   |   |   |");
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("|   |   |   !   |   |   !   |   |   |");
+			out.println("+===+===+===*===+===+===*===+===+===+");
+			out.println("|   |   |   !   |   |   !   |   |   |");
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("|   |   |   !   |   |   !   |   |   |");
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("|   |   |   !   |   |   !   |   |   |");
+			out.println("+===+===+===*===+===+===*===+===+===+");
+			out.println("|   |   |   !   |   |   !   |   |   |");
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("|   |   |   !   |   |   !   |   |   |");
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("|   |   |   !   |   |   !   |   |   |");
+			out.println("+---+---+---*---+---+---*---+---+---+");
 		}
 
-		//if(size==9)
-		else{
-			int[][] array = new int[(size*2)+1][size];
-			for(int i=0; i<array.length; i++) {
-				for(int j=0; j<array[i].length; j++) {
-					if(size==9)
-						if(i%2==0) {
-							if((i == 6) || (i == 12))
-								if(j == 3 || j==6)
-									System.out.print("*===");
-								else 
-									System.out.print("+===");
-							else if(i+4 != Math.sqrt(size))
-								if(j == 3 || j==6)
-									System.out.print("*---");
-								else 
-									System.out.print("+---");
-						}
-						else {
-							if((j==3 || j==6))
-								System.out.print("!   ");
-							else
-								System.out.print("|   ");
-						}
-				}
-				if(i%2==0)
-					System.out.println("+");
-				else
-					System.out.println("|");
-			}
-		}
 	}
 
 
@@ -202,80 +183,60 @@ public class ConsoleUI {
 	 * @param size
 	 * @param backendSudoku
 	 */
-	public void printBoard(int size, int[][] backendSudoku) {
+	public void printBoard(int size, int[][] array) {
 		if(size==4) {
-			String[][] array = new String[(size*2)+1][(size*2+1)];
-			for(int i=0; i<array.length; i++) {
-				for(int j=0; j<array[i].length; j++) {
-					if(i%2==0) {
-						if(j%2!=0)		//if j is odd
-							array[i][j] = "---"; //7 IFF using tab
-						if(i==size)
-							array[i][j] = "===";	//7 IFF using tab
-						if(j%2==0)		//if j is even
-							array[i][j] = "+";
-						if(j==size)
-							array[i][j] = "*";
-					}
-					if(i%2!=0) {
-						if(j%2!=0)		//if j is odd
-							array[i][j] = "   ";
-						if(j%2==0)		//if j is even
-							array[i][j] = "|";
-						if(j==size)
-							array[i][j] = "!";
-					}
-				}
-			}
-			//Fill in the bad String board with out info from the backend board
-			for(int i=0; i<backendSudoku.length; i++) {
-				for(int j=0; j<backendSudoku[i].length; j++) {
-					if(backendSudoku[i][j] > 0)
-						array[(2*i)+1][(2*j)+1] = " "+backendSudoku[i][j]+" ";
-				}
-			}
+			out.println("+---+---+---+---+");
+			out.println("| "+array[0][0]+" | "+array[0][1]+ " ! "+array[0][2]+" | "+array[0][3]+" |  ");
+			out.println("+---+---*---+---+");
+			out.println("| "+array[1][0]+" | "+array[1][1]+ " ! "+array[1][2]+" | "+array[1][3]+" |  ");
+			out.println("+===+===*===+===+");
+			out.println("| "+array[2][0]+" | "+array[2][1]+ " ! "+array[2][2]+" | "+array[2][3]+" |  ");
+			out.println("+---+---*---+---+");
+			out.println("| "+array[3][0]+" | "+array[3][1]+ " ! "+array[3][2]+" | "+array[3][3]+" |  ");
+			out.println("+---+---+---+---+");
+
 		}
 
-		//if(size==9)
-		else{
-			int[][] array = new int[(size*2)+1][size];
-			for(int i=0; i<array.length; i++) {
-				for(int j=0; j<array[i].length; j++) {
-					if(size==9)
-						if(i%2==0) {
-							if((i == 6) || (i == 12))
-								if(j == 3 || j==6)
-									System.out.print("*===");
-								else 
-									System.out.print("+===");
-							else if(i+4 != Math.sqrt(size))
-								if(j == 3 || j==6)
-									System.out.print("*---");
-								else 
-									System.out.print("+---");
-						}
-						else {
-							if((j==3 || j==6))
-								System.out.print("!   ");
-							else
-								System.out.print("|   ");
-						}
-
-				}
-				if(i%2==0)
-					System.out.println("+");
-				else
-					System.out.println("|");
-			}
-			//Fill in the bad integer board with out info from the backend board
-			for(int i=0; i<backendSudoku.length; i++) {
-				for(int j=0; j<backendSudoku[i].length; j++) {
-					if(backendSudoku[i][j] > 0)
-						array[(2*i)+1][(2*j)+1] = backendSudoku[i][j];
-				}
-			}
+		if(size==9) {
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("| "+array[0][0]+" | "+array[0][1]+" | "+array[0][2]+" ! "
+					+ ""+array[0][3]+" |"+array[0][4]+" | "+array[0][5]+" ! "
+					+ ""+array[0][6]+" | "+array[0][7]+" |"+array[0][8]+" |");
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("| "+array[1][0]+" | "+array[1][1]+" | "+array[1][2]+" ! "
+					+ ""+array[1][3]+" |"+array[1][4]+" | "+array[1][5]+" ! "
+					+ ""+array[1][6]+" | "+array[1][7]+" |"+array[1][8]+" |");			
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("| "+array[2][0]+" | "+array[2][1]+" | "+array[2][2]+" ! "
+					+ ""+array[2][3]+" |"+array[2][4]+" | "+array[2][5]+" ! "
+					+ ""+array[2][6]+" | "+array[2][7]+" |"+array[2][8]+" |");
+			out.println("+===+===+===*===+===+===*===+===+===+");
+			out.println("| "+array[3][0]+" | "+array[3][1]+" | "+array[3][2]+" ! "
+					+ ""+array[3][3]+" |"+array[3][4]+" | "+array[3][5]+" ! "
+					+ ""+array[3][6]+" | "+array[3][7]+" |"+array[3][8]+" |");			
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("| "+array[4][0]+" | "+array[4][1]+" | "+array[4][2]+" ! "
+					+ ""+array[4][3]+" |"+array[4][4]+" | "+array[4][5]+" ! "
+					+ ""+array[4][6]+" | "+array[4][7]+" |"+array[4][8]+" |");
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("| "+array[5][0]+" | "+array[5][1]+" | "+array[5][2]+" ! "
+					+ ""+array[5][3]+" |"+array[5][4]+" | "+array[5][5]+" ! "
+					+ ""+array[5][6]+" | "+array[5][7]+" |"+array[5][8]+" |");			
+			out.println("+===+===+===*===+===+===*===+===+===+");
+			out.println("| "+array[6][0]+" | "+array[6][1]+" | "+array[6][2]+" ! "
+					+ ""+array[6][3]+" |"+array[6][4]+" | "+array[6][5]+" ! "
+					+ ""+array[6][6]+" | "+array[6][7]+" |"+array[6][8]+" |");			
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("| "+array[7][0]+" | "+array[7][1]+" | "+array[7][2]+" ! "
+					+ ""+array[7][3]+" |"+array[7][4]+" | "+array[7][5]+" ! "
+					+ ""+array[7][6]+" | "+array[7][7]+" |"+array[7][8]+" |");			
+			out.println("+---+---+---*---+---+---*---+---+---+");
+			out.println("| "+array[8][0]+" | "+array[8][1]+" | "+array[8][2]+" ! "
+					+ ""+array[8][3]+" |"+array[8][4]+" | "+array[8][5]+" ! "
+					+ ""+array[8][6]+" | "+array[8][7]+" |"+array[8][8]+" |");			
+			out.println("+---+---+---*---+---+---*---+---+---+");
 		}
-		//end of else
+
 	}
 
 	public void showSolvedMessage(String string) {
@@ -288,5 +249,6 @@ public class ConsoleUI {
 	public void showExitMessage() {
 		out.println("You selected '0'.\n"
 				+ "Game over.");
+		Board.setIsSolved(true);
 	}
 }
