@@ -5,7 +5,7 @@
  * Instructor: Dr. Yoosnek Cheon
  * TAs: Jesus Valles && Jose Cabrera
  * Purpose: To practice implementing a sudoku game via the user console
- * Last Modified: 25 January 2018
+ * Last Modified: 30 January 2018
  */
 package edu.utep.cs.cs3331.sudoku;
 
@@ -18,10 +18,10 @@ public class Board extends ConsoleUI {
 	private int size;
 	private static boolean bool;
 
-	//public Board() {
-	//this(4);	//creates a 4x4 board
-	//}
-
+	/**
+	 * Board: Creates an instance of board as a 2D array
+	 * @param size
+	 */
 	public Board(int size) {	//creates the board to be of size n
 		backendBoard = new int[size][size];
 		for(int i=0; i<backendBoard.length; i++) {
@@ -33,6 +33,13 @@ public class Board extends ConsoleUI {
 	}
 
 
+	/**
+	 * editBoard: Edits the instance of the board we have declared
+	 * @param size
+	 * @param x
+	 * @param y
+	 * @param value
+	 */
 	public static void editBoard(int size, int x, int y, int value) {
 		backendBoard[x-1][y-1] = value;
 
@@ -49,6 +56,14 @@ public class Board extends ConsoleUI {
 		ui.printBoard(size, backendBoard);	
 	}
 
+	
+	/**
+	 * checkRowAndColumn: Checks row and column to ensure user's number can be inserted into the desired position (Check 1 of 2)
+	 * @param x_coordinate
+	 * @param y_coordinate
+	 * @param value
+	 * @return
+	 */
 	public static boolean checkRowAndColumn(int x_coordinate, int y_coordinate, int value) {
 
 		for(int i=0; i<backendBoard.length;i++)	//checks rows
@@ -66,10 +81,18 @@ public class Board extends ConsoleUI {
 		return checkBox(x_coordinate, y_coordinate, value);
 	}
 
+	/**
+	 * checkBox: Checks the quadrant to ensure the user's number can be inserted into the desired position (Check 2 of 2)
+	 * @param x_val
+	 * @param y_val
+	 * @param value
+	 * @return
+	 */
 	public static boolean checkBox(int x_val, int y_val, int value) {
 		if(x_val<=Math.sqrt(backendBoard.length)) {
+			//Q1
 			if(y_val<=Math.sqrt(backendBoard.length)) {
-				System.out.println("We're in Q1");//Q1
+				System.out.println("We're in Q1");
 				for(int i=0; i<Math.sqrt(backendBoard.length); i++) {
 					for(int j=0; j<Math.sqrt(backendBoard.length); j++){
 						if(backendBoard[i][j] == value)
@@ -77,49 +100,41 @@ public class Board extends ConsoleUI {
 					}
 				}
 			}
-
+			//Q7
 			else if(y_val > 2 * Math.sqrt(backendBoard.length)) {
-				System.out.println("We're in Q7");//Q7
-				
+				System.out.println("We're in Q7");
 				for(int i=0; i<Math.sqrt(backendBoard.length); i++) {
 					for(int j=(int) ((int) 2*Math.sqrt(backendBoard.length)); j<backendBoard.length; j++){
 						if(backendBoard[i][j] == value)
-							//System.out.println("We cannot put in this box");//Q1
 							return false;
 					}
 				}
 			}
-			
 			else {
-				System.out.println("We're in Q4");//Q4
-				
+				//Q4
+				System.out.println("We're in Q4");
 				for(int i=0; i<Math.sqrt(backendBoard.length); i++) {
 					for(int j=(int) Math.sqrt(backendBoard.length); j<2* Math.sqrt(backendBoard.length); j++){
 						if(backendBoard[i][j] == value)
-							//System.out.println("We cannot put in this box");//Q1
 							return false;
 					}
 				}
 			}
 		}
-		
-		
 		else if(x_val> 2 *Math.sqrt(backendBoard.length)) {
+			//Q3
 			if(y_val<=Math.sqrt(backendBoard.length)) {
-				System.out.println("We're in Q3");//Q3
-				
+				System.out.println("We're in Q3");
 				for(int i=(int) (2* Math.sqrt(backendBoard.length)); i<backendBoard.length; i++) {
 					for(int j=0; j<Math.sqrt(backendBoard.length); j++){
 						if(backendBoard[i][j] == value)
-							//System.out.println("We cannot put in this box");//Q1
 							return false;
 					}
 				}
 			}
-
+			//Q9
 			else if(y_val > 2 * Math.sqrt(backendBoard.length)) {
-				System.out.println("We're in Q9");//Q9
-				
+				System.out.println("We're in Q9");
 				for(int i=(int) (2* Math.sqrt(backendBoard.length)); i<backendBoard.length; i++) {
 					for(int j=(int) ((int) 2*Math.sqrt(backendBoard.length)); j<backendBoard.length; j++){
 						if(backendBoard[i][j] == value)
@@ -127,13 +142,12 @@ public class Board extends ConsoleUI {
 					}
 				}
 			}
+			//Q6
 			else if(y_val > Math.sqrt(backendBoard.length)) {
-				System.out.println("We're in Q6");//Q6
-				
+				System.out.println("We're in Q6");
 				for(int i=(int) (2* Math.sqrt(backendBoard.length)); i<backendBoard.length; i++) {
 					for(int j=(int) Math.sqrt(backendBoard.length); j<2* Math.sqrt(backendBoard.length); j++){
 						if(backendBoard[i][j] == value)
-							//System.out.println("We cannot put in this box");//Q1
 							return false;
 					}
 				}
@@ -142,8 +156,9 @@ public class Board extends ConsoleUI {
 		
 		
 		else {
+			//Q2
 			if(y_val<=Math.sqrt(backendBoard.length)) {
-				System.out.println("We're in Q2");//Q1
+				System.out.println("We're in Q2");
 				for(int i=(int) Math.sqrt(backendBoard.length); i< 2* Math.sqrt(backendBoard.length); i++) {
 					for(int j=0; j<Math.sqrt(backendBoard.length); j++){
 						if(backendBoard[i][j] == value)
@@ -151,9 +166,9 @@ public class Board extends ConsoleUI {
 					}
 				}	
 			}
+			//Q8
 			else if(y_val >2 * Math.sqrt(backendBoard.length)) {
-				System.out.println("We're in Q8");//Q8
-				
+				System.out.println("We're in Q8");
 				for(int i=(int) Math.sqrt(backendBoard.length); i< 2* Math.sqrt(backendBoard.length); i++) {
 					for(int j=(int) ((int) 2*Math.sqrt(backendBoard.length)); j<backendBoard.length; j++){
 						if(backendBoard[i][j] == value)
@@ -162,7 +177,8 @@ public class Board extends ConsoleUI {
 				}
 			}
 			else {
-				System.out.println("We're in Q5");//Q5
+				//Q5
+				System.out.println("We're in Q5");
 				for(int i=(int) Math.sqrt(backendBoard.length); i< 2* Math.sqrt(backendBoard.length); i++) {
 					for(int j=(int) Math.sqrt(backendBoard.length); j<2* Math.sqrt(backendBoard.length); j++){
 						if(backendBoard[i][j] == value)
@@ -174,15 +190,11 @@ public class Board extends ConsoleUI {
 		return true;
 	}
 
-	//FIXME: 
-	//private static Random rand = new Random();
-
 	public static void setIsSolved(boolean sentinal) {
 		bool = sentinal;
 	}
 
 	public static boolean isSolved() {
 		return bool;
-		//return rand.nextBoolean();
 	}
 }

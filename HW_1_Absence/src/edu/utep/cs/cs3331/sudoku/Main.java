@@ -5,7 +5,7 @@
  * Instructor: Dr. Yoosnek Cheon
  * TAs: Jesus Valles && Jose Cabrera
  * Purpose: To practice implementing a sudoku game via the user console
- * Last Modified: 25 January 2018
+ * Last Modified: 30 January 2018
  */
 
 package edu.utep.cs.cs3331.sudoku;
