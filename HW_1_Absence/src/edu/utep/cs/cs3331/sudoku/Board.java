@@ -9,6 +9,7 @@
  */
 package edu.utep.cs.cs3331.sudoku;
 
+import java.lang.reflect.Array;
 import java.util.Random;
 
 public class Board extends ConsoleUI {
@@ -17,9 +18,9 @@ public class Board extends ConsoleUI {
 	private int size;
 	private static boolean bool;
 
-	public Board() {
-		this(4);	//creates a 4x4 board
-	}
+	//public Board() {
+	//this(4);	//creates a 4x4 board
+	//}
 
 	public Board(int size) {	//creates the board to be of size n
 		backendBoard = new int[size][size];
@@ -48,34 +49,133 @@ public class Board extends ConsoleUI {
 		ui.printBoard(size, backendBoard);	
 	}
 
-	public static boolean rowChecker(int x_coordinate, int value) {
-		for (int i=0; i<backendBoard.length; i++)
-			if (backendBoard[x_coordinate][i] == value)
-				return false;
-		return true;
+	public static boolean checkRowAndColumn(int x_coordinate, int y_coordinate, int value) {
+
+		for(int i=0; i<backendBoard.length;i++)	//checks rows
+			for(int j=0; j<backendBoard[i].length; j++)
+				if(i==x_coordinate-1)
+					if(backendBoard[i][j] == value)
+						return false;
+
+		for(int i=0; i<backendBoard.length;i++)	//check columns
+			for(int j=0; j<backendBoard[i].length; j++)
+				if(j==y_coordinate-1)
+					if(backendBoard[i][j] == value)
+						return false;
+
+		return checkBox(x_coordinate, y_coordinate, value);
 	}
 
-	public static boolean columnChecker(int y_coordinate, int value) {
-		for (int i=0; i<backendBoard.length; i++)
-			if (backendBoard[i][y_coordinate] == value)
-				return false;
+	public static boolean checkBox(int x_val, int y_val, int value) {
+		if(x_val<=Math.sqrt(backendBoard.length)) {
+			if(y_val<=Math.sqrt(backendBoard.length)) {
+				System.out.println("We're in Q1");//Q1
+				for(int i=0; i<Math.sqrt(backendBoard.length); i++) {
+					for(int j=0; j<Math.sqrt(backendBoard.length); j++){
+						if(backendBoard[i][j] == value)
+							return false;
+					}
+				}
+			}
+
+			else if(y_val > 2 * Math.sqrt(backendBoard.length)) {
+				System.out.println("We're in Q7");//Q7
+				
+				for(int i=0; i<Math.sqrt(backendBoard.length); i++) {
+					for(int j=(int) ((int) 2*Math.sqrt(backendBoard.length)); j<backendBoard.length; j++){
+						if(backendBoard[i][j] == value)
+							//System.out.println("We cannot put in this box");//Q1
+							return false;
+					}
+				}
+			}
+			
+			else {
+				System.out.println("We're in Q4");//Q4
+				
+				for(int i=0; i<Math.sqrt(backendBoard.length); i++) {
+					for(int j=(int) Math.sqrt(backendBoard.length); j<2* Math.sqrt(backendBoard.length); j++){
+						if(backendBoard[i][j] == value)
+							//System.out.println("We cannot put in this box");//Q1
+							return false;
+					}
+				}
+			}
+		}
+		
+		
+		else if(x_val> 2 *Math.sqrt(backendBoard.length)) {
+			if(y_val<=Math.sqrt(backendBoard.length)) {
+				System.out.println("We're in Q3");//Q3
+				
+				for(int i=(int) (2* Math.sqrt(backendBoard.length)); i<backendBoard.length; i++) {
+					for(int j=0; j<Math.sqrt(backendBoard.length); j++){
+						if(backendBoard[i][j] == value)
+							//System.out.println("We cannot put in this box");//Q1
+							return false;
+					}
+				}
+			}
+
+			else if(y_val > 2 * Math.sqrt(backendBoard.length)) {
+				System.out.println("We're in Q9");//Q9
+				
+				for(int i=(int) (2* Math.sqrt(backendBoard.length)); i<backendBoard.length; i++) {
+					for(int j=(int) ((int) 2*Math.sqrt(backendBoard.length)); j<backendBoard.length; j++){
+						if(backendBoard[i][j] == value)
+							return false;
+					}
+				}
+			}
+			else if(y_val > Math.sqrt(backendBoard.length)) {
+				System.out.println("We're in Q6");//Q6
+				
+				for(int i=(int) (2* Math.sqrt(backendBoard.length)); i<backendBoard.length; i++) {
+					for(int j=(int) Math.sqrt(backendBoard.length); j<2* Math.sqrt(backendBoard.length); j++){
+						if(backendBoard[i][j] == value)
+							//System.out.println("We cannot put in this box");//Q1
+							return false;
+					}
+				}
+			}
+		}
+		
+		
+		else {
+			if(y_val<=Math.sqrt(backendBoard.length)) {
+				System.out.println("We're in Q2");//Q1
+				for(int i=(int) Math.sqrt(backendBoard.length); i< 2* Math.sqrt(backendBoard.length); i++) {
+					for(int j=0; j<Math.sqrt(backendBoard.length); j++){
+						if(backendBoard[i][j] == value)
+							return false;
+					}
+				}	
+			}
+			else if(y_val >2 * Math.sqrt(backendBoard.length)) {
+				System.out.println("We're in Q8");//Q8
+				
+				for(int i=(int) Math.sqrt(backendBoard.length); i< 2* Math.sqrt(backendBoard.length); i++) {
+					for(int j=(int) ((int) 2*Math.sqrt(backendBoard.length)); j<backendBoard.length; j++){
+						if(backendBoard[i][j] == value)
+							return false;
+					}
+				}
+			}
+			else {
+				System.out.println("We're in Q5");//Q5
+				for(int i=(int) Math.sqrt(backendBoard.length); i< 2* Math.sqrt(backendBoard.length); i++) {
+					for(int j=(int) Math.sqrt(backendBoard.length); j<2* Math.sqrt(backendBoard.length); j++){
+						if(backendBoard[i][j] == value)
+							return false;
+					}
+				}	
+			}
+		}
 		return true;
 	}
-	
-	public static boolean boxChecker(int x_coordinate, int y_coordinate, int value) {
-        int[] box = {
-        		x_coordinate-(x_coordinate%backendBoard.length), y_coordinate-(y_coordinate%backendBoard.length)
-        		};
-
-        for(int i=box[0]; i<=(box[0]+2); i++)
-            for(int j=box[1]; j<=(box[1]+2); j++)
-                if(backendBoard[i][j] == value)
-                    return false;
-        return true;
-    }
 
 	//FIXME: 
-	private static Random rand = new Random();
+	//private static Random rand = new Random();
 
 	public static void setIsSolved(boolean sentinal) {
 		bool = sentinal;

@@ -41,7 +41,7 @@ public class ConsoleUI {
 	 */
 	public int askSize() {
 		size = new Scanner(System.in);
-		out.print("What board size do you want?\n"
+		out.println("What board size do you want?\n"
 				+ "Enter '4' or '9'");
 		int boardSize = size.nextInt();
 		if (boardSize != 4 && boardSize != 9) {
@@ -134,26 +134,15 @@ public class ConsoleUI {
 			 *********************EDIT + PRINT THE BOARD*************************
 			 ********************************************************************/	
 			if(!Board.isSolved()) {
-				
-				boolean goesInRow = Board.rowChecker(x_coordinate, value);
-				boolean goesInColumn = Board.columnChecker(y_coordinate, value);
-				boolean goesInBox =  Board.boxChecker(x_coordinate, y_coordinate, value);
-				
-				if(goesInRow && goesInColumn && goesInBox)
-							Board.editBoard(size, x_coordinate, y_coordinate, value);
-				else {
-					if(!goesInRow)
-						out.println("Your number cannot go in this row.");
-					if(!goesInColumn)
-						out.println("Your number cannot go in this column.");
-					if(!goesInBox)
-						out.println("Your number cannot go in this box.");
-				}
+				if(Board.checkRowAndColumn(x_coordinate, y_coordinate, value))	//if the number can go in this row, column, and box
+					Board.editBoard(size, x_coordinate, y_coordinate, value);	//edit the board
+				else 
+					out.println("Your number cannot go in this position.");
 			}
 		}
 	}
-	
-	
+
+
 
 	/**
 	 * printBoard call that will be made every time the user inputs a value in the board
