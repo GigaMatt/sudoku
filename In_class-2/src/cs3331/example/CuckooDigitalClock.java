@@ -10,7 +10,7 @@ public class CuckooDigitalClock extends DigitalClock{
 	/* Play Audio at the top of the hour*/
 	@Override
 	public void play(String file) {
-		Calendar.getCalendar
+		Calendar.getCalendar();
 
 		play("cuckoo.au");
 

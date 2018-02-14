@@ -22,7 +22,7 @@
   </class>  
   <class id="3" language="java" name="edu.utep.cs.cs3331.sudoku.Board" project="HW_1" 
     file="/HW_1/HW_1_Absence/src/edu/utep/cs/cs3331/sudoku/Board.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="370" y="538"/>    
+    <position height="-1" width="-1" x="410" y="564"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
