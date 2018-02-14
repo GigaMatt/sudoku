@@ -81,6 +81,7 @@ public class Board extends ConsoleUI {
 		return checkBox(x_coordinate, y_coordinate, value);
 	}
 
+	
 	/**
 	 * checkBox: Checks the quadrant to ensure the user's number can be inserted into the desired position (Check 2 of 2)
 	 * @param x_val
@@ -190,6 +191,7 @@ public class Board extends ConsoleUI {
 		return true;
 	}
 
+	
 	public static void setIsSolved(boolean sentinal) {
 		bool = sentinal;
 	}

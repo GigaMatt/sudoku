@@ -53,7 +53,12 @@ public class ConsoleUI {
 		//main will then call the board to be built
 		return boardSize;
 	}
-
+	
+	/**
+	 * playGame: Has user play the game
+	 * @param board
+	 * @param size
+	 */
 	public void playGame(Board board, int size) {
 		while(!board.isSolved()) {
 			//STEP 1: Print the empty bad board
@@ -141,7 +146,6 @@ public class ConsoleUI {
 			}
 		}
 	}
-
 
 
 	/**
