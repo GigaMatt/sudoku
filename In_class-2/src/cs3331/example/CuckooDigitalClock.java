@@ -1,4 +1,6 @@
 package cs3331.example;
+import java.util.Calendar;
+
 import cs3331.example.DigitalClock;
 
 public class CuckooDigitalClock extends DigitalClock{
@@ -11,6 +13,10 @@ public class CuckooDigitalClock extends DigitalClock{
 	@Override
 	public void play(String file) {
 		Calendar.getCalendar();
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		int minute = calendar.get(Calendar.MINUTE);
+		int second = calendar.get(Calendar.SECOND);
+		
 
 		play("cuckoo.au");
 
