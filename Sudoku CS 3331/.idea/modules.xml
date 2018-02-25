@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../AI.iml" filepath="$PROJECT_DIR$/../AI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Homework2/Homework2.iml" filepath="$PROJECT_DIR$/Homework2/Homework2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../AI/Searches/Searches.iml" filepath="$PROJECT_DIR$/../AI/Searches/Searches.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sudoku CS 3331.iml" filepath="$PROJECT_DIR$/Sudoku CS 3331.iml" />
+    </modules>
+  </component>
+</project>
