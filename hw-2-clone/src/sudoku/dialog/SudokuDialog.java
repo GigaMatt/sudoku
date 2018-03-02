@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import sudoku.dialog.BoardPanel;
@@ -23,7 +24,9 @@ import sudoku.model.Board;
  */
 @SuppressWarnings("serial")
 public class SudokuDialog extends JFrame {
-
+	
+	private int numChoosen;
+	
     /** Default dimension of the dialog. */
     private final static Dimension DEFAULT_SIZE = new Dimension(310, 430);
 
@@ -37,7 +40,7 @@ public class SudokuDialog extends JFrame {
 
     /** Message bar to display various messages. */
     private JLabel msgBar = new JLabel("");
-
+    
     /** Create a new dialog. */
     public SudokuDialog() {
         this(DEFAULT_SIZE);
@@ -47,7 +50,7 @@ public class SudokuDialog extends JFrame {
     public SudokuDialog(Dimension dim) {
         super("Sudoku");
         setSize(dim);
-        board = new Board(9);
+        board = new Board(9);//default size is 9
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureUI();
         //setLocationRelativeTo(null);
@@ -61,19 +64,24 @@ public class SudokuDialog extends JFrame {
      * @param x 0-based row index of the clicked square.
      * @param y 0-based column index of the clicked square.
      */
-    private void boardClicked(int x, int y) {
+    private void boardClicked(int x, int y) {//set number on board FIX
         // WRITE YOUR CODE HERE ...
         //
-        showMessage(String.format("Board clicked: x = %d, y = %d",  x, y));
+    	board.validEntry(x, y, numChoosen);
+        boardPanel.setBoard(board);
+        boardPanel.repaint();
+        showMessage(String.format("Board clicked: x = %d, y = %d, numChoosen = %d",  x, y, numChoosen));
+        numChoosen = 0;
     }
 
     /**
      * Callback to be invoked when a number button is clicked.
      * @param number Clicked number (1-9), or 0 for "X".
      */
-    private void numberClicked(int number) {
+    private void numberClicked(int number) {//be able to set this number in matrix FIX
         // WRITE YOUR CODE HERE ...
         //
+    	numChoosen = number;
         showMessage("Number clicked: " + number);
     }
 
@@ -84,10 +92,19 @@ public class SudokuDialog extends JFrame {
      * accordingly.
      * @param size Requested puzzle size, either 4 or 9.
      */
-    private void newClicked(int size) {
+    private void newClicked(int size) {//changes board size
         // WRITE YOUR CODE HERE ...
         //
-        showMessage("New clicked: " + size);
+    	int opcion = JOptionPane.showConfirmDialog(null, "Play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
+    	if (opcion == 0) { //The ISSUE is here
+    		board = new Board(size);
+        	boardPanel.setBoard(board);
+        	repaint();//we can switch now the box indexes change too
+            showMessage("New clicked: " + size);
+    	} else {
+    	   showMessage("No");
+    	}
+    	
     }
 
     /**

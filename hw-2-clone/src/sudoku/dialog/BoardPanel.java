@@ -76,7 +76,7 @@ public class BoardPanel extends JPanel {
 
     /** Draw the associated board. */
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics g) {//print numbers too
         super.paint(g); 
 
         // determine the square size
@@ -89,9 +89,37 @@ public class BoardPanel extends JPanel {
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
 
         // WRITE YOUR CODE HERE ...
-        // i.e., draw grid and squares.
-        for(int i = 0; i <= Math.sqrt(board.size()); i++)
-        	g.drawLine(1, squareSize*i + 1, dim.width - 1, (int) Math.sqrt(board.size())*i + 1);
+        //drawing the grid lines
+        g.setColor(Color.black);
+        for(int i = 0; i <= board.size; i++) {//vertical lines, looks good
+        	if(i%Math.sqrt(board.size) != 0) {
+        		g.setColor(Color.gray);
+        		g.drawLine(squareSize*i, 0, squareSize*i, Math.min(dim.width, dim.height));
+        	}else {
+        		g.setColor(Color.black);
+        		g.drawLine(squareSize*i, 0, squareSize*i, Math.min(dim.width, dim.height));
+        	}
+        }
+        for(int i = 0; i <= board.size; i++) {//horizontal lines, looks good
+        	if(i%Math.sqrt(board.size) != 0) {
+        		g.setColor(Color.gray);
+        		g.drawLine(0, squareSize*i, Math.min(dim.width, dim.height), squareSize*i);//looks good
+        	}else {
+        		g.setColor(Color.black);
+        		g.drawLine(0, squareSize*i, Math.min(dim.width, dim.height), squareSize*i);
+        	}
+        }
+        
+        //board.setEntry(1, 2, 2);//test case to show Mat
+        
+        //drawing the numbers form matrix
+        for(int i = 0; i < board.size; i++) {
+        	for(int j = 1; j <= board.size; j++) {//from one to print out last row
+        		char[] temp = new char[] {(char) (board.getEntry(i, j - 1) + '0')};
+        		//best I could get it to the center of the square
+        		g.drawChars(temp, 0, 1, (int) (squareSize*i + squareSize/2), (int) (squareSize*j - squareSize/2));
+        	}
+        }
         
     }
 
