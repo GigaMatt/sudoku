@@ -115,9 +115,11 @@ public class BoardPanel extends JPanel {
         //drawing the numbers form matrix
         for(int i = 0; i < board.size; i++) {
         	for(int j = 1; j <= board.size; j++) {//from one to print out last row
-        		char[] temp = new char[] {(char) (board.getEntry(i, j - 1) + '0')};
-        		//best I could get it to the center of the square
-        		g.drawChars(temp, 0, 1, (int) (squareSize*i + squareSize/2), (int) (squareSize*j - squareSize/2));
+        		if(board.getEntry(i, j - 1) != 0) {	
+        			char[] temp = new char[] {(char) (board.getEntry(i, j - 1) + '0')};
+        			//best I could get it to the center of the square
+        			g.drawChars(temp, 0, 1, (int) (squareSize*i + squareSize/2), (int) (squareSize*j - squareSize/2));
+        		}
         	}
         }
         

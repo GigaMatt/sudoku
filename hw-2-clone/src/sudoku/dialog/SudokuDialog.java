@@ -67,11 +67,27 @@ public class SudokuDialog extends JFrame {
     private void boardClicked(int x, int y) {//set number on board FIX
         // WRITE YOUR CODE HERE ...
         //
-    	board.validEntry(x, y, numChoosen);
-        boardPanel.setBoard(board);
-        boardPanel.repaint();
-        showMessage(String.format("Board clicked: x = %d, y = %d, numChoosen = %d",  x, y, numChoosen));
-        numChoosen = 0;
+    	if(numChoosen == 0) {
+    		board.setEntry(x, y, numChoosen);
+	    	boardPanel.setBoard(board);
+	        boardPanel.repaint();
+    	}else if(board.validEntry(x, y, numChoosen)) {
+    		board.setEntry(x, y, numChoosen);
+    		boardPanel.setBoard(board);
+        	boardPanel.repaint();
+        	if(board.isSolved()) {//play sound here!
+        		int opcion = JOptionPane.showConfirmDialog(null, "Congratulations! Do you want to play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
+            	if (opcion == 0) { //The ISSUE is here
+            		board = new Board(board.size);
+                	boardPanel.setBoard(board);
+                	repaint();//we can switch now the box indexes change too
+            	} else {
+            	   showMessage("No");
+            	}
+        	}
+    	}else {//play sound here!
+    		showMessage("Conflicing Numbers");
+    	}
     }
 
     /**

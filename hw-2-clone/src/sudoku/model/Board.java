@@ -36,11 +36,6 @@ public class Board {
     	return getSquare(i,j).value;
     }
     
-    public boolean change() {//tells me if the board changed or not
-    	
-    	return false;
-    }
-    
     //make sure everything has been adjusted to the new row and column perspective 1 - size
     public boolean validEntry(int row, int col, int entry) {
         if(row >= size || col >= size)
@@ -57,19 +52,19 @@ public class Board {
         return true;
     }
 
-    private boolean boxCheck(int row, int col, int entry) {
-        int rowBound = (int) ((row - 1)/Math.sqrt(size));
+    private boolean boxCheck(int row, int col, int entry) {//this method is not working properly
+    	int rowBound = (int) (row/Math.sqrt(size));
         rowBound = (int) (rowBound * Math.sqrt(size));
-        int colBound = (int) ((col - 1)/Math.sqrt(size));
+        int colBound = (int) (col/Math.sqrt(size));
         colBound = (int) (colBound * Math.sqrt(size));
         
-        for(int i = rowBound; i < rowBound + (int) (Math.sqrt(size)); i++) {
-        	for(int j = 0; j < colBound + (int) Math.sqrt(size); j++) {
-        			if(getSquare(i,j).value == entry) {
-        				return false;
-        			}
-        		}
+        for(int i = rowBound; i < (rowBound + (int) (Math.sqrt(size))); i++) {
+            for(int j = colBound; j < (colBound + (int) (Math.sqrt(size))); j++) {
+                if(entry == getEntry(i, j))
+                    return false;
+            }
         }
+        
         return true;
         
     }
