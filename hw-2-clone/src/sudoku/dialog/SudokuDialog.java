@@ -1,5 +1,7 @@
 package sudoku.dialog;
 import java.awt.*;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URL;
 
 import javax.swing.BorderFactory;
@@ -13,6 +15,8 @@ import javax.swing.JPanel;
 
 import sudoku.dialog.BoardPanel;
 import sudoku.model.Board;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 /**
  * A dialog template for playing simple Sudoku games.
@@ -78,8 +82,14 @@ public class SudokuDialog extends JFrame {
 
 
 				//@FIXME: GET DIR TO WINNING SOUND
-				String winningSound = "HELLO";
-				//playWinningSound(winningSound);
+				String winningSound = "winning-sound.wav";
+				//System.out.print(winningSound);
+				try {
+					playWinningSound(winningSound);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 
 				if (opcion == 0) {		//The ISSUE is here
@@ -95,9 +105,39 @@ public class SudokuDialog extends JFrame {
 
 
 			//@FIXME: GET DIR TO INCONSISTANT SOUND
-			String inconsistantPlacementSound = "HELLO";
-			//playInconsistantSound(inconsistantPlacementSound);
+			String inconsistantPlacementSound = "error-sound.wav";
+			//System.out.print(inconsistantPlacementSound);
+			try {
+				playInconsistantSound(inconsistantPlacementSound);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+	}
+
+	private void playWinningSound(String winningSound)   throws Exception
+	{
+		// open the sound file as a Java input stream
+		InputStream in = new FileInputStream(winningSound);
+
+		// create an audiostream from the inputstream
+		AudioStream audioStream = new AudioStream(in);
+
+		// play the audio clip with the audioplayer class
+		AudioPlayer.player.start(audioStream);
+	}
+
+	private void playInconsistantSound(String inconsistantPlacementSound)   throws Exception
+	{
+		// open the sound file as a Java input stream
+		InputStream in = new FileInputStream(inconsistantPlacementSound);
+
+		// create an audiostream from the inputstream
+		AudioStream audioStream = new AudioStream(in);
+
+		// play the audio clip with the audioplayer class
+		AudioPlayer.player.start(audioStream);
 	}
 
 	/**
