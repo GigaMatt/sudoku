@@ -1,8 +1,9 @@
 package sudoku.dialog;
 import java.awt.*;
+import java.io.FileInputStream;
 import java.io.InputStream;
 
-//import java.net.URL;
+import java.net.URL;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -52,7 +53,18 @@ public class SudokuDialog extends JFrame {
 		super("Sudoku");
 		setSize(dim);
 		board = new Board(9);		//default board size
-		boardPanel = new BoardPanel(board, this::boardClicked);
+		boardPanel = new BoardPanel(board, (x, y) -> {
+			try {
+				boardClicked(x, y);
+			} catch (Exception e) {
+				
+				
+				// TODO Auto-generated catch block
+				
+				
+				e.printStackTrace();
+			}
+		});
 		configureUI();
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
@@ -62,8 +74,9 @@ public class SudokuDialog extends JFrame {
 	 * Callback to be invoked when a square of the board is clicked.
 	 * @param x 0-based row index of the clicked square.
 	 * @param y 0-based column index of the clicked square.
+	 * @throws Exception 
 	 */
-	private void boardClicked(int x, int y) {
+	private void boardClicked(int x, int y) throws Exception {		//exception used for playing sound
 
 
 		//FIXME: REQUIRING 2 CLICKS FOR FULL FUCNTIONALITY
@@ -115,8 +128,13 @@ public class SudokuDialog extends JFrame {
 		  }
 	}
 
-	private void playInconsistantSound(String path) {
-		// TODO Auto-generated method stub
+	private void playInconsistantSound(String path) throws Exception{		//use AudioStream
+	    //convert path to InputStream
+		InputStream in = new FileInputStream(path);
+
+	    //convert to AudioStream
+	    AudioStream audioStream = new AudioStream(in);
+	    AudioPlayer.player.start(audioStream);
 		
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
