@@ -1,5 +1,4 @@
 package sudoku.dialog;
-
 import java.awt.*;
 import java.net.URL;
 
@@ -20,7 +19,6 @@ import sudoku.model.Board;
  * You need to write code for three callback methods:
  * newClicked(int), numberClicked(int) and boardClicked(int,int).
  *
- * @author Yoonsik Cheon
  */
 @SuppressWarnings("serial")
 public class SudokuDialog extends JFrame {
@@ -50,13 +48,11 @@ public class SudokuDialog extends JFrame {
     public SudokuDialog(Dimension dim) {
         super("Sudoku");
         setSize(dim);
-        board = new Board(9);//default size is 9
+        board = new Board(9);		//default board size
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureUI();
-        //setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
-        //setResizable(false);
     }
 
     /**
@@ -64,9 +60,11 @@ public class SudokuDialog extends JFrame {
      * @param x 0-based row index of the clicked square.
      * @param y 0-based column index of the clicked square.
      */
-    private void boardClicked(int x, int y) {//set number on board FIX
-        // WRITE YOUR CODE HERE ...
-        //
+    private void boardClicked(int x, int y) {
+
+    	
+    	//FIXME: REQUIRING 2 CLICKS FOR FULL FUCNTIONALITY
+
     	if(numChoosen == 0) {
     		board.setEntry(x, y, numChoosen);
 	    	boardPanel.setBoard(board);
@@ -75,17 +73,28 @@ public class SudokuDialog extends JFrame {
     		board.setEntry(x, y, numChoosen);
     		boardPanel.setBoard(board);
         	boardPanel.repaint();
-        	if(board.isSolved()) {//play sound here!
+        	if(board.isSolved()) {
+        		
+        		
+        		//play sound here!
+        		
+        		
+        		
         		int opcion = JOptionPane.showConfirmDialog(null, "Congratulations! Do you want to play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
-            	if (opcion == 0) { //The ISSUE is here
+            	if (opcion == 0) {		//The ISSUE is here
             		board = new Board(board.size);
                 	boardPanel.setBoard(board);
-                	repaint();//we can switch now the box indexes change too
+                	repaint();			//we can switch now the box indexes change too
             	} else {
             	   showMessage("No");
             	}
         	}
-    	}else {//play sound here!
+    	}else {
+    		
+    		
+    		//play sound here!
+    		
+    		
     		showMessage("Conflicing Numbers");
     	}
     }
@@ -94,9 +103,12 @@ public class SudokuDialog extends JFrame {
      * Callback to be invoked when a number button is clicked.
      * @param number Clicked number (1-9), or 0 for "X".
      */
-    private void numberClicked(int number) {//be able to set this number in matrix FIX
-        // WRITE YOUR CODE HERE ...
-        //
+    private void numberClicked(int number) {
+    	
+    	//FIXME: VERIFY THE NUMBER IS BEING READBACK TO THE USER 
+    	
+        //FIXME: WRITE YOUR CODE HERE ...
+        
     	numChoosen = number;
         showMessage("Number clicked: " + number);
     }
@@ -108,7 +120,7 @@ public class SudokuDialog extends JFrame {
      * accordingly.
      * @param size Requested puzzle size, either 4 or 9.
      */
-    private void newClicked(int size) {//changes board size
+    private void newClicked(int size) {		//changes board size
         // WRITE YOUR CODE HERE ...
         //
     	int opcion = JOptionPane.showConfirmDialog(null, "Play a new game?", "New Game", JOptionPane.YES_NO_OPTION);

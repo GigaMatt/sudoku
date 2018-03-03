@@ -16,7 +16,6 @@ import sudoku.model.Board;
  * the paint() method.
  *
  * @see sudoku.model.Board
- * @author Yoonsik Cheon
  */
 @SuppressWarnings("serial")
 public class BoardPanel extends JPanel {
@@ -88,10 +87,10 @@ public class BoardPanel extends JPanel {
         g.setColor(boardColor); 
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
 
-        // WRITE YOUR CODE HERE ...
+        
         //drawing the grid lines
         g.setColor(Color.black);
-        for(int i = 0; i <= board.size; i++) {//vertical lines, looks good
+        for(int i = 0; i <= board.size; i++) {		//vertical lines, looks good
         	if(i%Math.sqrt(board.size) != 0) {
         		g.setColor(Color.gray);
         		g.drawLine(squareSize*i, 0, squareSize*i, Math.min(dim.width, dim.height));
@@ -100,17 +99,18 @@ public class BoardPanel extends JPanel {
         		g.drawLine(squareSize*i, 0, squareSize*i, Math.min(dim.width, dim.height));
         	}
         }
-        for(int i = 0; i <= board.size; i++) {//horizontal lines, looks good
+        for(int i = 0; i <= board.size; i++) {		//horizontal lines, looks good
         	if(i%Math.sqrt(board.size) != 0) {
         		g.setColor(Color.gray);
-        		g.drawLine(0, squareSize*i, Math.min(dim.width, dim.height), squareSize*i);//looks good
+        		g.drawLine(0, squareSize*i, Math.min(dim.width, dim.height), squareSize*i);		//looks good
         	}else {
         		g.setColor(Color.black);
         		g.drawLine(0, squareSize*i, Math.min(dim.width, dim.height), squareSize*i);
         	}
         }
         
-        //board.setEntry(1, 2, 2);//test case to show Mat
+        //Test Case: Board recognizes input of 2 @ (2,3)
+        board.setEntry(1, 2, 2);
         
         //drawing the numbers form matrix
         for(int i = 0; i < board.size; i++) {
