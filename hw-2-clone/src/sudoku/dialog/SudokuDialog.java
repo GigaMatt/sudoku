@@ -1,9 +1,7 @@
 package sudoku.dialog;
 import java.awt.*;
-import java.io.FileInputStream;
-import java.io.InputStream;
-
 import java.net.URL;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -15,8 +13,6 @@ import javax.swing.JPanel;
 
 import sudoku.dialog.BoardPanel;
 import sudoku.model.Board;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 
 /**
  * A dialog template for playing simple Sudoku games.
@@ -53,18 +49,7 @@ public class SudokuDialog extends JFrame {
 		super("Sudoku");
 		setSize(dim);
 		board = new Board(9);		//default board size
-		boardPanel = new BoardPanel(board, (x, y) -> {
-			try {
-				boardClicked(x, y);
-			} catch (Exception e) {
-				
-				
-				// TODO Auto-generated catch block
-				
-				
-				e.printStackTrace();
-			}
-		});
+		boardPanel = new BoardPanel(board, this::boardClicked);
 		configureUI();
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
@@ -74,9 +59,8 @@ public class SudokuDialog extends JFrame {
 	 * Callback to be invoked when a square of the board is clicked.
 	 * @param x 0-based row index of the clicked square.
 	 * @param y 0-based column index of the clicked square.
-	 * @throws Exception 
 	 */
-	private void boardClicked(int x, int y) throws Exception {		//exception used for playing sound
+	private void boardClicked(int x, int y) {
 
 
 		//FIXME: REQUIRING 2 CLICKS FOR FULL FUCNTIONALITY
@@ -95,7 +79,7 @@ public class SudokuDialog extends JFrame {
 
 				//@FIXME: GET DIR TO WINNING SOUND
 				String winningSound = "HELLO";
-				playWinningSound(winningSound);
+				//playWinningSound(winningSound);
 
 
 				if (opcion == 0) {		//The ISSUE is here
@@ -112,34 +96,9 @@ public class SudokuDialog extends JFrame {
 
 			//@FIXME: GET DIR TO INCONSISTANT SOUND
 			String inconsistantPlacementSound = "HELLO";
-			playInconsistantSound(inconsistantPlacementSound);
+			//playInconsistantSound(inconsistantPlacementSound);
 		}
 	}
-	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private void playWinningSound(String path) {
-		  try {
-		    InputStream input = getClass().getResourceAsStream(path);
-		    AudioStream output = new AudioStream(input);
-		    AudioPlayer.player.start(output);
-		  }
-		  catch (Exception e) {
-		    System.out.println("An exception was caught; unable to play sound.");
-		  }
-	}
-
-	private void playInconsistantSound(String path) throws Exception{		//use AudioStream
-	    //convert path to InputStream
-		InputStream in = new FileInputStream(path);
-
-	    //convert to AudioStream
-	    AudioStream audioStream = new AudioStream(in);
-	    AudioPlayer.player.start(audioStream);
-		
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 	/**
 	 * Callback to be invoked when a number button is clicked.
