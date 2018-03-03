@@ -1,7 +1,8 @@
 package sudoku.dialog;
 import java.awt.*;
-import java.net.URL;
+import java.io.InputStream;
 
+//import java.net.URL;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -13,6 +14,8 @@ import javax.swing.JPanel;
 
 import sudoku.dialog.BoardPanel;
 import sudoku.model.Board;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 /**
  * A dialog template for playing simple Sudoku games.
@@ -99,6 +102,26 @@ public class SudokuDialog extends JFrame {
 			playInconsistantSound(inconsistantPlacementSound);
 		}
 	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private void playWinningSound(String path) {
+		  try {
+		    InputStream input = getClass().getResourceAsStream(path);
+		    AudioStream output = new AudioStream(input);
+		    AudioPlayer.player.start(output);
+		  }
+		  catch (Exception e) {
+		    System.out.println("An exception was caught; unable to play sound.");
+		  }
+	}
+
+	private void playInconsistantSound(String path) {
+		// TODO Auto-generated method stub
+		
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 	/**
 	 * Callback to be invoked when a number button is clicked.
