@@ -120,7 +120,7 @@ public class SudokuDialog extends JFrame {
 				}
 			}
 		}else {
-			showMessage("Conflicing Numbers");			
+			showMessage("Invalid Input.");			
 
 			String inconsistantPlacementSound = "error-sound.wav";
 			try {
