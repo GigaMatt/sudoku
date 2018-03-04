@@ -1,3 +1,12 @@
+/*
+ * CS 3331
+ * Homework 2
+ * @author Enrique Salcido
+ * @author Matthew S Montoya
+ * Purpose: To practice implementing Java Applets & Graphics
+ * Last Modified: 4 March 2018
+ */
+
 package sudoku.dialog;
 import java.awt.*;
 import java.io.FileInputStream;
@@ -19,9 +28,7 @@ import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
 /**
- * A dialog template for playing simple Sudoku games.
- * You need to write code for three callback methods:
- * newClicked(int), numberClicked(int) and boardClicked(int,int).
+ * A dialog for playing simple Sudoku games.
  *
  */
 @SuppressWarnings("serial")
