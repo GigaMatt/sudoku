@@ -47,7 +47,10 @@ public class BoardPanel extends JPanel {
     /** Width and height of a square in pixels. */
     private int squareSize;
 
-    /** Create a new board panel to display the given board. */
+    /** Create a new board panel to display the given board.
+     * @param board Instance of board being worked on
+     * @param listener
+     */
     public BoardPanel(Board board, ClickListener listener) {
         this.board = board;
         addMouseListener(new MouseAdapter() {
@@ -60,16 +63,17 @@ public class BoardPanel extends JPanel {
         });
     }
 
-    /** Set the board to be displayed. */
+    /** Set the board to be displayed.
+     * @param board Instance of board being worked on
+     */
     public void setBoard(Board board) {
     	this.board = board;
     }
     
     /**
-     * Given a screen coordinate, return the indexes of the corresponding square
-     * or -1 if there is no square.
-     * The indexes are encoded and returned as x*100 + y, 
-     * where x and y are 0-based column/row indexes.
+     * Identifies indexes of the current square
+     * @param x horizontal location of square on x-y grid
+     * @param y vertical location of square on x-y grid
      */
     private int locateSquaree(int x, int y) {
     	if (x < 0 || x > board.size * squareSize
@@ -81,7 +85,9 @@ public class BoardPanel extends JPanel {
     	return xx * 100 + yy;
     }
 
-    /** Draw the associated board. */
+    /** Draw the associated board.
+     * @param g Instance of Graphics
+     */
     @Override
     public void paint(Graphics g) {//print numbers too
         super.paint(g); 
@@ -96,9 +102,9 @@ public class BoardPanel extends JPanel {
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
 
         
-        //drawing the grid lines
+        //draw the grid lines
         g.setColor(Color.black);
-        for(int i = 0; i <= board.size; i++) {		//vertical lines, looks good
+        for(int i = 0; i <= board.size; i++) {		//vertical lines
         	if(i%Math.sqrt(board.size) != 0) {
         		g.setColor(Color.gray);
         		g.drawLine(squareSize*i, 0, squareSize*i, Math.min(dim.width, dim.height));
@@ -107,10 +113,10 @@ public class BoardPanel extends JPanel {
         		g.drawLine(squareSize*i, 0, squareSize*i, Math.min(dim.width, dim.height));
         	}
         }
-        for(int i = 0; i <= board.size; i++) {		//horizontal lines, looks good
+        for(int i = 0; i <= board.size; i++) {		//horizontal lines
         	if(i%Math.sqrt(board.size) != 0) {
         		g.setColor(Color.gray);
-        		g.drawLine(0, squareSize*i, Math.min(dim.width, dim.height), squareSize*i);		//looks good
+        		g.drawLine(0, squareSize*i, Math.min(dim.width, dim.height), squareSize*i);
         	}else {
         		g.setColor(Color.black);
         		g.drawLine(0, squareSize*i, Math.min(dim.width, dim.height), squareSize*i);
@@ -118,7 +124,7 @@ public class BoardPanel extends JPanel {
         }
         
         //Test Case: Board recognizes input of 2 @ (2,3)
-        board.setEntry(1, 2, 2);
+        //board.setEntry(1, 2, 2);
         
         //drawing the numbers form matrix
         for(int i = 0; i < board.size; i++) {

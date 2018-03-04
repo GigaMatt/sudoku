@@ -17,11 +17,19 @@ public class Board {
 	public int size;
     private List<Square> squares;
     
+    /**
+     * Initiate Board
+     */
     public Board() {
     	this.size = 9;
     	squares = new ArrayList<Square>(81);
     }
 
+    
+    /**
+     * Create ArrayList of n*n squares
+     * @param size
+     */
     public Board(int size) {
         this.size = size;
     	squares = new ArrayList<Square>(size*size);
@@ -32,6 +40,10 @@ public class Board {
     	}
     }
 
+    /**
+     * Return size of the board
+     * @return
+     */
     public int size(){
         return size;
     }
@@ -40,17 +52,41 @@ public class Board {
     	return squares.get(i*size + j);
     }
     
+    
+    /**
+     * Return value of a square
+     * @param i
+     * @param j
+     * @return
+     */
     public int getEntry(int i, int j) {
     	return getSquare(i,j).value;
     }
     
-    //make sure everything has been adjusted to the new row and column perspective 1 - size
+    
+        
+    /**
+     * Ensure user's desired coordinates are valid
+     * @param row
+     * @param col
+     * @param entry
+     * @return
+     */
     public boolean validEntry(int row, int col, int entry) {
         if(row >= size || col >= size)
             return false;
         return (rowColCheck(row, col, entry) && boxCheck(row, col, entry));
     }
+    
+    
 
+    /**
+     * 
+     * @param row
+     * @param col
+     * @param entry
+     * @return
+     */
     private boolean rowColCheck(int row, int col, int entry) {
         for(int i = 0; i < size; i++) {
         	if (entry == squares.get(size*i + col).value || entry == squares.get(size*row + i).value) {
@@ -59,8 +95,17 @@ public class Board {
         }
         return true;
     }
+    
+    
 
-    private boolean boxCheck(int row, int col, int entry) {//this method is not working properly
+    /**
+     * Ensure user's coordinate value is valid per sudoku rules
+     * @param row
+     * @param col
+     * @param entry
+     * @return
+     */
+    private boolean boxCheck(int row, int col, int entry) {
     	int rowBound = (int) (row/Math.sqrt(size));
         rowBound = (int) (rowBound * Math.sqrt(size));
         int colBound = (int) (col/Math.sqrt(size));
@@ -77,14 +122,29 @@ public class Board {
         
     }
 
+    /**
+     * Delete coordinate value
+     * @param x
+     * @param y
+     */
     public void deleteEntry(int x, int y){
         squares.get(size*x + y).value = 0;
     }
 
+    /**
+     * Insert user's desired value into desired coordinate
+     * @param x
+     * @param y
+     * @param entry
+     */
     public void setEntry(int x, int y, int entry) {
         squares.get(size*x + y).value = entry;
     }
 
+    /**
+     * Check if sudoku board is solved
+     * @return
+     */
     public boolean isSolved() {
         for(int i = 0; i < squares.size(); i++)
         	if(squares.get(i).value == 0)

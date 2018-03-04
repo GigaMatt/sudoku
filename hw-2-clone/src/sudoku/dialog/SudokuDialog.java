@@ -55,7 +55,11 @@ public class SudokuDialog extends JFrame {
 		this(DEFAULT_SIZE);
 	}
 
-	/** Create a new dialog of the given screen dimension. */
+	
+	
+	/** Create a new dialog of the given screen dimension. 
+	 * @param dim The dimensions of the board
+	 */
 	public SudokuDialog(Dimension dim) {
 		super("Sudoku");
 		setSize(dim);
@@ -66,6 +70,8 @@ public class SudokuDialog extends JFrame {
 		setVisible(true);
 	}
 
+	
+	
 	/**
 	 * Callback to be invoked when a square of the board is clicked.
 	 * @param x 0-based row index of the clicked square.
@@ -74,7 +80,7 @@ public class SudokuDialog extends JFrame {
 	private void boardClicked(int x, int y) {
 
 
-		//FIXME: REQUIRING 2 CLICKS FOR FULL FUCNTIONALITY
+		//FIXME: SOMETIMES REQUIRING 2 CLICKS FOR FULL FUCNTIONALITY
 
 		if(numChoosen == 0) {
 			board.setEntry(x, y, numChoosen);
@@ -86,13 +92,10 @@ public class SudokuDialog extends JFrame {
 			boardPanel.repaint();
 			if(board.isSolved()) {
 
-				//@FIXME: GET DIR TO WINNING SOUND
 				String winningSound = "winning-sound.wav";
-				//System.out.print(winningSound);
 				try {
-					playWinningSound(winningSound);
+					playSound(winningSound);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				int option = JOptionPane.showConfirmDialog(null, "Congratulations! Do you want to play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
@@ -100,53 +103,37 @@ public class SudokuDialog extends JFrame {
 				if (option == 0) {		//The ISSUE is here
 					board = new Board(board.size);
 					boardPanel.setBoard(board);
-					repaint();			//we can switch now the box indexes change too
+					repaint();
 				} else {
 					showMessage("No");
 				}
 			}
 		}else {
-			showMessage("Conflicing Numbers");
-
-
-			//FIXME: GET DIR TO INCONSISTANT SOUND
-			
+			showMessage("Conflicing Numbers");			
 			
 			String inconsistantPlacementSound = "error-sound.wav";
-			//DEBUG: System.out.print(inconsistantPlacementSound);
 			try {
-				playInconsistantSound(inconsistantPlacementSound);
+				playSound(inconsistantPlacementSound);
 			} catch (Exception e) {
-				//TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
+	
+	
 
-	private void playWinningSound(String winningSound)   throws Exception
-	{
-		// open the sound file as a Java input stream
-		InputStream in = new FileInputStream(winningSound);
-
-		// create an audiostream from the inputstream
+	/**
+	 * Play sounds when incorrect, open file as InputStream && convert to AudioStream
+	 * @param soundPath Source file for .wav sound
+	 */
+	private void playSound(String soundPath) throws Exception {
+		InputStream in = new FileInputStream(soundPath);
 		AudioStream audioStream = new AudioStream(in);
-
-		// play the audio clip with the audioplayer class
 		AudioPlayer.player.start(audioStream);
 	}
 
-	private void playInconsistantSound(String inconsistantPlacementSound)   throws Exception
-	{
-		// open the sound file as a Java input stream
-		InputStream in = new FileInputStream(inconsistantPlacementSound);
-
-		// create an audiostream from the inputstream
-		AudioStream audioStream = new AudioStream(in);
-
-		// play the audio clip with the audioplayer class
-		AudioPlayer.player.start(audioStream);
-	}
-
+	
+	
 	/**
 	 * Callback to be invoked when a number button is clicked.
 	 * @param number Clicked number (1-9), or 0 for "X".
@@ -161,6 +148,8 @@ public class SudokuDialog extends JFrame {
 		showMessage("Number clicked: " + number);
 	}
 
+	
+	
 	/**
 	 * Callback to be invoked when a new button is clicked.
 	 * If the current game is over, start a new game of the given size;
@@ -171,11 +160,11 @@ public class SudokuDialog extends JFrame {
 	private void newClicked(int size) {		//changes board size
 		// WRITE YOUR CODE HERE ...
 		//
-		int opcion = JOptionPane.showConfirmDialog(null, "Play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
-		if (opcion == 0) { //The ISSUE is here
+		int option = JOptionPane.showConfirmDialog(null, "Play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
+		if (option == 0) { 					//The ISSUE is here
 			board = new Board(size);
 			boardPanel.setBoard(board);
-			repaint();//we can switch now the box indexes change too
+			repaint();						//we can switch now the box indexes change too
 			showMessage("New clicked: " + size);
 		} else {
 			showMessage("No");
@@ -183,6 +172,8 @@ public class SudokuDialog extends JFrame {
 
 	}
 
+	
+	
 	/**
 	 * Display the given string in the message bar.
 	 * @param msg Message to be displayed.
@@ -191,7 +182,11 @@ public class SudokuDialog extends JFrame {
 		msgBar.setText(msg);
 	}
 
-	/** Configure the UI. */
+	
+	
+	/** 
+	 * Configure the UI.
+	 */
 	private void configureUI() {
 		setIconImage(createImageIcon("sudoku.png").getImage());
 		setLayout(new BorderLayout());
@@ -211,7 +206,11 @@ public class SudokuDialog extends JFrame {
 		add(msgBar, BorderLayout.SOUTH);
 	}
 
-	/** Create a control panel consisting of new and number buttons. */
+	
+	
+	/** 
+	 * Create a control panel consisting of new and number buttons.
+	 */
 	private JPanel makeControlPanel() {
 		JPanel newButtons = new JPanel(new FlowLayout());
 		JButton new4Button = new JButton("New (4x4)");
@@ -244,7 +243,12 @@ public class SudokuDialog extends JFrame {
 		return content;
 	}
 
-	/** Create an image icon from the given image file. */
+	
+	
+	/** 
+	 * Create an image icon from the given image file. 
+	 * @param filename Directory of the image 
+	 */
 	private ImageIcon createImageIcon(String filename) {
 		URL imageUrl = getClass().getResource(IMAGE_DIR + filename);
 		if (imageUrl != null) {
@@ -253,6 +257,11 @@ public class SudokuDialog extends JFrame {
 		return null;
 	}
 
+	
+	/**
+	 * Run the program
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		new SudokuDialog();
 	}

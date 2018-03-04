@@ -13,6 +13,11 @@ public class Square {
 	
 	public int x,y, value;
 	
+	/**
+	 * Identify a certain coordinate on the board
+	 * @param x
+	 * @param y
+	 */
 	public Square(int x, int y) {
 		this.x = x;
 		this.y = y;
