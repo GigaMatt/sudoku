@@ -78,8 +78,6 @@ public class SudokuDialog extends JFrame {
 			boardPanel.setBoard(board);
 			boardPanel.repaint();
 			if(board.isSolved()) {
-				int opcion = JOptionPane.showConfirmDialog(null, "Congratulations! Do you want to play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
-
 
 				//@FIXME: GET DIR TO WINNING SOUND
 				String winningSound = "winning-sound.wav";
@@ -90,9 +88,9 @@ public class SudokuDialog extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				int option = JOptionPane.showConfirmDialog(null, "Congratulations! Do you want to play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
 
-
-				if (opcion == 0) {		//The ISSUE is here
+				if (option == 0) {		//The ISSUE is here
 					board = new Board(board.size);
 					boardPanel.setBoard(board);
 					repaint();			//we can switch now the box indexes change too
@@ -104,13 +102,15 @@ public class SudokuDialog extends JFrame {
 			showMessage("Conflicing Numbers");
 
 
-			//@FIXME: GET DIR TO INCONSISTANT SOUND
+			//FIXME: GET DIR TO INCONSISTANT SOUND
+			
+			
 			String inconsistantPlacementSound = "error-sound.wav";
-			//System.out.print(inconsistantPlacementSound);
+			//DEBUG: System.out.print(inconsistantPlacementSound);
 			try {
 				playInconsistantSound(inconsistantPlacementSound);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				//TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
