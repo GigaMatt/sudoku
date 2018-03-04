@@ -58,6 +58,7 @@ public class BoardPanel extends JPanel {
             	int xy = locateSquaree(e.getX(), e.getY());
             	if (xy >= 0) {
             		listener.clicked(xy / 100, xy % 100);
+            		//Color in selected square
             	}
             }
         });
@@ -100,6 +101,12 @@ public class BoardPanel extends JPanel {
         final Color oldColor = g.getColor();
         g.setColor(boardColor); 
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
+        g.setColor(boardColor); 
+        //Color the square
+        g.setColor(Color.green);
+        //FIXME: Move when clicked elsewhere
+		g.fillRect(squareSize * board.x, squareSize * board.y, squareSize, squareSize); 
+
 
         
         //draw the grid lines
@@ -131,7 +138,6 @@ public class BoardPanel extends JPanel {
         	for(int j = 1; j <= board.size; j++) {//from one to print out last row
         		if(board.getEntry(i, j - 1) != 0) {	
         			char[] temp = new char[] {(char) (board.getEntry(i, j - 1) + '0')};
-        			//best I could get it to the center of the square
         			g.drawChars(temp, 0, 1, (int) (squareSize*i + squareSize/2), (int) (squareSize*j - squareSize/2));
         		}
         	}

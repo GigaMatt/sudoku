@@ -15,7 +15,10 @@ import java.util.List;
 public class Board {
 	
 	public int size;
+	public int x;
+	public int y;
     private List<Square> squares;
+    
     
     /**
      * Initiate Board

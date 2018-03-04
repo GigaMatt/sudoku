@@ -9,6 +9,7 @@
 
 package sudoku.dialog;
 import java.awt.*;
+import java.awt.Graphics;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -49,14 +50,16 @@ public class SudokuDialog extends JFrame {
 
 	/** Message bar to display various messages. */
 	private JLabel msgBar = new JLabel("");
+	
+	private int squareSize;
 
 	/** Create a new dialog. */
 	public SudokuDialog() {
 		this(DEFAULT_SIZE);
 	}
 
-	
-	
+
+
 	/** Create a new dialog of the given screen dimension. 
 	 * @param dim The dimensions of the board
 	 */
@@ -70,28 +73,36 @@ public class SudokuDialog extends JFrame {
 		setVisible(true);
 	}
 
-	
-	
+
+
 	/**
 	 * Callback to be invoked when a square of the board is clicked.
 	 * @param x 0-based row index of the clicked square.
 	 * @param y 0-based column index of the clicked square.
 	 */
 	private void boardClicked(int x, int y) {
-
-
+		
+		
 		//FIXME: SOMETIMES REQUIRING 2 CLICKS FOR FULL FUCNTIONALITY
+
+		
+		board.x = x;
+		board.y=y;
+		boardPanel.repaint();
 
 		if(numChoosen == 0) {
 			board.setEntry(x, y, numChoosen);
 			boardPanel.setBoard(board);
-			boardPanel.repaint();
-		}else if(board.validEntry(x, y, numChoosen)) {
+			showMessage(String.format("You've chosen "+x+" , "+y+"."));
+		}
+
+		else if(board.validEntry(x, y, numChoosen)) {
 			board.setEntry(x, y, numChoosen);
 			boardPanel.setBoard(board);
 			boardPanel.repaint();
-			if(board.isSolved()) {
+			showMessage(String.format("You've chosen "+x+", "+y));
 
+			if(board.isSolved()) {
 				String winningSound = "winning-sound.wav";
 				try {
 					playSound(winningSound);
@@ -110,7 +121,7 @@ public class SudokuDialog extends JFrame {
 			}
 		}else {
 			showMessage("Conflicing Numbers");			
-			
+
 			String inconsistantPlacementSound = "error-sound.wav";
 			try {
 				playSound(inconsistantPlacementSound);
@@ -119,8 +130,8 @@ public class SudokuDialog extends JFrame {
 			}
 		}
 	}
-	
-	
+
+
 
 	/**
 	 * Play sounds when incorrect, open file as InputStream && convert to AudioStream
@@ -132,24 +143,20 @@ public class SudokuDialog extends JFrame {
 		AudioPlayer.player.start(audioStream);
 	}
 
-	
-	
+
+
 	/**
 	 * Callback to be invoked when a number button is clicked.
 	 * @param number Clicked number (1-9), or 0 for "X".
 	 */
 	private void numberClicked(int number) {
-
-		//FIXME: VERIFY THE NUMBER IS BEING READBACK TO THE USER 
-
-		//FIXME: WRITE YOUR CODE HERE ...
-
+        boardPanel.repaint();
 		numChoosen = number;
-		showMessage("Number clicked: " + number);
+		showMessage("You chose " + number);
 	}
 
-	
-	
+
+
 	/**
 	 * Callback to be invoked when a new button is clicked.
 	 * If the current game is over, start a new game of the given size;
@@ -158,22 +165,21 @@ public class SudokuDialog extends JFrame {
 	 * @param size Requested puzzle size, either 4 or 9.
 	 */
 	private void newClicked(int size) {		//changes board size
-		// WRITE YOUR CODE HERE ...
-		//
 		int option = JOptionPane.showConfirmDialog(null, "Play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
-		if (option == 0) { 					//The ISSUE is here
+		if (option == 0) { 					
 			board = new Board(size);
 			boardPanel.setBoard(board);
 			repaint();						//we can switch now the box indexes change too
-			showMessage("New clicked: " + size);
+			showMessage("New game of size " + size);
 		} else {
 			showMessage("No");
 		}
+		showMessage("New game of size " + size);
 
 	}
 
-	
-	
+
+
 	/**
 	 * Display the given string in the message bar.
 	 * @param msg Message to be displayed.
@@ -182,8 +188,8 @@ public class SudokuDialog extends JFrame {
 		msgBar.setText(msg);
 	}
 
-	
-	
+
+
 	/** 
 	 * Configure the UI.
 	 */
@@ -206,8 +212,8 @@ public class SudokuDialog extends JFrame {
 		add(msgBar, BorderLayout.SOUTH);
 	}
 
-	
-	
+
+
 	/** 
 	 * Create a control panel consisting of new and number buttons.
 	 */
@@ -243,8 +249,8 @@ public class SudokuDialog extends JFrame {
 		return content;
 	}
 
-	
-	
+
+
 	/** 
 	 * Create an image icon from the given image file. 
 	 * @param filename Directory of the image 
@@ -257,7 +263,7 @@ public class SudokuDialog extends JFrame {
 		return null;
 	}
 
-	
+
 	/**
 	 * Run the program
 	 * @param args
