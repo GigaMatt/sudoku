@@ -9,7 +9,6 @@
 
 package sudoku.dialog;
 import java.awt.*;
-import java.awt.Graphics;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -81,10 +80,6 @@ public class SudokuDialog extends JFrame {
 	 * @param y 0-based column index of the clicked square.
 	 */
 	private void boardClicked(int x, int y) {
-		
-		
-		//FIXME: SOMETIMES REQUIRING 2 CLICKS FOR FULL FUCNTIONALITY
-
 		
 		board.x = x;
 		board.y=y;

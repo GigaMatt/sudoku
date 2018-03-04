@@ -103,7 +103,7 @@ public class BoardPanel extends JPanel {
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
         g.setColor(boardColor); 
         //Color the square
-        g.setColor(Color.green);
+        g.setColor(Color.decode("#23a008"));
         //FIXME: Move when clicked elsewhere
 		g.fillRect(squareSize * board.x, squareSize * board.y, squareSize, squareSize); 
 
