@@ -3,6 +3,7 @@
  * Homework 2
  * @author Enrique Salcido
  * @author Matthew S Montoya
+ * @author Yoonsik Cheon
  * Purpose: To practice implementing Java Applets & Graphics
  * Last Modified: 4 March 2018
  */
@@ -33,7 +34,8 @@ import sun.audio.AudioStream;
  */
 @SuppressWarnings("serial")
 public class SudokuDialog extends JFrame {
-
+	
+	/** Keeps track of the number chosen. */
 	private int numChoosen;
 
 	/** Default dimension of the dialog. */
@@ -50,6 +52,7 @@ public class SudokuDialog extends JFrame {
 	/** Message bar to display various messages. */
 	private JLabel msgBar = new JLabel("");
 	
+	/** Square size of a square on the board. */
 	private int squareSize;
 
 	/** Create a new dialog. */

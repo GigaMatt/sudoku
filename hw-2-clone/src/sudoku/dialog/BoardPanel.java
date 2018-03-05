@@ -3,6 +3,7 @@
  * Homework 2
  * @author Enrique Salcido
  * @author Matthew S Montoya
+ * @author Yoonsik Cheon
  * Purpose: To practice implementing Java Applets & Graphics
  * Last Modified: 4 March 2018
  */
@@ -28,13 +29,12 @@ import sudoku.model.Board;
 @SuppressWarnings("serial")
 public class BoardPanel extends JPanel {
     
+	/** Callback to notify clicking of a square. 
+	 * 
+	 * @param x 0-based column index of the clicked square
+	 * @param y 0-based row index of the clicked square
+	 */
 	public interface ClickListener {
-		
-		/** Callback to notify clicking of a square. 
-		 * 
-		 * @param x 0-based column index of the clicked square
-		 * @param y 0-based row index of the clicked square
-		 */
 		void clicked(int x, int y);
 	}
 	
@@ -49,7 +49,7 @@ public class BoardPanel extends JPanel {
 
     /** Create a new board panel to display the given board.
      * @param board Instance of board being worked on
-     * @param listener
+     * @param listener gets the possition that was clicked on
      */
     public BoardPanel(Board board, ClickListener listener) {
         this.board = board;
@@ -58,7 +58,6 @@ public class BoardPanel extends JPanel {
             	int xy = locateSquaree(e.getX(), e.getY());
             	if (xy >= 0) {
             		listener.clicked(xy / 100, xy % 100);
-            		//Color in selected square
             	}
             }
         });
@@ -104,7 +103,6 @@ public class BoardPanel extends JPanel {
         g.setColor(boardColor); 
         //Color the square
         g.setColor(Color.decode("#23a008"));
-        //FIXME: Move when clicked elsewhere
 		g.fillRect(squareSize * board.x, squareSize * board.y, squareSize, squareSize); 
 
 
@@ -129,9 +127,6 @@ public class BoardPanel extends JPanel {
         		g.drawLine(0, squareSize*i, Math.min(dim.width, dim.height), squareSize*i);
         	}
         }
-        
-        //Test Case: Board recognizes input of 2 @ (2,3)
-        //board.setEntry(1, 2, 2);
         
         //drawing the numbers form matrix
         for(int i = 0; i < board.size; i++) {

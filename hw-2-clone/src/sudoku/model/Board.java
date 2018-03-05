@@ -3,6 +3,7 @@
  * Homework 2
  * @author Enrique Salcido
  * @author Matthew S Montoya
+ * @author Yoonsik Cheon
  * Purpose: To practice implementing Java Applets & Graphics
  * Last Modified: 4 March 2018
  */
@@ -14,9 +15,16 @@ import java.util.List;
 /** An abstraction of Sudoku puzzle. */
 public class Board {
 	
+	/** Size of the Sudoku game. */
 	public int size;
+	
+	/** x coordinate of square chosen. */
 	public int x;
+	
+	/** y coordinate of square chosen. */
 	public int y;
+	
+	/** The squares the compose the board. */
     private List<Square> squares;
     
     
