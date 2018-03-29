@@ -3,13 +3,13 @@
  * Homework 2
  * @author Enrique Salcido
  * @author Matthew S Montoya
+ * @author Yoonsik Cheon
  * Purpose: To practice implementing Java Applets & Graphics
  * Last Modified: 4 March 2018
  */
 
 package sudoku.dialog;
 import java.awt.*;
-import java.awt.Graphics;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -34,7 +34,8 @@ import sun.audio.AudioStream;
  */
 @SuppressWarnings("serial")
 public class SudokuDialog extends JFrame {
-
+	
+	/** Keeps track of the number chosen. */
 	private int numChoosen;
 
 	/** Default dimension of the dialog. */
@@ -51,6 +52,7 @@ public class SudokuDialog extends JFrame {
 	/** Message bar to display various messages. */
 	private JLabel msgBar = new JLabel("");
 	
+	/** Square size of a square on the board. */
 	private int squareSize;
 
 	/** Create a new dialog. */
@@ -81,10 +83,6 @@ public class SudokuDialog extends JFrame {
 	 * @param y 0-based column index of the clicked square.
 	 */
 	private void boardClicked(int x, int y) {
-		
-		
-		//FIXME: SOMETIMES REQUIRING 2 CLICKS FOR FULL FUCNTIONALITY
-
 		
 		board.x = x;
 		board.y=y;
