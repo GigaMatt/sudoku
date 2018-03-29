@@ -78,7 +78,7 @@ public class Board {
     public boolean validEntry(int row, int col, int entry) {
         if(row >= size || col >= size)
             return false;
-        if(entry > size)
+        if(entry > size) 
         	return false;
         return (rowColCheck(row, col, entry) && boxCheck(row, col, entry));
     }
