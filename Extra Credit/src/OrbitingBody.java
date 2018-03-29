@@ -30,7 +30,14 @@ public class OrbitingBody implements GetParams{
 
 	public void calculateX() {
 		int center = dim.width/2;
-		return (int)(center+distance*Math.cos(Math.toRadians(angle)));
+		
+		
+		//STEPS TO MAKE THIS HAPPEN
+		//x and y increment
+		//then you calculate them
+		//then you fill them
+		return (int)(center+distance*Math.cos(Math.toRadians(angle)));	//distance is distance from the center of the planet. We need dx and dy to make this happen. Reference images
+
 	}
 
 	public void calculateY() {
