@@ -10,23 +10,17 @@
 
 package sudoku.dialog;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
+//import javax.sound.sampled.AudioInputStream;
+import javax.swing.*;
 import sudoku.dialog.BoardPanel;
 import sudoku.model.Board;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
+//import sun.audio.AudioPlayer;
+//import sun.audio.AudioStream;
 
 /**
  * A dialog for playing simple Sudoku games.
@@ -39,7 +33,7 @@ public class SudokuDialog extends JFrame {
 	private int numChoosen;
 
 	/** Default dimension of the dialog. */
-	private final static Dimension DEFAULT_SIZE = new Dimension(310, 430);
+	private final static Dimension DEFAULT_SIZE = new Dimension(500, 500);
 
 	private final static String IMAGE_DIR = "/image/";
 
@@ -62,10 +56,12 @@ public class SudokuDialog extends JFrame {
 
 
 
+
 	/** Create a new dialog of the given screen dimension. 
 	 * @param dim The dimensions of the board
 	 */
 	public SudokuDialog(Dimension dim) {
+		
 		super("Sudoku");
 		setSize(dim);
 		board = new Board(9);		//default board size
@@ -136,9 +132,9 @@ public class SudokuDialog extends JFrame {
 	 * @param soundPath Source file for .wav sound
 	 */
 	private void playSound(String soundPath) throws Exception {
-		InputStream in = new FileInputStream(soundPath);
-		AudioStream audioStream = new AudioStream(in);
-		AudioPlayer.player.start(audioStream);
+		//InputStream in = new FileInputStream(soundPath);
+		//AudioInputStream audioStream = new AudioInputStream(in);
+		//AudioPlayer.player.start(audioStream);
 	}
 
 
@@ -192,30 +188,82 @@ public class SudokuDialog extends JFrame {
 	 * Configure the UI.
 	 */
 	private void configureUI() {
-		setIconImage(createImageIcon("sudoku.png").getImage());
-		setLayout(new BorderLayout());
+	        setIconImage(createImageIcon("sudoku.png").getImage());
+	        setLayout(new BorderLayout());
 
-		JPanel buttons = makeControlPanel();
-		// boarder: top, left, bottom, right
-		buttons.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
-		add(buttons, BorderLayout.NORTH);
+	        //JPanel buttons = makeControlPanel();
+	        // boarder: top, left, bottom, right
+	        JFrame frame = new JFrame("Sudoku Menu");
+	        frame.setVisible(true);
+	        frame.setSize(400,200);
+	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		JPanel board = new JPanel();
-		board.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
-		board.setLayout(new GridLayout(1,1));
-		board.add(boardPanel);
-		add(board, BorderLayout.CENTER);
+	        JMenuBar menuBar = new JMenuBar();
+	        frame.setJMenuBar(menuBar);
+	        JMenu menu = new JMenu("Game");
+	        menu.setMnemonic(KeyEvent.VK_G);
+	        menu.getAccessibleContext().setAccessibleDescription("Game Menu");
+	        menuBar.add(menu);
+	        
+	        
+			JMenuItem newGame = new JMenuItem("New Game");
+			menu.add(newGame);
+			menu.addSeparator();
+			//TODO Create the new game
+			//newClicked(9);
 
-		msgBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
-		add(msgBar, BorderLayout.SOUTH);
-	}
+			JMenuItem solve = new JMenuItem("Solve For Me");
+			menu.add(solve);
+			menu.addSeparator();
+			
+			JMenuItem isSolved = new JMenuItem("Is this solveable?");
+			menu.add(isSolved);
+			
+			
+			JToolBar toolBar = new JToolBar("Still draggable");
+	        makeControlPanel(toolBar);
+
+	        
+	        //HOLD UP
+	        
+	        addButtons();
+	        
+	        public static void addButtons() {
+	        	//first button
+	            button = makeNavigationButton("Back24", PREVIOUS,
+	                                          "Back to previous something-or-other",
+	                                          "Previous");
+	            toolBar.add(button);
+
+	            //second button
+	            button = makeNavigationButton("Up24", UP,
+	                                          "Up to something-or-other",
+	                                          "Up");
+	            toolBar.add(button);
+	        }
+	        
+	        ///////
+
+	        //buttons.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
+	        add(menuBar,BorderLayout.NORTH);
+	        //add(buttons, BorderLayout.NORTH);
+
+	        JPanel board = new JPanel();
+	        board.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
+	        board.setLayout(new GridLayout(1,1));
+	        board.add(boardPanel);
+	        add(board, BorderLayout.CENTER);
+
+	        msgBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
+	        add(msgBar, BorderLayout.SOUTH);
+	    }
 
 
 
 	/** 
 	 * Create a control panel consisting of new and number buttons.
 	 */
-	private JPanel makeControlPanel() {
+	private JPanel makeControlPanel(JToolBar toolBar) {
 		JPanel newButtons = new JPanel(new FlowLayout());
 		JButton new4Button = new JButton("New (4x4)");
 		for (JButton button: new JButton[] { new4Button, new JButton("New (9x9)") }) {
@@ -229,7 +277,7 @@ public class SudokuDialog extends JFrame {
 
 		// buttons labeled 1, 2, ..., 9, and X.
 		JPanel numberButtons = new JPanel(new FlowLayout());
-		int maxNumber = board.size() + 1;
+		int maxNumber = board.size + 1;
 		for (int i = 1; i <= maxNumber; i++) {
 			int number = i % maxNumber;
 			JButton button = new JButton(number == 0 ? "X" : String.valueOf(number));
