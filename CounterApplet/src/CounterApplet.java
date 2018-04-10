@@ -4,7 +4,7 @@ import javax.swing.JLabel;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class CounterApplet extends Applet implements MouseListener{
+public class CounterApplet extends Applet{
 
 
 	private Counter counter = new Counter();
@@ -16,8 +16,6 @@ public class CounterApplet extends Applet implements MouseListener{
 		display.setText(Integer.toString(counter.value()));//shows initial value of 0
 		JButton button = new JButton("Increment");
 		add(button);//adds button
-		
-		button.addMouseLis
 
 		button.addActionListener(new MyActionListener());
 
@@ -42,35 +40,5 @@ public class CounterApplet extends Applet implements MouseListener{
 		public int value() {
 			return value;
 		}
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }
