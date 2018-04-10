@@ -1,23 +1,26 @@
 package sudoku.dialog;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+
+import java.awt.event.KeyEvent;
+import javax.swing.*;
 
 public class JFrame1 {
 	public static void main(String[] args) {
+
 		JFrame jf = new JFrame();
 		jf.setTitle("Sudoku");
 		jf.setSize(500,500);
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.setVisible(true);
-		
-		JMenuBar jmbar = new JMenuBar();
-		jf.setJMenuBar(jmbar);
-		
-		JMenu file = new JMenu("File");	//create File menu named "File"
-		jmbar.add(file);
-		file.addSeparator();	//line separator in the menu bar
+	    
+	    JMenuBar jmb= new JMenuBar();
+	    jf.setJMenuBar(jmb);
+	    
+	    
+	    JMenu file = new JMenu("File");
+	    //file.setMnemonic(KeyEvent.VK_G);
+	    //file.getAccessibleContext().setAccessibleDescription("Game Menu");
+	    jmb.add(file);
+	    file.addSeparator();
 		
 		JMenuItem newGame = new JMenuItem("New Game");
 		file.add(newGame);

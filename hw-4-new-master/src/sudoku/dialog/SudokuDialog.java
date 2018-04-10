@@ -18,9 +18,12 @@ import java.net.URL;
  * newClicked(int), numberClicked(int) and boardClicked(int,int).
  *
  * @author Yoonsik Cheon
+ * @author Enrique Salcido
+ * @author Matthew Montoya
  * @author Anthony Ayo
  * @version 3
  */
+
 @SuppressWarnings("serial")
 public class SudokuDialog extends JFrame {
     JMenuBar MenuBar;
@@ -32,7 +35,7 @@ public class SudokuDialog extends JFrame {
     public JMenu CreateMenuBar() {
     JFrame frame = new JFrame("Sudoku Menu");
     frame.setVisible(true);
-    frame.setSize(400,200);
+    frame.setSize(500,500);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     MenuBar = new JMenuBar();
