@@ -225,7 +225,6 @@ public class SudokuDialog extends JFrame {
 			public void actionPerformed(ActionEvent e){
 				newClicked(9);
 			}
-
 		});
 		file.add(newGameMenu);
 		file.addSeparator();
