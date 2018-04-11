@@ -15,6 +15,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 import sudoku.model.Board;
@@ -97,7 +98,7 @@ public class BoardPanel extends JPanel {
         squareSize = Math.min(dim.width, dim.height) / board.size;
 
         // draw background
-        final Color oldColor = g.getColor();
+        //final Color oldColor = g.getColor();
         g.setColor(boardColor); 
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
         g.setColor(boardColor); 

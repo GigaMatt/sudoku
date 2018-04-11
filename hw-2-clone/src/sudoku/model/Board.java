@@ -10,10 +10,13 @@
 
 package sudoku.model;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /** An abstraction of Sudoku puzzle. */
-public class Board {
+public class Board{
 	
 	/** Size of the Sudoku game. */
 	public int size;
@@ -25,7 +28,7 @@ public class Board {
 	public int y;
 	
 	/** The squares the compose the board. */
-    private List<Square> squares;
+    public List<Square> squares;
     
     
     /**
@@ -33,16 +36,6 @@ public class Board {
      */
     public Board() {
     	this.size = 9;
-    	squares = new ArrayList<Square>(81);
-    }
-
-    
-    /**
-     * Create ArrayList of n*n squares
-     * @param size
-     */
-    public Board(int size) {
-        this.size = size;
     	squares = new ArrayList<Square>(size*size);
     	for(int i = 0; i < size; i++) {
     		for(int j = 0; j < size; j++) {
@@ -51,18 +44,35 @@ public class Board {
     	}
     }
 
+    
     /**
-     * Return size of the board
-     * @return
+     * Create ArrayList of n*n squares
+     * @param size
      */
-    public int size(){
-        return size;
+    public Board(int size) {
+        if(size == 4) {
+	    	this.size = size;
+	    	squares = new ArrayList<Square>(size*size);
+	    	for(int i = 0; i < size; i++) {
+	    		for(int j = 0; j < size; j++) {
+	    			squares.add(new Square(i, j));
+	    		}
+	    	}
+        }
+        else {
+        	this.size = 9;
+        	squares = new ArrayList<Square>(size*size);
+	    	for(int i = 0; i < size; i++) {
+	    		for(int j = 0; j < size; j++) {
+	    			squares.add(new Square(i, j));
+	    		}
+	    	}
+        }
     }
     
-    public Square getSquare(int i, int j) {
+    private Square getSquare(int i, int j) {
     	return squares.get(i*size + j);
     }
-    
     
     /**
      * Return value of a square
@@ -73,9 +83,7 @@ public class Board {
     public int getEntry(int i, int j) {
     	return getSquare(i,j).value;
     }
-    
-    
-        
+      
     /**
      * Ensure user's desired coordinates are valid
      * @param row
@@ -91,8 +99,6 @@ public class Board {
         return (rowColCheck(row, col, entry) && boxCheck(row, col, entry));
     }
     
-    
-
     /**
      * 
      * @param row
@@ -151,7 +157,10 @@ public class Board {
      * @param entry
      */
     public void setEntry(int x, int y, int entry) {
-        squares.get(size*x + y).value = entry;
+        if(entry <= size && entry >= 0) {
+        	squares.get(size*x + y).value = entry;
+        	squares.get(size*x + y).updateSet(entry);
+    	}
     }
 
     /**
@@ -164,5 +173,32 @@ public class Board {
         		return false;
         return true;
     }
+
+
+	public Set<Integer> getPossibleValues(int x, int y) {
+		Set<Integer> s = new HashSet<Integer>();
+		s.addAll(Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8}));
+		
+		for(int i = 0; i < size; i++) {
+			if(getEntry(x,i) != 0) {
+				s.remove(getEntry(x,i));
+			}
+		}
+		
+		if(s.isEmpty())
+			return s;
+		
+		for(int i = 0; i < size; i++) {
+			if(getEntry(i,y) != 0) {
+				s.remove(getEntry(x,i));
+			}
+		}
+		
+		if(s.isEmpty())
+			return s;
+		
+		return s;
+		
+	}
     
 }
