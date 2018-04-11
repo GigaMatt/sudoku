@@ -13,10 +13,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
 //import javax.sound.sampled.AudioInputStream;
 import javax.swing.*;
 import sudoku.dialog.BoardPanel;
@@ -192,50 +196,103 @@ public class SudokuDialog extends JFrame {
 	private void configureUI() {
 		setIconImage(createImageIcon("sudoku.png").getImage());
 		setLayout(new BorderLayout());
-		
-		
+
+
 		JToolBar toolBar = new JToolBar("Sudoku");
 		toolBar.setSize(750,100);
-		
+
 		//add buttons to the tool bar
 		addButtons(toolBar);
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		add(toolBar, BorderLayout.NORTH);
-		
-	    JMenuBar jmb = new JMenuBar();
-	    setJMenuBar(jmb);
-	    
-	    
-	    JMenu file = new JMenu("File");
-	    file.setMnemonic(KeyEvent.VK_G);
-	    file.getAccessibleContext().setAccessibleDescription("Game Menu");
-	    jmb.add(file);
-	    file.addSeparator();
-		
-		JMenuItem newGameMenu = new JMenuItem("New Game");
-		file.add(newGameMenu);
-		file.addSeparator();
 
-		JMenuItem solve = new JMenuItem("Solve for me");
-		file.add(solve);
-		file.addSeparator();
+		JMenuBar jmb = new JMenuBar();
+		setJMenuBar(jmb);
+
+		JMenu file = new JMenu("File");
+		file.setMnemonic(KeyEvent.VK_F);
+
+		//file.setMnemonic(KeyEvent.VK_G);
+		//file.getAccessibleContext().setAccessibleDescription("Game Menu");
+		jmb.add(file);
+
+		//IMAGE FOR PLAYING A NEW GAME
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File("play.jpg"));
+		} 
+		catch (IOException e) {}
+		BufferedImage ret = new BufferedImage(32,32,BufferedImage.TYPE_INT_RGB);
+		ret.getGraphics().drawImage(img,0,0,32,32,null);
+		ImageIcon playIcon = new ImageIcon(ret);
+		JMenuItem newGameMenu = new JMenuItem("New Game", playIcon);
 		
-		JMenuItem isSolved = new JMenuItem("Solveable?");
-		file.add(isSolved);
-		file.addSeparator();
+		newGameMenu.setMnemonic(KeyEvent.VK_N);
+		newGameMenu.setToolTipText("Play a new game");
+
+
+
+
+
+		//BULB
+		BufferedImage bulb = null;
+		try {
+			bulb = ImageIO.read(new File("bulb.png"));
+		} 
+		catch (IOException e) {}
+		BufferedImage returnBulb = new BufferedImage(32,32,BufferedImage.TYPE_INT_RGB);
+		ret.getGraphics().drawImage(bulb,0,0,32,32,null);
+		ImageIcon bulbIcon = new ImageIcon(returnBulb);
+		JMenuItem solve = new JMenuItem("Solve for me", bulbIcon);
+
+
+		//IMAGE FOR CanBeSolved?
+		BufferedImage question = null;
+		try {
+			question = ImageIO.read(new File("questionMark.jpg"));
+		} 
+		catch (IOException e) {}
+		BufferedImage returnQuestion = new BufferedImage(32,32,BufferedImage.TYPE_INT_RGB);
+		ret.getGraphics().drawImage(question,0,0,32,32,null);
+		ImageIcon solveIcon = new ImageIcon(returnQuestion);
+		JMenuItem isSolved = new JMenuItem("Solveable?", solveIcon);
+
+
+		
 		
 		JMenuItem exit = new JMenuItem("Exit");
+
+		file.add(newGameMenu);
+		file.addSeparator();
+		file.add(solve);
+		file.addSeparator();
+		file.add(isSolved);
+		file.addSeparator();
 		file.add(exit);
 		file.addSeparator();
-		
+
+		JMenu edit = new JMenu("Edit");
+		file.setMnemonic(KeyEvent.VK_G);
+		file.getAccessibleContext().setAccessibleDescription("Game Menu");
+		jmb.add(edit);
+
+		JMenuItem undo = new JMenuItem("Undo");
+		JMenuItem redo = new JMenuItem("Redo");
+
+		edit.add(undo);
+		edit.addSeparator();
+		edit.add(redo);
+		edit.addSeparator();
+
+
 		class exitaction implements ActionListener{
 			public void actionPerformed (ActionEvent e){
 				System.exit(0);
 			}
 		}
-		
+
 		exit.addActionListener(new exitaction());
 
 		JPanel board = new JPanel();
@@ -250,17 +307,16 @@ public class SudokuDialog extends JFrame {
 
 
 	protected void addButtons(JToolBar toolBar) {
-		
-		JButton new4Button = new JButton("New (4x4)");
-		for (JButton button: new JButton[] { new4Button, new JButton("New (9x9)") }) {
+
+		for (JButton button: new JButton[] {new JButton("New (9x9)") }) {
 			button.setFocusPainted(false);
 			button.addActionListener(e -> {
-				newClicked(e.getSource() == new4Button ? 4 : 9);
+				newClicked(e.getSource() == button ? 9 : 9);
 			});
 			toolBar.add(button);
 		}
 		toolBar.setAlignmentX(CENTER_ALIGNMENT);
-		
+
 		int maxNumber = board.size + 1;
 		for (int i = 1; i <= maxNumber; i++) {
 			int number = i % maxNumber;
@@ -268,7 +324,6 @@ public class SudokuDialog extends JFrame {
 			button.setFocusPainted(false);
 			button.setMargin(new Insets(0,2,0,2));
 			button.addActionListener(e -> numberClicked(number));
-			//numberButtons.add(button);
 			toolBar.add(button);
 
 		}
@@ -276,52 +331,9 @@ public class SudokuDialog extends JFrame {
 
 		JPanel toolBar2 = new JPanel();
 		toolBar2.setLayout(new BoxLayout(toolBar2, BoxLayout.PAGE_AXIS));
-		//content.add(newButtons);
 		toolBar2.add(toolBar);
 
 	}
-
-
-
-
-
-	/** 
-	 * Create a control panel consisting of new and number buttons.
-	 *
-	private JPanel makeControlPanel() {
-		JPanel newButtons = new JPanel(new FlowLayout());
-		JButton new4Button = new JButton("New (4x4)");
-		for (JButton button: new JButton[] { new4Button, new JButton("New (9x9)") }) {
-			button.setFocusPainted(false);
-			button.addActionListener(e -> {
-				newClicked(e.getSource() == new4Button ? 4 : 9);
-			});
-			newButtons.add(button);
-		}
-		newButtons.setAlignmentX(LEFT_ALIGNMENT);
-
-		// buttons labeled 1, 2, ..., 9, and X.
-		JPanel numberButtons = new JPanel(new FlowLayout());
-		int maxNumber = board.size + 1;
-		for (int i = 1; i <= maxNumber; i++) {
-			int number = i % maxNumber;
-			JButton button = new JButton(number == 0 ? "X" : String.valueOf(number));
-			button.setFocusPainted(false);
-			button.setMargin(new Insets(0,2,0,2));
-			button.addActionListener(e -> numberClicked(number));
-			numberButtons.add(button);
-		}
-		numberButtons.setAlignmentX(LEFT_ALIGNMENT);
-
-		JPanel content = new JPanel();
-		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
-		content.add(newButtons);
-		content.add(numberButtons);
-		return content;
-	}
-	*/
-
-
 
 	/** 
 	 * Create an image icon from the given image file. 
