@@ -13,12 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.EventObject;
 import java.util.EventListener;
@@ -226,28 +221,10 @@ public class SudokuDialog extends JFrame {
 		file.getAccessibleContext().setAccessibleDescription("Game Menu");
 		jmb.add(file);
 
-		//IMAGE FOR PLAYING A NEW GAME
-		//ImageIcon newGameIcon = createImageIcon("play1.png");//.getImage();
+		//JMenuItem FILE
 		JMenuItem newGame = new JMenuItem("New Game", KeyEvent.VK_N);
-
-
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		//MediaTracker tracker = new MediaTracker(this);
-		Image image = toolkit.getImage("play1.png");
-
-		//image = resizeImage(image, 32, 32);
-		Image newimg = image.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH);
-		//File outputfile = new File("src/image/play2.jpg");
-		//ImageIO.write((RenderedImage) newimg, "jpg", outputfile);
-		//save the image
-		//send that image to the createImageIcon()
-		//image = toolkit.getImage("play2.png");
-		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream(newimg)));
-
-		//ImageIcon icon=new ImageIcon(image);
-
+		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/play1_resized.png")));
 		newGame.setIcon(newGameIcon);
-
 		newGame.setToolTipText("Play a new game");
 		newGame.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -256,50 +233,56 @@ public class SudokuDialog extends JFrame {
 			}
 		});
 		file.add(newGame);
-
 		file.addSeparator();
 
-
-
-
-
-		//BULB
-
-		JMenuItem solve = new JMenuItem("Solve for me");
-
-
-		//IMAGE FOR CanBeSolved?
-
-		JMenuItem isSolved = new JMenuItem("Solveable?");
-
-
-
-		//IMAGE FOR PLAYING A NEW GAME
-
-		JMenuItem exit = new JMenuItem("Exit");
-
-
-
-
-		file.add(solve);
+		
+		//JMenuItem SOLVE_PUZZLE
+		JMenuItem solvePuzzle = new JMenuItem("Solve Puzzle", KeyEvent.VK_S);
+		ImageIcon solvePuzzleIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/bulb_resized.png")));
+		solvePuzzle.setIcon(solvePuzzleIcon);
+		solvePuzzle.setToolTipText("Solve the puzzle for me");
+		file.add(solvePuzzle);
 		file.addSeparator();
-		file.add(isSolved);
+
+		//JMenuItem TEST_SOLVEABILITY
+		JMenuItem testSolveability = new JMenuItem("Check Progress", KeyEvent.VK_I);
+		ImageIcon solveableIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/questionMark_resized.png")));
+		testSolveability.setIcon(solveableIcon);
+		testSolveability.setToolTipText("Check if my progress is solveable");
+		file.add(testSolveability);
 		file.addSeparator();
+
+		//JMenuItem EXIT
+		JMenuItem exit = new JMenuItem("Quit Game", KeyEvent.VK_Q);
+		ImageIcon exitIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/door_resized.png")));
+		exit.setIcon(exitIcon);
+		exit.setToolTipText("Exit the game");
 		file.add(exit);
 		file.addSeparator();
+		
 
 		JMenu edit = new JMenu("Edit");
 		file.setMnemonic(KeyEvent.VK_G);
 		file.getAccessibleContext().setAccessibleDescription("Game Menu");
 		jmb.add(edit);
 
-		JMenuItem undo = new JMenuItem("Undo");
-		JMenuItem redo = new JMenuItem("Redo");
-
+		//JMenuItem UNDO
+		JMenuItem undo = new JMenuItem("Undo", KeyEvent.VK_U);
+		ImageIcon undoIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/undo_resized.png")));
+		undo.setIcon(undoIcon);
+		undo.setToolTipText("Undo last move");
 		edit.add(undo);
 		edit.addSeparator();
+		
+		
+		//JMenuItem REDO
+		JMenuItem redo = new JMenuItem("Redo");
+		ImageIcon redoIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/redo_resized.png")));
+		redo.setIcon(redoIcon);
+		redo.setToolTipText("Redo last move");
 		edit.add(redo);
 		edit.addSeparator();
+
 
 
 		class exitaction implements ActionListener{
@@ -319,21 +302,7 @@ public class SudokuDialog extends JFrame {
 		msgBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
 		add(msgBar, BorderLayout.SOUTH);
 	}
-
-
-	private BufferedImage resizeImage(Image image, int width, int height) {
-		BufferedImage resizedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2 = resizedImg.createGraphics();
-
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2.drawImage(image, 0, 0, width, height, null);
-		g2.dispose();
-
-		return resizedImg;
-	}
-
-
-
+	
 
 	protected void addButtons(JToolBar toolBar) {
 
