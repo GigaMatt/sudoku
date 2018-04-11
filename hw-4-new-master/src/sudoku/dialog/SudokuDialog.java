@@ -19,10 +19,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.EventObject;
+import java.util.EventListener;
+
 
 import javax.imageio.ImageIO;
 //import javax.sound.sampled.AudioInputStream;
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+
 import sudoku.dialog.BoardPanel;
 import sudoku.model.Board;
 //import sun.audio.AudioPlayer;
@@ -262,8 +268,18 @@ public class SudokuDialog extends JFrame {
 
 		
 		
+<<<<<<< HEAD
 		JMenuItem exit = new JMenuItem("Exit");
 
+=======
+		JMenuItem newGameMenu = new JMenuItem("New Game");
+		newGameMenu.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				newClicked(9);
+			}
+
+		});
+>>>>>>> 6e2ddbddb636c61a12b0c6e5f76e1d9122d9ee3c
 		file.add(newGameMenu);
 		file.addSeparator();
 		file.add(solve);
@@ -305,6 +321,12 @@ public class SudokuDialog extends JFrame {
 		add(msgBar, BorderLayout.SOUTH);
 	}
 
+//	public void menuSelected(MenuEvent e){
+//		if(e.getSource()==newGameMenu){
+//
+//		}
+//	}
+
 
 	protected void addButtons(JToolBar toolBar) {
 
@@ -335,6 +357,54 @@ public class SudokuDialog extends JFrame {
 
 	}
 
+<<<<<<< HEAD
+=======
+
+
+
+
+	/** 
+	 * Create a control panel consisting of new and number buttons.
+	 *
+	private JPanel makeControlPanel() {
+		JPanel newButtons = new JPanel(new FlowLayout());
+		JButton new4Button = new JButton("New (4x4)");
+		for (JButton button: new JButton[] { new4Button, new JButton("New (9x9)") }) {
+			button.setFocusPainted(false);
+			button.addActionListener(e -> {
+				newClicked(e.getSource() == new4Button ? 4 : 9);
+			});
+			newButtons.add(button);
+		}
+		newButtons.setAlignmentX(LEFT_ALIGNMENT);
+
+		// buttons labeled 1, 2, ..., 9, and X.
+		JPanel numberButtons = new JPanel(new FlowLayout());
+		int maxNumber = board.size + 1;
+		for (int i = 1; i <= maxNumber; i++) {
+			int number = i % maxNumber;
+			JButton button = new JButton(number == 0 ? "X" : String.valueOf(number));
+			button.setFocusPainted(false);
+			button.setMargin(new Insets(0,2,0,2));
+			button.addActionListener(e -> numberClicked(number));
+			numberButtons.add(button);
+		}
+		numberButtons.setAlignmentX(LEFT_ALIGNMENT);
+
+		JPanel content = new JPanel();
+		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
+		content.add(newButtons);
+		content.add(numberButtons);
+		return content;
+	}
+	*/
+	public void keyTyped(KeyEvent e){
+
+	}
+
+
+
+>>>>>>> 6e2ddbddb636c61a12b0c6e5f76e1d9122d9ee3c
 	/** 
 	 * Create an image icon from the given image file. 
 	 * @param filename Directory of the image 
