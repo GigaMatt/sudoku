@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -61,8 +62,9 @@ public class SudokuDialog extends JFrame {
 	/** Square size of a square on the board. */
 	private int squareSize;
 
-	/** Create a new dialog. */
-	public SudokuDialog() {
+	/** Create a new dialog. 
+	 * @throws IOException */
+	public SudokuDialog() throws IOException {
 		this(DEFAULT_SIZE);
 	}
 
@@ -71,8 +73,9 @@ public class SudokuDialog extends JFrame {
 
 	/** Create a new dialog of the given screen dimension. 
 	 * @param dim The dimensions of the board
+	 * @throws IOException 
 	 */
-	public SudokuDialog(Dimension dim) {
+	public SudokuDialog(Dimension dim) throws IOException {
 
 		super("Sudoku");
 		setSize(dim);
@@ -198,8 +201,9 @@ public class SudokuDialog extends JFrame {
 
 	/** 
 	 * Configure the UI.
+	 * @throws IOException 
 	 */
-	private void configureUI() {
+	private void configureUI() throws IOException {
 		setIconImage(createImageIcon("sudoku.png").getImage());
 		setLayout(new BorderLayout());
 
@@ -219,69 +223,65 @@ public class SudokuDialog extends JFrame {
 
 		JMenu file = new JMenu("File");
 		file.setMnemonic(KeyEvent.VK_F);
-
-		//file.setMnemonic(KeyEvent.VK_G);
-		//file.getAccessibleContext().setAccessibleDescription("Game Menu");
+		file.getAccessibleContext().setAccessibleDescription("Game Menu");
 		jmb.add(file);
 
 		//IMAGE FOR PLAYING A NEW GAME
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(new File("play.jpg"));
-		} 
-		catch (IOException e) {}
-		BufferedImage ret = new BufferedImage(32,32,BufferedImage.TYPE_INT_RGB);
-		ret.getGraphics().drawImage(img,0,0,32,32,null);
-		ImageIcon playIcon = new ImageIcon(ret);
-		JMenuItem newGameMenu = new JMenuItem("New Game", playIcon);
-		
-		newGameMenu.setMnemonic(KeyEvent.VK_N);
-		newGameMenu.setToolTipText("Play a new game");
+		//ImageIcon newGameIcon = createImageIcon("play1.png");//.getImage();
+		JMenuItem newGame = new JMenuItem("New Game", KeyEvent.VK_N);
+
+
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		//MediaTracker tracker = new MediaTracker(this);
+		Image image = toolkit.getImage("play1.png");
+
+		//image = resizeImage(image, 32, 32);
+		Image newimg = image.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH);
+		//File outputfile = new File("src/image/play2.jpg");
+		//ImageIO.write((RenderedImage) newimg, "jpg", outputfile);
+		//save the image
+		//send that image to the createImageIcon()
+		//image = toolkit.getImage("play2.png");
+		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream(newimg)));
+
+		//ImageIcon icon=new ImageIcon(image);
+
+		newGame.setIcon(newGameIcon);
+
+		newGame.setToolTipText("Play a new game");
+		newGame.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				newClicked(9);
+
+			}
+
+		});
+		file.add(newGame);
+
+		file.addSeparator();
 
 
 
 
 
 		//BULB
-		BufferedImage bulb = null;
-		try {
-			bulb = ImageIO.read(new File("bulb.png"));
-		} 
-		catch (IOException e) {}
-		BufferedImage returnBulb = new BufferedImage(32,32,BufferedImage.TYPE_INT_RGB);
-		ret.getGraphics().drawImage(bulb,0,0,32,32,null);
-		ImageIcon bulbIcon = new ImageIcon(returnBulb);
-		JMenuItem solve = new JMenuItem("Solve for me", bulbIcon);
+
+		JMenuItem solve = new JMenuItem("Solve for me");
 
 
 		//IMAGE FOR CanBeSolved?
-		BufferedImage question = null;
-		try {
-			question = ImageIO.read(new File("questionMark.jpg"));
-		} 
-		catch (IOException e) {}
-		BufferedImage returnQuestion = new BufferedImage(32,32,BufferedImage.TYPE_INT_RGB);
-		ret.getGraphics().drawImage(question,0,0,32,32,null);
-		ImageIcon solveIcon = new ImageIcon(returnQuestion);
-		JMenuItem isSolved = new JMenuItem("Solveable?", solveIcon);
+
+		JMenuItem isSolved = new JMenuItem("Solveable?");
 
 
-		
-		
-<<<<<<< HEAD
+
+		//IMAGE FOR PLAYING A NEW GAME
+
 		JMenuItem exit = new JMenuItem("Exit");
 
-=======
-		JMenuItem newGameMenu = new JMenuItem("New Game");
-		newGameMenu.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				newClicked(9);
-			}
 
-		});
->>>>>>> 6e2ddbddb636c61a12b0c6e5f76e1d9122d9ee3c
-		file.add(newGameMenu);
-		file.addSeparator();
+
+
 		file.add(solve);
 		file.addSeparator();
 		file.add(isSolved);
@@ -321,11 +321,19 @@ public class SudokuDialog extends JFrame {
 		add(msgBar, BorderLayout.SOUTH);
 	}
 
-//	public void menuSelected(MenuEvent e){
-//		if(e.getSource()==newGameMenu){
-//
-//		}
-//	}
+
+	private BufferedImage resizeImage(Image image, int width, int height) {
+		BufferedImage resizedImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2 = resizedImg.createGraphics();
+
+		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2.drawImage(image, 0, 0, width, height, null);
+		g2.dispose();
+
+		return resizedImg;
+	}
+
+
 
 
 	protected void addButtons(JToolBar toolBar) {
@@ -357,54 +365,15 @@ public class SudokuDialog extends JFrame {
 
 	}
 
-<<<<<<< HEAD
-=======
 
 
 
-
-	/** 
-	 * Create a control panel consisting of new and number buttons.
-	 *
-	private JPanel makeControlPanel() {
-		JPanel newButtons = new JPanel(new FlowLayout());
-		JButton new4Button = new JButton("New (4x4)");
-		for (JButton button: new JButton[] { new4Button, new JButton("New (9x9)") }) {
-			button.setFocusPainted(false);
-			button.addActionListener(e -> {
-				newClicked(e.getSource() == new4Button ? 4 : 9);
-			});
-			newButtons.add(button);
-		}
-		newButtons.setAlignmentX(LEFT_ALIGNMENT);
-
-		// buttons labeled 1, 2, ..., 9, and X.
-		JPanel numberButtons = new JPanel(new FlowLayout());
-		int maxNumber = board.size + 1;
-		for (int i = 1; i <= maxNumber; i++) {
-			int number = i % maxNumber;
-			JButton button = new JButton(number == 0 ? "X" : String.valueOf(number));
-			button.setFocusPainted(false);
-			button.setMargin(new Insets(0,2,0,2));
-			button.addActionListener(e -> numberClicked(number));
-			numberButtons.add(button);
-		}
-		numberButtons.setAlignmentX(LEFT_ALIGNMENT);
-
-		JPanel content = new JPanel();
-		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
-		content.add(newButtons);
-		content.add(numberButtons);
-		return content;
-	}
-	*/
 	public void keyTyped(KeyEvent e){
 
 	}
 
 
 
->>>>>>> 6e2ddbddb636c61a12b0c6e5f76e1d9122d9ee3c
 	/** 
 	 * Create an image icon from the given image file. 
 	 * @param filename Directory of the image 
@@ -421,8 +390,9 @@ public class SudokuDialog extends JFrame {
 	/**
 	 * Run the program
 	 * @param args
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		new SudokuDialog();
 	}
 }
