@@ -254,7 +254,6 @@ public class SudokuDialog extends JFrame {
 				newClicked(9);
 
 			}
-
 		});
 		file.add(newGame);
 
