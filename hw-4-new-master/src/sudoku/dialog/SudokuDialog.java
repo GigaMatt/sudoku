@@ -10,6 +10,8 @@
 
 package sudoku.dialog;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -28,7 +30,7 @@ import sudoku.model.Board;
  */
 @SuppressWarnings("serial")
 public class SudokuDialog extends JFrame {
-	
+
 	/** Keeps track of the number chosen. */
 	private int numChoosen;
 
@@ -45,7 +47,7 @@ public class SudokuDialog extends JFrame {
 
 	/** Message bar to display various messages. */
 	private JLabel msgBar = new JLabel("");
-	
+
 	/** Square size of a square on the board. */
 	private int squareSize;
 
@@ -61,7 +63,7 @@ public class SudokuDialog extends JFrame {
 	 * @param dim The dimensions of the board
 	 */
 	public SudokuDialog(Dimension dim) {
-		
+
 		super("Sudoku");
 		setSize(dim);
 		board = new Board(9);		//default board size
@@ -79,7 +81,7 @@ public class SudokuDialog extends JFrame {
 	 * @param y 0-based column index of the clicked square.
 	 */
 	private void boardClicked(int x, int y) {
-		
+
 		board.x = x;
 		board.y=y;
 		boardPanel.repaint();
@@ -144,7 +146,7 @@ public class SudokuDialog extends JFrame {
 	 * @param number Clicked number (1-9), or 0 for "X".
 	 */
 	private void numberClicked(int number) {
-        boardPanel.repaint();
+		boardPanel.repaint();
 		numChoosen = number;
 		showMessage("You chose " + number);
 	}
@@ -188,82 +190,105 @@ public class SudokuDialog extends JFrame {
 	 * Configure the UI.
 	 */
 	private void configureUI() {
-	        setIconImage(createImageIcon("sudoku.png").getImage());
-	        setLayout(new BorderLayout());
+		setIconImage(createImageIcon("sudoku.png").getImage());
+		setLayout(new BorderLayout());
+		
+		
+		JToolBar toolBar = new JToolBar("Sudoku");
+		toolBar.setSize(750,100);
+		
+		//add buttons to the tool bar
+		addButtons(toolBar);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-	        //JPanel buttons = makeControlPanel();
-	        // boarder: top, left, bottom, right
-	        JFrame frame = new JFrame("Sudoku Menu");
-	        frame.setVisible(true);
-	        frame.setSize(400,200);
-	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		add(toolBar, BorderLayout.NORTH);
+		
+	    JMenuBar jmb = new JMenuBar();
+	    setJMenuBar(jmb);
+	    
+	    
+	    JMenu file = new JMenu("File");
+	    file.setMnemonic(KeyEvent.VK_G);
+	    file.getAccessibleContext().setAccessibleDescription("Game Menu");
+	    jmb.add(file);
+	    file.addSeparator();
+		
+		JMenuItem newGameMenu = new JMenuItem("New Game");
+		file.add(newGameMenu);
+		file.addSeparator();
 
-	        JMenuBar menuBar = new JMenuBar();
-	        frame.setJMenuBar(menuBar);
-	        JMenu menu = new JMenu("Game");
-	        menu.setMnemonic(KeyEvent.VK_G);
-	        menu.getAccessibleContext().setAccessibleDescription("Game Menu");
-	        menuBar.add(menu);
-	        
-	        
-			JMenuItem newGame = new JMenuItem("New Game");
-			menu.add(newGame);
-			menu.addSeparator();
-			//TODO Create the new game
-			//newClicked(9);
+		JMenuItem solve = new JMenuItem("Solve for me");
+		file.add(solve);
+		file.addSeparator();
+		
+		JMenuItem isSolved = new JMenuItem("Solveable?");
+		file.add(isSolved);
+		file.addSeparator();
+		
+		JMenuItem exit = new JMenuItem("Exit");
+		file.add(exit);
+		file.addSeparator();
+		
+		class exitaction implements ActionListener{
+			public void actionPerformed (ActionEvent e){
+				System.exit(0);
+			}
+		}
+		
+		exit.addActionListener(new exitaction());
 
-			JMenuItem solve = new JMenuItem("Solve For Me");
-			menu.add(solve);
-			menu.addSeparator();
-			
-			JMenuItem isSolved = new JMenuItem("Is this solveable?");
-			menu.add(isSolved);
-			
-			
-			JToolBar toolBar = new JToolBar("Still draggable");
-	        makeControlPanel(toolBar);
+		JPanel board = new JPanel();
+		board.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
+		board.setLayout(new GridLayout(1,1));
+		board.add(boardPanel);
+		add(board, BorderLayout.CENTER);
 
-	        
-	        //HOLD UP
-	        
-	        addButtons();
-	        
-	        public static void addButtons() {
-	        	//first button
-	            button = makeNavigationButton("Back24", PREVIOUS,
-	                                          "Back to previous something-or-other",
-	                                          "Previous");
-	            toolBar.add(button);
+		msgBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
+		add(msgBar, BorderLayout.SOUTH);
+	}
 
-	            //second button
-	            button = makeNavigationButton("Up24", UP,
-	                                          "Up to something-or-other",
-	                                          "Up");
-	            toolBar.add(button);
-	        }
-	        
-	        ///////
 
-	        //buttons.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
-	        add(menuBar,BorderLayout.NORTH);
-	        //add(buttons, BorderLayout.NORTH);
+	protected void addButtons(JToolBar toolBar) {
+		
+		JButton new4Button = new JButton("New (4x4)");
+		for (JButton button: new JButton[] { new4Button, new JButton("New (9x9)") }) {
+			button.setFocusPainted(false);
+			button.addActionListener(e -> {
+				newClicked(e.getSource() == new4Button ? 4 : 9);
+			});
+			toolBar.add(button);
+		}
+		toolBar.setAlignmentX(CENTER_ALIGNMENT);
+		
+		int maxNumber = board.size + 1;
+		for (int i = 1; i <= maxNumber; i++) {
+			int number = i % maxNumber;
+			JButton button = new JButton(number == 0 ? "X" : String.valueOf(number));
+			button.setFocusPainted(false);
+			button.setMargin(new Insets(0,2,0,2));
+			button.addActionListener(e -> numberClicked(number));
+			//numberButtons.add(button);
+			toolBar.add(button);
 
-	        JPanel board = new JPanel();
-	        board.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
-	        board.setLayout(new GridLayout(1,1));
-	        board.add(boardPanel);
-	        add(board, BorderLayout.CENTER);
+		}
+		toolBar.setAlignmentX(LEFT_ALIGNMENT);
 
-	        msgBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
-	        add(msgBar, BorderLayout.SOUTH);
-	    }
+		JPanel toolBar2 = new JPanel();
+		toolBar2.setLayout(new BoxLayout(toolBar2, BoxLayout.PAGE_AXIS));
+		//content.add(newButtons);
+		toolBar2.add(toolBar);
+
+	}
+
+
 
 
 
 	/** 
 	 * Create a control panel consisting of new and number buttons.
-	 */
-	private JPanel makeControlPanel(JToolBar toolBar) {
+	 *
+	private JPanel makeControlPanel() {
 		JPanel newButtons = new JPanel(new FlowLayout());
 		JButton new4Button = new JButton("New (4x4)");
 		for (JButton button: new JButton[] { new4Button, new JButton("New (9x9)") }) {
@@ -294,6 +319,7 @@ public class SudokuDialog extends JFrame {
 		content.add(numberButtons);
 		return content;
 	}
+	*/
 
 
 

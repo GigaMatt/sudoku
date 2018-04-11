@@ -17,8 +17,8 @@ public class JFrame1 {
 	    
 	    
 	    JMenu file = new JMenu("File");
-	    //file.setMnemonic(KeyEvent.VK_G);
-	    //file.getAccessibleContext().setAccessibleDescription("Game Menu");
+	    file.setMnemonic(KeyEvent.VK_G);
+	    file.getAccessibleContext().setAccessibleDescription("Game Menu");
 	    jmb.add(file);
 	    file.addSeparator();
 		
