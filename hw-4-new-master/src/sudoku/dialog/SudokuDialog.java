@@ -1,4 +1,5 @@
 /*
+
  * CS 3331
  * Homework 2
  * @author Enrique Salcido
@@ -244,6 +245,7 @@ public class SudokuDialog extends JFrame {
 		file.add(solvePuzzle);
 		file.addSeparator();
 
+		
 		//JMenuItem TEST_SOLVEABILITY
 		JMenuItem testSolveability = new JMenuItem("Check Progress", KeyEvent.VK_I);
 		ImageIcon solveableIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/questionMark_resized.png")));
@@ -252,6 +254,7 @@ public class SudokuDialog extends JFrame {
 		file.add(testSolveability);
 		file.addSeparator();
 
+		
 		//JMenuItem EXIT
 		JMenuItem exit = new JMenuItem("Quit Game", KeyEvent.VK_Q);
 		ImageIcon exitIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/door_resized.png")));
@@ -266,6 +269,7 @@ public class SudokuDialog extends JFrame {
 		file.getAccessibleContext().setAccessibleDescription("Game Menu");
 		jmb.add(edit);
 
+		
 		//JMenuItem UNDO
 		JMenuItem undo = new JMenuItem("Undo", KeyEvent.VK_U);
 		ImageIcon undoIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/undo_resized.png")));
