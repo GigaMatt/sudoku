@@ -20,7 +20,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -54,7 +53,7 @@ public class SudokuDialog extends JFrame {
 	private JLabel msgBar = new JLabel("");
 	
 	/** Square size of a square on the board. */
-	public int squareSize;
+	private int squareSize;
 
 	/** Create a new dialog. */
 	public SudokuDialog() {
@@ -230,7 +229,7 @@ public class SudokuDialog extends JFrame {
 
 		// buttons labeled 1, 2, ..., 9, and X.
 		JPanel numberButtons = new JPanel(new FlowLayout());
-		int maxNumber = board.size + 1;
+		int maxNumber = board.size() + 1;
 		for (int i = 1; i <= maxNumber; i++) {
 			int number = i % maxNumber;
 			JButton button = new JButton(number == 0 ? "X" : String.valueOf(number));
@@ -245,7 +244,6 @@ public class SudokuDialog extends JFrame {
 		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 		content.add(newButtons);
 		content.add(numberButtons);
-		
 		return content;
 	}
 

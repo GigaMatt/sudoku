@@ -10,9 +10,6 @@
 
 package sudoku.model;
 
-import java.util.Arrays;
-import java.util.Set;
-
 public class Square {
 	
 	/** x coordinate of square chosen. */
@@ -24,15 +21,6 @@ public class Square {
 	/** Value of square chosen. */
 	public int value;
 	
-	public Set<Integer> possibleValues;
-	
-	public Square() {
-		x = 0;
-		y = 0;
-		value = 0;
-		possibleValues.addAll(Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8,9}));
-	}
-	
 	/**
 	 * Identify a certain coordinate on the board
 	 * @param x
@@ -42,19 +30,6 @@ public class Square {
 		this.x = x;
 		this.y = y;
 		value = 0;
-		possibleValues.addAll(Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8}));
-	}
-	
-	public void updateSet(int x) {
-		possibleValues.remove(x);
-	}
-	
-	public boolean emptySet(){
-		return possibleValues.isEmpty();
-	}
-	
-	public Set<Integer> getPossibleMoves() {
-		return possibleValues;
 	}
 	
 }
