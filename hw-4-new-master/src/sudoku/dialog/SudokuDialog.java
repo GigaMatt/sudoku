@@ -16,9 +16,15 @@ import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.EventObject;
+import java.util.EventListener;
+
 
 //import javax.sound.sampled.AudioInputStream;
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+
 import sudoku.dialog.BoardPanel;
 import sudoku.model.Board;
 //import sun.audio.AudioPlayer;
@@ -215,6 +221,12 @@ public class SudokuDialog extends JFrame {
 	    file.addSeparator();
 		
 		JMenuItem newGameMenu = new JMenuItem("New Game");
+		newGameMenu.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				newClicked(9);
+			}
+
+		});
 		file.add(newGameMenu);
 		file.addSeparator();
 
@@ -247,6 +259,12 @@ public class SudokuDialog extends JFrame {
 		msgBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
 		add(msgBar, BorderLayout.SOUTH);
 	}
+
+//	public void menuSelected(MenuEvent e){
+//		if(e.getSource()==newGameMenu){
+//
+//		}
+//	}
 
 
 	protected void addButtons(JToolBar toolBar) {
@@ -320,6 +338,9 @@ public class SudokuDialog extends JFrame {
 		return content;
 	}
 	*/
+	public void keyTyped(KeyEvent e){
+
+	}
 
 
 
