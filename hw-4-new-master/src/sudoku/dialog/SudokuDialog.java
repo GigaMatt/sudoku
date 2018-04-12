@@ -1,13 +1,12 @@
 /*
-
  * CS 3331
- * Homework 2
+ * Homework 4
  * @author Anthony Ayo
  * @author Matthew Montoya
  * @author Enrique Salcido
  * @author Yoonsik Cheon
- * Purpose: To practice implementing Java Applets & Graphics
- * Last Modified: 11 April 2018
+ * Purpose: To practice implementing Java Graphics
+ * Last Modified: 12 April 2018
  */
 
 package sudoku.dialog;
