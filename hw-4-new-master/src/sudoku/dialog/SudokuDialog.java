@@ -2,11 +2,12 @@
 
  * CS 3331
  * Homework 2
+ * @author Anthony Ayo
+ * @author Matthew Montoya
  * @author Enrique Salcido
- * @author Matthew S Montoya
  * @author Yoonsik Cheon
  * Purpose: To practice implementing Java Applets & Graphics
- * Last Modified: 4 March 2018
+ * Last Modified: 11 April 2018
  */
 
 package sudoku.dialog;
@@ -202,14 +203,15 @@ public class SudokuDialog extends JFrame {
 	private void configureUI() throws IOException {
 		setIconImage(createImageIcon("sudoku.png").getImage());
 		setLayout(new BorderLayout());
-
+		JButton b1 = new JButton("New Game");
+		
 
 		JToolBar toolBar = new JToolBar("Sudoku");
-		toolBar.setSize(750,100);
+		toolBar.setSize(750,500);
 
 		//add buttons to the tool bar
 		addButtons(toolBar);
-
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		add(toolBar, BorderLayout.NORTH);
@@ -308,17 +310,59 @@ public class SudokuDialog extends JFrame {
 	}
 	
 
-	protected void addButtons(JToolBar toolBar) {
+	protected void addButtons(JToolBar toolBar) throws IOException {
 
-		for (JButton button: new JButton[] {new JButton("New (9x9)") }) {
-			button.setFocusPainted(false);
-			button.addActionListener(e -> {
-				newClicked(e.getSource() == button ? 9 : 9);
-			});
-			toolBar.add(button);
-		}
-		toolBar.setAlignmentX(CENTER_ALIGNMENT);
+//		for (JButton button: new JButton[] {new JButton("New (9x9)") }) {
+//			button.setFocusPainted(false);
+//			button.addActionListener(e -> {
+//				newClicked(e.getSource() == button ? 9 : 9);
+//			});
+//			toolBar.add(button);
+//		}
+		
+		//FIXME Change this to the actual needed image
+		//ImageIcon newGameIcon = new ImageIcon("/src/image/play1_resized.png");
+		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/redo_resized.png")));
+		
+		//newGame.setToolTipText("Play a new game");
+		//toolBar.add(redo);
+		
 
+		JButton newGame = new JButton(newGameIcon);
+		newGame.setFocusPainted(false);
+		newGame.addActionListener(e -> {
+			newClicked(e.getSource() == newGame ? 9 : 9);
+		});
+		newGame.setToolTipText("Play a new Game");
+		toolBar.add(newGame);
+		toolBar.addSeparator();
+		
+		ImageIcon checkGameIcon = new ImageIcon("bulb_resized.png");
+		JButton checkGame = new JButton(checkGameIcon);
+		checkGame.setIcon(newGameIcon);
+		checkGame.setFocusPainted(false);
+		checkGame.addActionListener(e -> {
+			newClicked(e.getSource() == checkGame ? 9 : 9);
+		});
+		checkGame.setToolTipText("Check Game Status");
+		toolBar.add(checkGame);
+		toolBar.addSeparator();
+		
+		
+		ImageIcon solveGameIcon = new ImageIcon("play1_resized.png");
+		JButton solveGame = new JButton("Solve Game");
+		solveGame.setFocusPainted(false);
+		solveGame.addActionListener(e -> {
+			newClicked(e.getSource() == solveGame? 9 : 9);
+		});
+		solveGame.setToolTipText("Solve the Game ");
+		solveGame.setFocusPainted(false);
+		toolBar.add(solveGame);
+		toolBar.addSeparator();
+		//toolBar.setAlignmentX(CENTER_ALIGNMENT);
+		
+		///////////////////
+		
 		int maxNumber = board.size + 1;
 		for (int i = 1; i <= maxNumber; i++) {
 			int number = i % maxNumber;
