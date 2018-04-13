@@ -84,48 +84,27 @@ public class ChatDialogUI extends JDialog {
     
     /** Callback to be called when the connect button is clicked. */
     private void connectClicked(ActionEvent event) {
-    	
-    	
-    	String host = "opuntia.cs.utep.edu";
         try {
-            Socket socket = new Socket(host, 8000);
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                 socket.getInputStream()));
-            PrintWriter out = new PrintWriter(new OutputStreamWriter(
-                 socket.getOutputStream()));
-           // <<send and receive data by using in and out>>
-            socket.close();
-          } catch (Exception e) {
+            Socket socket = new Socket(serverEdit.getText(), 8000);
+            System.out.println(serverEdit.getText());
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+        } catch (Exception e) {
             e.printStackTrace();
-          }
-        
-     // send data to server
-        for (int i = 1; i <= 10; i++) {
-           System.out.println("Sending: line " + i);
-           System.out.println("line " + i);
-           System.out.flush();
         }
-        System.out.println("BYE");
-        System.out.flush();
-
-        // receive data from server
-        String str = null; 
-        while ((str = in.readLine()) != null) {
-           System.out.println(str);
-        }
-
-      }
-
-        //--
-        //-- WRITE YOUR CODE HERE
-        //--
     }
     
-    /** Callback to be called when the sendt button is clicked. */
+    /** Callback to be called when the send button is clicked. */
     private void sendClicked(ActionEvent event) {
-        //--
-        //-- WRITE YOUR CODE HERE
-        //--
+        try {
+            Socket socket = new Socket(serverEdit.getText(), 8000); //not sure if this works?
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+            out.println(msgEdit.getText());
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /** Show the given message in a dialog. */
