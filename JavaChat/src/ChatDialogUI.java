@@ -1,5 +1,3 @@
-// $Id: ChatDialogUI.java,v 1.3 2018/04/06 21:32:56 cheon Exp $
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -35,6 +33,7 @@ public class ChatDialogUI extends JDialog {
     private JTextField portEdit;
     private JTextArea msgDisplay;
     private JTextField msgEdit;
+    private Socket socket;
     
     /** Create a main dialog. */
     public ChatDialogUI() {
@@ -85,7 +84,7 @@ public class ChatDialogUI extends JDialog {
     /** Callback to be called when the connect button is clicked. */
     private void connectClicked(ActionEvent event) {
         try {
-            Socket socket = new Socket(serverEdit.getText(), 8000);
+            socket = new Socket(serverEdit.getText(), 8000);
             System.out.println(serverEdit.getText());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -97,7 +96,6 @@ public class ChatDialogUI extends JDialog {
     /** Callback to be called when the send button is clicked. */
     private void sendClicked(ActionEvent event) {
         try {
-            Socket socket = new Socket(serverEdit.getText(), 8000); //not sure if this works?
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
             out.println(msgEdit.getText());
