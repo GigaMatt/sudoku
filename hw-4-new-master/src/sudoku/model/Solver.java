@@ -18,7 +18,7 @@ import java.util.Set;
 //expect them to take a long time
 public class Solver implements BoardSolver {
 	
-	Board b = new Board();
+	Board b = new Board(9);
 	
 	//returns the solved board
 	//call this method by doing: board = solveBoard(board);
