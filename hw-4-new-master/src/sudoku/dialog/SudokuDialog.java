@@ -5,13 +5,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.EventObject;
 import java.util.EventListener;
 
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
 //import javax.sound.sampled.AudioInputStream;
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
@@ -21,6 +24,7 @@ import sudoku.dialog.BoardPanel;
 import sudoku.model.Board;
 //import sun.audio.AudioPlayer;
 //import sun.audio.AudioStream;
+import sun.audio.AudioPlayer;
 
 /**
  * A dialog for playing simple Sudoku games.
@@ -84,48 +88,58 @@ public class SudokuDialog extends JFrame {
 
 		board.x = x;
 		board.y=y;
-		boardPanel.repaint();
 
-		if(numChoosen == 0) {
-			board.setEntry(x, y, numChoosen);
-			boardPanel.setBoard(board);
+
+		if(board.checkRandomEntry(x,y) == false){	
 			showMessage(String.format("You've chosen "+x+" , "+y+"."));
+			showMessage("Invalid Selection.");	//Means square was pre-filled. User cannot change
 		}
-
-		else if(board.validEntry(x, y, numChoosen)) {
-			board.setEntry(x, y, numChoosen);
-			boardPanel.setBoard(board);
+		else{
 			boardPanel.repaint();
-			showMessage(String.format("You've chosen "+x+", "+y));
+			if(numChoosen == 0) {
+				board.setEntry(x, y, numChoosen);
+				boardPanel.setBoard(board);
+				showMessage(String.format("You've chosen "+x+" , "+y+"."));
+			}
 
-			if(board.isSolved()) {
-				String winningSound = "winning-sound.wav";
+			else if(board.validEntry(x, y, numChoosen)) {
+				board.setEntry(x, y, numChoosen);
+				boardPanel.setBoard(board);
+				boardPanel.repaint();
+				showMessage(String.format("You've chosen "+x+", "+y));
+
+				if(board.isSolved()) {
+					String winningSound = "winning-sound.wav";
+					try {
+						playSound(winningSound);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					int option = JOptionPane.showConfirmDialog(null, "Congratulations! Do you want to play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
+
+					if (option == 0) {
+						board = new Board(board.size);
+						boardPanel.setBoard(board);
+						repaint();
+					} else {
+						showMessage("No");
+					}
+				}
+			}else {
+				showMessage("Invalid Input.");			
+
+				String inconsistantPlacementSound = "error-sound.wav";
 				try {
-					playSound(winningSound);
+					playSound(inconsistantPlacementSound);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				int option = JOptionPane.showConfirmDialog(null, "Congratulations! Do you want to play a new game?", "New Game", JOptionPane.YES_NO_OPTION);
-
-				if (option == 0) {		//The ISSUE is here
-					board = new Board(board.size);
-					boardPanel.setBoard(board);
-					repaint();
-				} else {
-					showMessage("No");
-				}
-			}
-		}else {
-			showMessage("Invalid Input.");			
-
-			String inconsistantPlacementSound = "error-sound.wav";
-			try {
-				playSound(inconsistantPlacementSound);
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
+		//else {
+		//	showMessage("Invalid Selection.");	//Means square was pre-filled. User cannot change
 	}
+	//}
 
 
 
@@ -134,7 +148,7 @@ public class SudokuDialog extends JFrame {
 	 * @param soundPath Source file for .wav sound
 	 */
 	private void playSound(String soundPath) throws Exception {
-		//InputStream in = new FileInputStream(soundPath);
+		InputStream in = new FileInputStream(soundPath);
 		//AudioInputStream audioStream = new AudioInputStream(in);
 		//AudioPlayer.player.start(audioStream);
 	}
@@ -194,14 +208,14 @@ public class SudokuDialog extends JFrame {
 		setIconImage(createImageIcon("sudoku.png").getImage());
 		setLayout(new BorderLayout());
 		JButton b1 = new JButton("New Game");
-		
+
 
 		JToolBar toolBar = new JToolBar("Sudoku");
 		toolBar.setSize(750,500);
 
 		//add buttons to the tool bar
 		addButtons(toolBar);
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		add(toolBar, BorderLayout.NORTH);
@@ -220,7 +234,7 @@ public class SudokuDialog extends JFrame {
 		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/play1_resized.png")));
 		newGame.setIcon(newGameIcon);
 		newGame.setToolTipText("Play a new game");
-	    newGame.setAccelerator(ctrlNKeyStroke);
+		newGame.setAccelerator(ctrlNKeyStroke);
 		newGame.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				newClicked(9);
@@ -229,7 +243,7 @@ public class SudokuDialog extends JFrame {
 		file.add(newGame);
 		file.addSeparator();
 
-		
+
 		//JMenuItem SOLVE_PUZZLE
 		JMenuItem solvePuzzle = new JMenuItem("Solve Puzzle", KeyEvent.VK_S);
 		KeyStroke ctrlSKeyStroke = KeyStroke.getKeyStroke("control S");
@@ -237,11 +251,11 @@ public class SudokuDialog extends JFrame {
 		solvePuzzle.setIcon(solvePuzzleIcon);
 		solvePuzzle.setToolTipText("Solve the puzzle for me");
 		solvePuzzle.setAccelerator(ctrlSKeyStroke);
-		
+
 		file.add(solvePuzzle);
 		file.addSeparator();
 
-		
+
 		//JMenuItem TEST_SOLVEABILITY
 		JMenuItem testSolveability = new JMenuItem("Check Progress", KeyEvent.VK_C);
 		KeyStroke ctrlCKeyStroke = KeyStroke.getKeyStroke("control C");
@@ -252,7 +266,7 @@ public class SudokuDialog extends JFrame {
 		file.add(testSolveability);
 		file.addSeparator();
 
-		
+
 		//JMenuItem EXIT
 		JMenuItem exit = new JMenuItem("Quit Game", KeyEvent.VK_Q);
 		KeyStroke ctrlQKeyStroke = KeyStroke.getKeyStroke("control Q");
@@ -262,14 +276,14 @@ public class SudokuDialog extends JFrame {
 		exit.setAccelerator(ctrlQKeyStroke);
 		file.add(exit);
 		file.addSeparator();
-		
+
 
 		JMenu edit = new JMenu("Edit");
 		file.setMnemonic(KeyEvent.VK_G);
 		file.getAccessibleContext().setAccessibleDescription("Game Menu");
 		jmb.add(edit);
 
-		
+
 		//JMenuItem UNDO
 		JMenuItem undo = new JMenuItem("Undo", KeyEvent.VK_U);
 		KeyStroke ctrlUKeyStroke = KeyStroke.getKeyStroke("control U");
@@ -279,8 +293,8 @@ public class SudokuDialog extends JFrame {
 		undo.setAccelerator(ctrlUKeyStroke);
 		edit.add(undo);
 		edit.addSeparator();
-		
-		
+
+
 		//JMenuItem REDO
 		JMenuItem redo = new JMenuItem("Redo");
 		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke("control R");
@@ -310,25 +324,25 @@ public class SudokuDialog extends JFrame {
 		msgBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
 		add(msgBar, BorderLayout.SOUTH);
 	}
-	
-// This section adds the action tool bar
+
+	// This section adds the action tool bar
 	protected void addButtons(JToolBar toolBar) throws IOException {
 
-//		for (JButton button: new JButton[] {new JButton("New (9x9)") }) {
-//			button.setFocusPainted(false);
-//			button.addActionListener(e -> {
-//				newClicked(e.getSource() == button ? 9 : 9);
-//			});
-//			toolBar.add(button);
-//		}
-		
+		//		for (JButton button: new JButton[] {new JButton("New (9x9)") }) {
+		//			button.setFocusPainted(false);
+		//			button.addActionListener(e -> {
+		//				newClicked(e.getSource() == button ? 9 : 9);
+		//			});
+		//			toolBar.add(button);
+		//		}
+
 		//FIXME Change this to the actual needed image
 		//ImageIcon newGameIcon = new ImageIcon("/src/image/play1_resized.png");
 		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/play1_resized.png")));
-		
+
 		//newGame.setToolTipText("Play a new game");
 		//toolBar.add(redo);
-		
+
 
 		JButton newGame = new JButton(newGameIcon);
 		newGame.setFocusPainted(false);
@@ -338,7 +352,7 @@ public class SudokuDialog extends JFrame {
 		newGame.setToolTipText("Play a new Game");
 		toolBar.add(newGame);
 		toolBar.addSeparator();
-		
+
 		ImageIcon checkGameIcon = new ImageIcon("bulb_resized.png");
 		JButton checkGame = new JButton(checkGameIcon);
 		checkGame.setIcon(newGameIcon);
@@ -349,8 +363,8 @@ public class SudokuDialog extends JFrame {
 		checkGame.setToolTipText("Check Game Status");
 		toolBar.add(checkGame);
 		toolBar.addSeparator();
-		
-		
+
+
 		ImageIcon solveGameIcon = new ImageIcon("play1_resized.png");
 		JButton solveGame = new JButton("Solve Game");
 		solveGame.setFocusPainted(false);
@@ -362,9 +376,9 @@ public class SudokuDialog extends JFrame {
 		toolBar.add(solveGame);
 		toolBar.addSeparator();
 		//toolBar.setAlignmentX(CENTER_ALIGNMENT);
-		
+
 		///////////////////
-		
+
 		int maxNumber = board.size + 1;
 		for (int i = 1; i <= maxNumber; i++) {
 			int number = i % maxNumber;

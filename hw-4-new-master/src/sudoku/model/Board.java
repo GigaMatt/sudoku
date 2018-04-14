@@ -12,6 +12,7 @@
 package sudoku.model;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -30,7 +31,7 @@ public class Board{
 	public int y;
 
 	/** The squares the compose the board. */
-	public List<Square> squares;
+	public static List<Square> squares;
 
 
 	/**
@@ -69,7 +70,7 @@ public class Board{
 			}
 		}
 	}
-		 */
+	 */
 
 
 	/**
@@ -97,6 +98,8 @@ public class Board{
 				setEntry(r,s,entry);	//setEntry(i, j, entry)
 			}
 		}
+		
+		//SCAN THE BOARD AND IMPLEMENT A T/F 2-D ARRAY FOR USER, THEN REFERENCE W/SUDOKU DIALOG
 
 
 		//RANDOMLY DELETE 64 numbers on the board
@@ -111,8 +114,8 @@ public class Board{
 			}
 		}
 	}
-	
-	
+
+
 	private Square getSquare(int i, int j) {
 		return squares.get(i*size + j);
 	}
@@ -159,7 +162,6 @@ public class Board{
 	}
 
 
-
 	/**
 	 * Ensure user's coordinate value is valid per sudoku rules
 	 * @param row
@@ -190,7 +192,7 @@ public class Board{
 	 * @param y
 	 */
 	public void deleteEntry(int x, int y){
-		squares.get(size*x + y).value = 0;
+			squares.get(size*x + y).value = 0;
 
 	}
 
@@ -202,9 +204,10 @@ public class Board{
 	 */
 	public boolean checkRandomEntry(int x, int y){
 		if(squares.get(size*x + y).value == 0)
-			return false;
+				return false;
 		return true;
 	}
+
 
 	/**
 	 * Insert user's desired value into desired coordinate
