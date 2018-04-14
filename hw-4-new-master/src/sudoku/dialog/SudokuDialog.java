@@ -225,13 +225,14 @@ public class SudokuDialog extends JFrame {
 
 		//JMenuItem FILE
 		JMenuItem newGame = new JMenuItem("New Game", KeyEvent.VK_N);
+		KeyStroke ctrlNKeyStroke = KeyStroke.getKeyStroke("control N");
 		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/play1_resized.png")));
 		newGame.setIcon(newGameIcon);
 		newGame.setToolTipText("Play a new game");
+	    newGame.setAccelerator(ctrlNKeyStroke);
 		newGame.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				newClicked(9);
-
 			}
 		});
 		file.add(newGame);
@@ -240,27 +241,34 @@ public class SudokuDialog extends JFrame {
 		
 		//JMenuItem SOLVE_PUZZLE
 		JMenuItem solvePuzzle = new JMenuItem("Solve Puzzle", KeyEvent.VK_S);
+		KeyStroke ctrlSKeyStroke = KeyStroke.getKeyStroke("control S");
 		ImageIcon solvePuzzleIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/bulb_resized.png")));
 		solvePuzzle.setIcon(solvePuzzleIcon);
 		solvePuzzle.setToolTipText("Solve the puzzle for me");
+		solvePuzzle.setAccelerator(ctrlSKeyStroke);
+		
 		file.add(solvePuzzle);
 		file.addSeparator();
 
 		
 		//JMenuItem TEST_SOLVEABILITY
-		JMenuItem testSolveability = new JMenuItem("Check Progress", KeyEvent.VK_I);
+		JMenuItem testSolveability = new JMenuItem("Check Progress", KeyEvent.VK_C);
+		KeyStroke ctrlCKeyStroke = KeyStroke.getKeyStroke("control C");
 		ImageIcon solveableIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/questionMark_resized.png")));
 		testSolveability.setIcon(solveableIcon);
 		testSolveability.setToolTipText("Check if my progress is solveable");
+		testSolveability.setAccelerator(ctrlCKeyStroke);
 		file.add(testSolveability);
 		file.addSeparator();
 
 		
 		//JMenuItem EXIT
 		JMenuItem exit = new JMenuItem("Quit Game", KeyEvent.VK_Q);
+		KeyStroke ctrlQKeyStroke = KeyStroke.getKeyStroke("control Q");
 		ImageIcon exitIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/door_resized.png")));
 		exit.setIcon(exitIcon);
-		exit.setToolTipText("Exit the game");
+		exit.setToolTipText("Quit the game");
+		exit.setAccelerator(ctrlQKeyStroke);
 		file.add(exit);
 		file.addSeparator();
 		
@@ -273,18 +281,22 @@ public class SudokuDialog extends JFrame {
 		
 		//JMenuItem UNDO
 		JMenuItem undo = new JMenuItem("Undo", KeyEvent.VK_U);
+		KeyStroke ctrlUKeyStroke = KeyStroke.getKeyStroke("control U");
 		ImageIcon undoIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/undo_resized.png")));
 		undo.setIcon(undoIcon);
 		undo.setToolTipText("Undo last move");
+		undo.setAccelerator(ctrlUKeyStroke);
 		edit.add(undo);
 		edit.addSeparator();
 		
 		
 		//JMenuItem REDO
 		JMenuItem redo = new JMenuItem("Redo");
+		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke("control R");
 		ImageIcon redoIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/redo_resized.png")));
 		redo.setIcon(redoIcon);
 		redo.setToolTipText("Redo last move");
+		redo.setAccelerator(ctrlRKeyStroke);
 		edit.add(redo);
 		edit.addSeparator();
 
@@ -308,7 +320,7 @@ public class SudokuDialog extends JFrame {
 		add(msgBar, BorderLayout.SOUTH);
 	}
 	
-
+// This section adds the action tool bar
 	protected void addButtons(JToolBar toolBar) throws IOException {
 
 //		for (JButton button: new JButton[] {new JButton("New (9x9)") }) {
@@ -321,7 +333,7 @@ public class SudokuDialog extends JFrame {
 		
 		//FIXME Change this to the actual needed image
 		//ImageIcon newGameIcon = new ImageIcon("/src/image/play1_resized.png");
-		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/redo_resized.png")));
+		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/play1_resized.png")));
 		
 		//newGame.setToolTipText("Play a new game");
 		//toolBar.add(redo);
