@@ -339,7 +339,12 @@ public class SudokuDialog extends JFrame {
 		//FIXME Change this to the actual needed image
 		//ImageIcon newGameIcon = new ImageIcon("/src/image/play1_resized.png");
 		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/play1_resized.png")));
+<<<<<<< HEAD
 
+=======
+		ImageIcon checkGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/questionMark_resized.png")));
+		ImageIcon SolveGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/bulb_resized.png")));
+>>>>>>> 725ededb385363bbbd01850509017a23bd241121
 		//newGame.setToolTipText("Play a new game");
 		//toolBar.add(redo);
 
@@ -352,10 +357,15 @@ public class SudokuDialog extends JFrame {
 		newGame.setToolTipText("Play a new Game");
 		toolBar.add(newGame);
 		toolBar.addSeparator();
+<<<<<<< HEAD
 
 		ImageIcon checkGameIcon = new ImageIcon("bulb_resized.png");
+=======
+		
+
+>>>>>>> 725ededb385363bbbd01850509017a23bd241121
 		JButton checkGame = new JButton(checkGameIcon);
-		checkGame.setIcon(newGameIcon);
+		//checkGame.setIcon(newGameIcon);
 		checkGame.setFocusPainted(false);
 		checkGame.addActionListener(e -> {
 			newClicked(e.getSource() == checkGame ? 9 : 9);
@@ -363,10 +373,17 @@ public class SudokuDialog extends JFrame {
 		checkGame.setToolTipText("Check Game Status");
 		toolBar.add(checkGame);
 		toolBar.addSeparator();
+<<<<<<< HEAD
 
 
 		ImageIcon solveGameIcon = new ImageIcon("play1_resized.png");
 		JButton solveGame = new JButton("Solve Game");
+=======
+		
+		
+		
+		JButton solveGame = new JButton(SolveGameIcon);
+>>>>>>> 725ededb385363bbbd01850509017a23bd241121
 		solveGame.setFocusPainted(false);
 		solveGame.addActionListener(e -> {
 			newClicked(e.getSource() == solveGame? 9 : 9);
