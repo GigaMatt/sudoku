@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /** An abstraction of Sudoku puzzle. */
@@ -34,7 +35,7 @@ public class Board{
 
 	/**
 	 * Initiate Board
-	 */
+
 	public Board() {
 		this.size = 9;
 		int startNum =0;
@@ -45,21 +46,34 @@ public class Board{
 				squares.add(new Square(i, j));
 			}
 		}
-		
-	
+
+
 		//FILL THE BOARD WITH SOLVEABLE NUMBERS
-		for(int r=0; r<size; r++){					//0 to n-1
+		for(int r = 0; r < size; r++){					//0 to n-1
 			startNum = (int) (Math.sqrt(size) * (r % Math.sqrt(size)) + (r/Math.sqrt(size)));
-			for(int s=0; s<size; s++) {				//c =0 to n-1
+			for(int s = 0; s < size; s++) {				//c =0 to n-1
 				entry = (((startNum + s) % size) + 1);
 				setEntry(r,s,entry);	//setEntry(i, j, entry)
 			}
 		}
+
+
+		//RANDOMLY DELETE 56 numbers on the board
+		int fill = size;
+		Random rand = new Random();
+		if(fill == 9) {
+			for (int traverse = 0; traverse < 81; traverse++) {
+				int x = rand.nextInt(9);
+				int y = rand.nextInt(9);
+				setEntry(x,y,0);
+			}
+		}
 	}
+		 */
 
 
 	/**
-	 * Create ArrayList of n*n squares
+	 * Initiate Board & Create ArrayList of n*n squares
 	 * @param size
 	 */
 	public Board(int size) {
@@ -73,18 +87,32 @@ public class Board{
 				squares.add(new Square(i, j));
 			}
 		}
-		
-		
+
+
 		//FILL THE BOARD WITH SOLVEABLE NUMBERS
-		for(int r=0; r<size; r++){					//0 to n
+		for(int r = 0; r < size; r++){					//0 to n
 			startNum = (int) (Math.sqrt(size) * (r % Math.sqrt(size)) + (r/Math.sqrt(size)));
-			for(int s=0; s<size; s++) {	
+			for(int s = 0; s < size; s++) {	
 				entry = (((startNum + s) % size) + 1);
 				setEntry(r,s,entry);	//setEntry(i, j, entry)
 			}
 		}
-	}
 
+
+		//RANDOMLY DELETE 64 numbers on the board
+		Random rand = new Random();
+		int remaining = 60;
+		while(remaining > 0) {
+			int x = rand.nextInt(9);
+			int y = rand.nextInt(9);
+			if(checkRandomEntry(x,y)) {
+				setEntry(x,y,0);
+				remaining--;
+			}
+		}
+	}
+	
+	
 	private Square getSquare(int i, int j) {
 		return squares.get(i*size + j);
 	}
@@ -164,6 +192,18 @@ public class Board{
 	public void deleteEntry(int x, int y){
 		squares.get(size*x + y).value = 0;
 
+	}
+
+
+	/**
+	 * Checks if random coordinate entry is 0
+	 * @param x
+	 * @param y
+	 */
+	public boolean checkRandomEntry(int x, int y){
+		if(squares.get(size*x + y).value == 0)
+			return false;
+		return true;
 	}
 
 	/**
