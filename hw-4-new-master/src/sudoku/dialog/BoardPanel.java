@@ -15,9 +15,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import java.awt.event.MouseMotionListener;
 
 import sudoku.model.Board;
 
@@ -51,7 +51,7 @@ public class BoardPanel extends JPanel {
 
     /** Create a new board panel to display the given board.
      * @param board Instance of board being worked on
-     * @param listener gets the possition that was clicked on
+     * @param listener gets the position that was clicked on
      */
     public BoardPanel(Board board, ClickListener listener) {
         this.board = board;

@@ -19,8 +19,10 @@ import javax.swing.event.MenuListener;
 
 import sudoku.dialog.BoardPanel;
 import sudoku.model.Board;
+import sudoku.model.BoardSolver;
 //import sun.audio.AudioPlayer;
 //import sun.audio.AudioStream;
+import sudoku.model.Solver;
 
 /**
  * A dialog for playing simple Sudoku games.
@@ -28,6 +30,7 @@ import sudoku.model.Board;
  */
 @SuppressWarnings("serial")
 public class SudokuDialog extends JFrame {
+	BoardSolver solver = new Solver();
 
 	/** Keeps track of the number chosen. */
 	private int numChoosen;
@@ -152,7 +155,6 @@ public class SudokuDialog extends JFrame {
 	}
 
 
-
 	/**
 	 * Callback to be invoked when a new button is clicked.
 	 * If the current game is over, start a new game of the given size;
@@ -193,19 +195,12 @@ public class SudokuDialog extends JFrame {
 	private void configureUI() throws IOException {
 		setIconImage(createImageIcon("sudoku.png").getImage());
 		setLayout(new BorderLayout());
-		JButton b1 = new JButton("New Game");
-		
-
 		JToolBar toolBar = new JToolBar("Sudoku");
 		toolBar.setSize(750,500);
-
 		//add buttons to the tool bar
 		addButtons(toolBar);
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		add(toolBar, BorderLayout.NORTH);
-
 		JMenuBar jmb = new JMenuBar();
 		setJMenuBar(jmb);
 
@@ -237,7 +232,13 @@ public class SudokuDialog extends JFrame {
 		solvePuzzle.setIcon(solvePuzzleIcon);
 		solvePuzzle.setToolTipText("Solve the puzzle for me");
 		solvePuzzle.setAccelerator(ctrlSKeyStroke);
-		
+		solvePuzzle.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				solver.solveBoard(board);
+				boardPanel.setBoard(board);
+				repaint();	
+			}
+		});
 		file.add(solvePuzzle);
 		file.addSeparator();
 
@@ -249,6 +250,11 @@ public class SudokuDialog extends JFrame {
 		testSolveability.setIcon(solveableIcon);
 		testSolveability.setToolTipText("Check if my progress is solveable");
 		testSolveability.setAccelerator(ctrlCKeyStroke);
+		testSolveability.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				solver.solveBoard(board);
+			}
+		});
 		file.add(testSolveability);
 		file.addSeparator();
 
@@ -262,6 +268,13 @@ public class SudokuDialog extends JFrame {
 		exit.setAccelerator(ctrlQKeyStroke);
 		file.add(exit);
 		file.addSeparator();
+		
+		class exitaction implements ActionListener{
+			public void actionPerformed (ActionEvent e){
+				System.exit(0);
+			}
+		}
+		exit.addActionListener(new exitaction());
 		
 
 		JMenu edit = new JMenu("Edit");
@@ -293,14 +306,6 @@ public class SudokuDialog extends JFrame {
 
 
 
-		class exitaction implements ActionListener{
-			public void actionPerformed (ActionEvent e){
-				System.exit(0);
-			}
-		}
-
-		exit.addActionListener(new exitaction());
-
 		JPanel board = new JPanel();
 		board.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
 		board.setLayout(new GridLayout(1,1));
@@ -311,52 +316,48 @@ public class SudokuDialog extends JFrame {
 		add(msgBar, BorderLayout.SOUTH);
 	}
 	
-// This section adds the action tool bar
+/**
+ * This method creates the buttons in the Action Bar
+ * @param toolBar
+ * @throws IOException
+ */
 	protected void addButtons(JToolBar toolBar) throws IOException {
 
-//		for (JButton button: new JButton[] {new JButton("New (9x9)") }) {
-//			button.setFocusPainted(false);
-//			button.addActionListener(e -> {
-//				newClicked(e.getSource() == button ? 9 : 9);
-//			});
-//			toolBar.add(button);
-//		}
-		
-		//FIXME Change this to the actual needed image
-		//ImageIcon newGameIcon = new ImageIcon("/src/image/play1_resized.png");
+
 		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/play1_resized.png")));
 		ImageIcon checkGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/questionMark_resized.png")));
 		ImageIcon SolveGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/bulb_resized.png")));
-		//newGame.setToolTipText("Play a new game");
-		//toolBar.add(redo);
-		
 
+		
+		// Creates the JButton New Game
 		JButton newGame = new JButton(newGameIcon);
 		newGame.setFocusPainted(false);
 		newGame.addActionListener(e -> {
-			newClicked(e.getSource() == newGame ? 9 : 9);
+			newClicked(9);
 		});
 		newGame.setToolTipText("Play a new Game");
 		toolBar.add(newGame);
 		toolBar.addSeparator();
 		
-
+		// Creates the JButton Check Game
 		JButton checkGame = new JButton(checkGameIcon);
 		//checkGame.setIcon(newGameIcon);
 		checkGame.setFocusPainted(false);
 		checkGame.addActionListener(e -> {
-			newClicked(e.getSource() == checkGame ? 9 : 9);
+			
 		});
 		checkGame.setToolTipText("Check Game Status");
 		toolBar.add(checkGame);
 		toolBar.addSeparator();
 		
 		
-		
+		// Creates the JButton Solve Game
 		JButton solveGame = new JButton(SolveGameIcon);
 		solveGame.setFocusPainted(false);
 		solveGame.addActionListener(e -> {
-			newClicked(e.getSource() == solveGame? 9 : 9);
+			solver.solveBoard(board);
+//			boardPanel.setBoard(board);
+//			repaint();	
 		});
 		solveGame.setToolTipText("Solve the Game ");
 		solveGame.setFocusPainted(false);
@@ -372,10 +373,12 @@ public class SudokuDialog extends JFrame {
 			JButton button = new JButton(number == 0 ? "X" : String.valueOf(number));
 			button.setFocusPainted(false);
 			button.setMargin(new Insets(0,2,0,2));
+			button.setToolTipText("Places "+number+" on the board ");
 			button.addActionListener(e -> numberClicked(number));
 			toolBar.add(button);
 
 		}
+		
 		toolBar.setAlignmentX(LEFT_ALIGNMENT);
 
 		JPanel toolBar2 = new JPanel();
@@ -383,12 +386,7 @@ public class SudokuDialog extends JFrame {
 		toolBar2.add(toolBar);
 
 	}
-
-
-
-
 	public void keyTyped(KeyEvent e){
-
 	}
 
 

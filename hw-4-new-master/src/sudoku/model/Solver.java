@@ -58,7 +58,7 @@ public class Solver implements BoardSolver {
 	//this is used for solving
 	private void backTracking(Board board) {
 		
-		if(board.isSolved()) {
+		if(board.isSolved()==true) {
 			return;
 		}else if(isSolvable(board)) {
 			for(int i = 0; i < board.squares.size(); i++) {
