@@ -25,6 +25,9 @@ public class Square {
 	/** Value of square chosen. */
 	public int value;
 	
+	//FINISH THIS
+	private boolean canBeChanged;
+	
 	public Set<Integer> possibleValues = new HashSet(Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8,9}));
 	
 	public Square() {
@@ -41,7 +44,8 @@ public class Square {
 	public Square(int x, int y) {
 		this.x = x;
 		this.y = y;
-		value = 0;
+		this.value = 0;
+		this.canBeChanged = true;
 	}
 	
 	public void updateSet(int x) {

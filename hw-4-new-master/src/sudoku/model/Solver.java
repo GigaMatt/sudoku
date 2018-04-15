@@ -9,60 +9,40 @@ public class Solver implements BoardSolver {
 	
 	Board b = new Board();
 	
-	//returns the solved board
-	//call this method by doing: board = solveBoard(board);
-	//display solved board and see if it was solved correctly
-	public Board solveBoard(Board board) {
+	public Board solveBoard(Board board){
 		
-		if(isSolvable(board)) {
-			b = board;
-			
-			backTracking(b);
-			
+		if(solve(board))
 			return b;
-		}else {
+		else
 			return board;
-		}
 		
 	}
 	
-	//returns true if the current board configuration is solvable
-	//returns false if the current board configuration is not solvable
-	public boolean isSolvable(Board board) {
+	private boolean solve(Board board) {
 		
-		b.squares = board.squares;//copy board
+		b = board;
 		
-		for(int i = 0; i < board.squares.size(); i++) 
-			if(board.squares.get(i).emptySet())
-				return false;
-		
-		backTracking(b);
-		if(b == null) {
-			return false;
+		for(int i = 0; i < b.size; i++){
+			for(int j = 0; j < b.size; j++){
+				if(b.getEntry(i,j) == 0){
+					Set<Integer> pvSquare = b.getPossibleValues(i,j);
+					Iterator<Integer> itr = pvSquare.iterator();
+					while(itr.hasNext()){
+						b.setEntry(i, j, (int) itr.next());
+						if(solve(board))
+							return true;
+					}
+					return false;
+				}
+			}
 		}
 		return true;
 		
 	}
 	
-	//this is used for solving
-	private void backTracking(Board board) {
+	public boolean isSolvable(Board board) {
 		
-		if(board.isSolved()) {
-			return;
-		}else if(isSolvable(board)) {
-			for(int i = 0; i < board.squares.size(); i++) {
-				if(board.squares.isEmpty()) {
-					Set<Integer> possibleMoves = board.squares.get(i).getPossibleMoves();
-					for(Iterator<Integer> j = possibleMoves.iterator(); j.hasNext(); ) {
-						board.squares.get(i).value = j.next();
-						backTracking(board);
-					}
-				}
-			}
-		}else {
-			board = null;
-			return;
-		}
+		return solve(board);
 		
 	}
 	

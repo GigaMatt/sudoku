@@ -12,10 +12,12 @@ package sudoku.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-/** An abstraction of Sudoku puzzle. */
+/** An abstraction of Sudoku puzzle. 
+ * @param <E>*/
 public class Board{
 	
 	/** Size of the Sudoku game. */
@@ -67,6 +69,29 @@ public class Board{
 	    			squares.add(new Square(i, j));
 	    		}
 	    	}
+	    	/*
+	    	Set<Integer> startNums = new HashSet(Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8,9}));
+	    	int count = 0;
+	    	for(Iterator<Integer> i = startNums.iterator(); i.hasNext(); ) {
+	    		Integer value = i.next();
+	    		this.setEntry(count, count, (int) value);
+	    		startNums.remove(value);
+	    		count++;
+	    	}
+	    	
+	    	solveBoard(this);
+	    	
+	    	remove a bunch of cells aka make them equal to zero
+	    	
+	    	for(int i = 0; i < squares.size(); i++){
+	    		if(squares.get(i).value != 0)
+	    			squares.get(i).canBeChanged = false;
+	    	}
+	    	
+	    	and now we have a board if some blocks already set in stone
+	    	just have to make sure the finalized squares cannot be changed
+	    	
+	    	*/
         }
     }
     
@@ -96,6 +121,10 @@ public class Board{
             return false;
         if(entry > size) 
         	return false;
+        /*
+        if(!this.getSquare(row, col).canBeChanged)//prevents the user from changing a square that is part of the puzzle
+        	return false;
+        */
         return (rowColCheck(row, col, entry) && boxCheck(row, col, entry));
     }
     
