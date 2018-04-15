@@ -20,42 +20,44 @@ public class Solver implements BoardSolver {
 	
 	Board b = new Board(9);
 	
-	public Board solveBoard(Board board){
+	//returns the solved board
+	//call this method by doing: board = solveBoard(board);
+	//display solved board and see if it was solved correctly
+	public Board solveBoard(Board board) {
 		
-		if(solve(board))
+		if(isSolvable(board)) {
+			b = board;
+			
+			backTracking(b);
+			
 			return b;
-		else
+		}else {
 			return board;
+		}
 		
 	}
 	
-	private boolean solve(Board board) {
+	//returns true if the current board configuration is solvable
+	//returns false if the current board configuration is not solvable
+	public boolean isSolvable(Board board) {
 		
-		b = board;
+		b.squares = board.squares;//copy board
 		
-		for(int i = 0; i < b.size; i++){
-			for(int j = 0; j < b.size; j++){
-				if(b.getEntry(i,j) == 0){
-					Set<Integer> pvSquare = b.getPossibleValues(i,j);
-					Iterator<Integer> itr = pvSquare.iterator();
-					while(itr.hasNext()){
-						b.setEntry(i, j, (int) itr.next());
-						if(solve(board))
-							return true;
-					}
-					return false;
-				}
-			}
+		for(int i = 0; i < board.squares.size(); i++) 
+			if(board.squares.get(i).emptySet())
+				return false;
+		
+		backTracking(b);
+		if(b == null) {
+			return false;
 		}
 		return true;
 		
 	}
 	
-	public boolean isSolvable(Board board) {
+	//this is used for solving
+	private void backTracking(Board board) {
 		
-<<<<<<< HEAD
-		return solve(board);
-=======
 		if(board.isSolved()==true) {
 			return;
 		}else if(isSolvable(board)) {
@@ -72,7 +74,6 @@ public class Solver implements BoardSolver {
 			board = null;
 			return;
 		}
->>>>>>> 110df3b762d742e5424f661c15ae8a67f26f06fd
 		
 	}
 	
