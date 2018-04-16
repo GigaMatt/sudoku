@@ -1,12 +1,11 @@
 /*
  * CS 3331
- * Homework 4
- * @author Anthony Ayo
- * @author Matthew Montoya
+ * Homework 2
  * @author Enrique Salcido
+ * @author Matthew S Montoya
  * @author Yoonsik Cheon
- * Purpose: To practice implementing Java Graphics
- * Last Modified: 12 April 2018
+ * Purpose: To practice implementing Java Applets & Graphics
+ * Last Modified: 4 March 2018
  */
 
 package sudoku.model;
@@ -26,6 +25,9 @@ public class Square {
 	/** Value of square chosen. */
 	public int value;
 	
+	//FINISH THIS
+	public boolean canBeChanged;
+	
 	public Set<Integer> possibleValues = new HashSet(Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8,9}));
 	
 	public Square() {
@@ -39,10 +41,11 @@ public class Square {
 	 * @param x
 	 * @param y
 	 */
-	public Square(int x, int y) {
+	public Square(int x, int y, boolean canBeChanged) {
 		this.x = x;
 		this.y = y;
-		value = 0;
+		this.value = 0;
+		this.canBeChanged = false;
 	}
 	
 	public void updateSet(int x) {
@@ -57,4 +60,12 @@ public class Square {
 		return possibleValues;
 	}
 	
+	public void changeCanBeChanged(boolean c) {
+		canBeChanged = c;
+		
+	}
+	
+	public boolean canBeChanged() {
+		return canBeChanged;
+	}
 }

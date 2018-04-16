@@ -1,12 +1,11 @@
 /*
  * CS 3331
- * Homework 4
- * @author Anthony Ayo
- * @author Matthew Montoya
+ * Homework 2
  * @author Enrique Salcido
+ * @author Matthew S Montoya
  * @author Yoonsik Cheon
- * Purpose: To practice implementing Java Graphics
- * Last Modified: 12 April 2018
+ * Purpose: To practice implementing Java Applets & Graphics
+ * Last Modified: 4 March 2018
  */
 
 package sudoku.dialog;
@@ -15,9 +14,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import java.awt.event.MouseMotionListener;
 
 import sudoku.model.Board;
 
@@ -51,7 +50,7 @@ public class BoardPanel extends JPanel {
 
     /** Create a new board panel to display the given board.
      * @param board Instance of board being worked on
-     * @param listener gets the position that was clicked on
+     * @param listener gets the possition that was clicked on
      */
     public BoardPanel(Board board, ClickListener listener) {
         this.board = board;

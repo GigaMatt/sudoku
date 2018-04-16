@@ -12,7 +12,6 @@
 package sudoku.model;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -32,13 +31,9 @@ public class Board{
 
 	/** The squares the compose the board. */
 	public static List<Square> squares;
-	
-	//boolean[][] secureNumbers = new boolean[size][size];
 
 
 
-	/**
-	 * Initiate Board
 
 	public Board() {
 		this.size = 9;
@@ -46,34 +41,14 @@ public class Board{
 		int entry = 0;
 		squares = new ArrayList<Square>(size*size);
 		for(int i = 0; i < size; i++) {
+			startNum = (int) (Math.sqrt(size) * (i % Math.sqrt(size)) + (i/Math.sqrt(size)));
 			for(int j = 0; j < size; j++) {
-				squares.add(new Square(i, j));
-			}
-		}
-
-
-		//FILL THE BOARD WITH SOLVEABLE NUMBERS
-		for(int r = 0; r < size; r++){					//0 to n-1
-			startNum = (int) (Math.sqrt(size) * (r % Math.sqrt(size)) + (r/Math.sqrt(size)));
-			for(int s = 0; s < size; s++) {				//c =0 to n-1
-				entry = (((startNum + s) % size) + 1);
-				setEntry(r,s,entry);	//setEntry(i, j, entry)
-			}
-		}
-
-
-		//RANDOMLY DELETE 56 numbers on the board
-		int fill = size;
-		Random rand = new Random();
-		if(fill == 9) {
-			for (int traverse = 0; traverse < 81; traverse++) {
-				int x = rand.nextInt(9);
-				int y = rand.nextInt(9);
-				setEntry(x,y,0);
+				squares.add(new Square(i, j, false));
+				entry = (((startNum + j) % size) + 1);
+				setEntry(i,j,entry);	//setEntry(i, j, entry)
 			}
 		}
 	}
-	 */
 
 
 	/**
@@ -89,26 +64,11 @@ public class Board{
 		for(int i = 0; i < size; i++) {
 			startNum = (int) (Math.sqrt(size) * (i % Math.sqrt(size)) + (i/Math.sqrt(size)));
 			for(int j = 0; j < size; j++) {
-				squares.add(new Square(i, j));
-				entry = (((startNum + j) % size) + 1);
-				//secureNumbers[i-1][j-1] = true;
-				setEntry(i,j,entry);	//setEntry(i, j, entry)
+				squares.add(new Square(i, j, false));
+				entry = (((startNum + j) % size) + 1);	//fill the board with solveable numbers
+				setEntry(i,j,entry);
 			}
 		}
-
-
-		//FILL THE BOARD WITH SOLVEABLE NUMBERS
-/*		for(int r = 0; r < size; r++){					//0 to n
-			startNum = (int) (Math.sqrt(size) * (r % Math.sqrt(size)) + (r/Math.sqrt(size)));
-			for(int s = 0; s < size; s++) {	
-				entry = (((startNum + s) % size) + 1);
-				secureNumbers[r][s] = true;
-				setEntry(r,s,entry);	//setEntry(i, j, entry)
-			}
-		}*/
-		
-		//SCAN THE BOARD AND IMPLEMENT A T/F 2-D ARRAY FOR USER, THEN REFERENCE W/SUDOKU DIALOG
-
 
 		//RANDOMLY DELETE 64 numbers on the board
 		Random rand = new Random();
@@ -118,14 +78,14 @@ public class Board{
 			int y = rand.nextInt(9);
 			if(checkRandomEntry(x,y)) {
 				setEntry(x,y,0);
-				//secureNumbers[x][y] = false;
+				squares.get(x*size + y).changeCanBeChanged(true);
 				remaining--;
 			}
 		}
 	}
 
 
-	private Square getSquare(int i, int j) {
+	public Square getSquare(int i, int j) {
 		return squares.get(i*size + j);
 	}
 
@@ -190,9 +150,7 @@ public class Board{
 					return false;
 			}
 		}
-
 		return true;
-
 	}
 
 	/**
@@ -201,8 +159,7 @@ public class Board{
 	 * @param y
 	 */
 	public void deleteEntry(int x, int y){
-			squares.get(size*x + y).value = 0;
-
+		squares.get(size*x + y).value = 0;
 	}
 
 
@@ -213,16 +170,9 @@ public class Board{
 	 */
 	public boolean checkRandomEntry(int x, int y){
 		if(squares.get(size*x + y).value == 0)
-				return false;
+			return false;
 		return true;
 	}
-	
-	
-	//public boolean areSecureNumbers(int x, int y) {
-		//return secureNumbers[x][y];
-		// TODO Auto-generated method stub
-		//return false;
-	//}
 
 
 	/**

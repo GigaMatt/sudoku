@@ -3,26 +3,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.FileInputStream;
+//import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+//import java.io.InputStream;
 import java.net.URL;
-import java.util.EventObject;
-import java.util.EventListener;
+//import java.util.EventObject;
+//import java.util.EventListener;
 
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-//import javax.sound.sampled.AudioInputStream;
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+//import javax.swing.event.MenuEvent;
+//import javax.swing.event.MenuListener;
+import javax.swing.undo.UndoManager;
 
 import sudoku.dialog.BoardPanel;
 import sudoku.model.Board;
-//import sun.audio.AudioPlayer;
-//import sun.audio.AudioStream;
-import sun.audio.AudioPlayer;
+import sudoku.model.BoardSolver;
+import sudoku.model.Solver;
+
+
 
 /**
  * A dialog for playing simple Sudoku games.
@@ -30,6 +30,7 @@ import sun.audio.AudioPlayer;
  */
 @SuppressWarnings("serial")
 public class SudokuDialog extends JFrame {
+	BoardSolver solveTheGame = new Solver();
 
 	/** Keeps track of the number chosen. */
 	private int numChoosen;
@@ -47,17 +48,16 @@ public class SudokuDialog extends JFrame {
 
 	/** Message bar to display various messages. */
 	private JLabel msgBar = new JLabel("");
+	UndoManager editManager = new UndoManager();
 
 	/** Square size of a square on the board. */
-	private int squareSize;
+	//private int squareSize;
 
 	/** Create a new dialog. 
 	 * @throws IOException */
 	public SudokuDialog() throws IOException {
 		this(DEFAULT_SIZE);
 	}
-
-
 
 
 	/** Create a new dialog of the given screen dimension. 
@@ -84,13 +84,13 @@ public class SudokuDialog extends JFrame {
 	 */
 	private void boardClicked(int x, int y) {
 
-		board.x = x;
+		board.x=x;
 		board.y=y;
 
 
-		if(board.areSecureNumbers(x,y) == true){	
+		if(board.getSquare(x,y).canBeChanged == false){	
 			showMessage(String.format("You've chosen "+x+" , "+y+"."));
-			showMessage("Invalid Selection.");	//Means square was pre-filled. User cannot change
+			showMessage("Invalid Selection -- Original Number");	//Means square was pre-filled. User cannot change
 		}
 		else{
 			boardPanel.repaint();
@@ -107,9 +107,9 @@ public class SudokuDialog extends JFrame {
 				showMessage(String.format("You've chosen "+x+", "+y));
 
 				if(board.isSolved()) {
-					String winningSound = "winning-sound.wav";
+					//String winningSound = "winning-sound.wav";
 					try {
-						playSound(winningSound);
+						//playSound(winningSound);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -126,9 +126,9 @@ public class SudokuDialog extends JFrame {
 			}else {
 				showMessage("Invalid Input.");			
 
-				String inconsistantPlacementSound = "error-sound.wav";
+				//String inconsistantPlacementSound = "error-sound.wav";
 				try {
-					playSound(inconsistantPlacementSound);
+					//playSound(inconsistantPlacementSound);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -136,16 +136,6 @@ public class SudokuDialog extends JFrame {
 		}
 	}
 
-
-	/**
-	 * Play sounds when incorrect, open file as InputStream && convert to AudioStream
-	 * @param soundPath Source file for .wav sound
-	 */
-	private void playSound(String soundPath) throws Exception {
-		InputStream in = new FileInputStream(soundPath);
-		//AudioInputStream audioStream = new AudioInputStream(in);
-		//AudioPlayer.player.start(audioStream);
-	}
 
 
 
@@ -158,7 +148,6 @@ public class SudokuDialog extends JFrame {
 		numChoosen = number;
 		showMessage("You chose " + number);
 	}
-
 
 
 	/**
@@ -201,19 +190,15 @@ public class SudokuDialog extends JFrame {
 	private void configureUI() throws IOException {
 		setIconImage(createImageIcon("sudoku.png").getImage());
 		setLayout(new BorderLayout());
-		JButton b1 = new JButton("New Game");
-
 
 		JToolBar toolBar = new JToolBar("Sudoku");
 		toolBar.setSize(750,500);
-
-		//add buttons to the tool bar
 		addButtons(toolBar);
 
+
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		add(toolBar, BorderLayout.NORTH);
-
 		JMenuBar jmb = new JMenuBar();
 		setJMenuBar(jmb);
 
@@ -246,6 +231,14 @@ public class SudokuDialog extends JFrame {
 		solvePuzzle.setToolTipText("Solve the puzzle for me");
 		solvePuzzle.setAccelerator(ctrlSKeyStroke);
 
+		solvePuzzle.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				board = solveTheGame.solveBoard(board);
+				boardPanel.setBoard(board);
+				repaint();	
+			}
+		});
+
 		file.add(solvePuzzle);
 		file.addSeparator();
 
@@ -257,6 +250,12 @@ public class SudokuDialog extends JFrame {
 		testSolveability.setIcon(solveableIcon);
 		testSolveability.setToolTipText("Check if my progress is solveable");
 		testSolveability.setAccelerator(ctrlCKeyStroke);
+		testSolveability.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				boolean bool = solveTheGame.isSolvable(board);
+				showMessage(String.format("The board is solvable: "+bool+"."));
+			}
+		});
 		file.add(testSolveability);
 		file.addSeparator();
 
@@ -270,6 +269,15 @@ public class SudokuDialog extends JFrame {
 		exit.setAccelerator(ctrlQKeyStroke);
 		file.add(exit);
 		file.addSeparator();
+
+
+		class exitaction implements ActionListener{
+			public void actionPerformed (ActionEvent e){
+				System.exit(0);
+			}
+		}
+		exit.addActionListener(new exitaction());
+
 
 
 		JMenu edit = new JMenu("Edit");
@@ -301,14 +309,6 @@ public class SudokuDialog extends JFrame {
 
 
 
-		class exitaction implements ActionListener{
-			public void actionPerformed (ActionEvent e){
-				System.exit(0);
-			}
-		}
-
-		exit.addActionListener(new exitaction());
-
 		JPanel board = new JPanel();
 		board.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
 		board.setLayout(new GridLayout(1,1));
@@ -319,90 +319,87 @@ public class SudokuDialog extends JFrame {
 		add(msgBar, BorderLayout.SOUTH);
 	}
 
-	// This section adds the action tool bar
+
+	/**
+	 * This method creates the buttons in the Action Bar
+	 * @param toolBar
+	 * @throws IOException
+	 */
+
 	protected void addButtons(JToolBar toolBar) throws IOException {
-
-		//		for (JButton button: new JButton[] {new JButton("New (9x9)") }) {
-		//			button.setFocusPainted(false);
-		//			button.addActionListener(e -> {
-		//				newClicked(e.getSource() == button ? 9 : 9);
-		//			});
-		//			toolBar.add(button);
-		//		}
-
-		//FIXME Change this to the actual needed image
-		//ImageIcon newGameIcon = new ImageIcon("/src/image/play1_resized.png");
 		ImageIcon newGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/play1_resized.png")));
-
 		ImageIcon checkGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/questionMark_resized.png")));
 		ImageIcon SolveGameIcon = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/bulb_resized.png")));
-		//>>>>>>> 725ededb385363bbbd01850509017a23bd241121
-		//newGame.setToolTipText("Play a new game");
-		//toolBar.add(redo);
+		ImageIcon exitIcons = new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/src/image/door_resized.png")));
 
 
+		// Creates the JButton New Game
 		JButton newGame = new JButton(newGameIcon);
 		newGame.setFocusPainted(false);
 		newGame.addActionListener(e -> {
-			newClicked(e.getSource() == newGame ? 9 : 9);
+			newClicked(9);
 		});
 		newGame.setToolTipText("Play a new Game");
 		toolBar.add(newGame);
 		toolBar.addSeparator();
 
-		//ImageIcon checkGameIcon = new ImageIcon("bulb_resized.png");
-		JButton checkGame = new JButton(checkGameIcon);
-		//checkGame.setIcon(newGameIcon);
-		checkGame.setFocusPainted(false);
-		checkGame.addActionListener(e -> {
-			newClicked(e.getSource() == checkGame ? 9 : 9);
+		JButton exitGame = new JButton(exitIcons);
+		exitGame.setFocusPainted(false);
+		exitGame.addActionListener(e -> {
+			System.exit(0);
 		});
-		checkGame.setToolTipText("Check Game Status");
-		toolBar.add(checkGame);
+		exitGame.setToolTipText("Exit the Game");
+		exitGame.setFocusPainted(false);
+		toolBar.add(exitGame);
 		toolBar.addSeparator();
 
-
-		ImageIcon solveGameIcon = new ImageIcon("play1_resized.png");
-		JButton solveGame = new JButton("Solve Game");
-
-
-
-				//JButton solveGame = new JButton(SolveGameIcon);
-		solveGame.setFocusPainted(false);
-		solveGame.addActionListener(e -> {
-			newClicked(e.getSource() == solveGame? 9 : 9);
-		});
-		solveGame.setToolTipText("Solve the Game ");
-		solveGame.setFocusPainted(false);
-		toolBar.add(solveGame);
-		toolBar.addSeparator();
-		//toolBar.setAlignmentX(CENTER_ALIGNMENT);
-
-		///////////////////
-
+		
 		int maxNumber = board.size + 1;
 		for (int i = 1; i <= maxNumber; i++) {
 			int number = i % maxNumber;
 			JButton button = new JButton(number == 0 ? "X" : String.valueOf(number));
 			button.setFocusPainted(false);
 			button.setMargin(new Insets(0,2,0,2));
+			button.setToolTipText("Places "+number+" on the board ");
 			button.addActionListener(e -> numberClicked(number));
 			toolBar.add(button);
 
 		}
+
 		toolBar.setAlignmentX(LEFT_ALIGNMENT);
+		toolBar.addSeparator();
+		// Creates the JButton Check Game
+		JButton checkGame = new JButton(checkGameIcon);
+		checkGame.setFocusPainted(false);
+		checkGame.addActionListener(e -> {
+			boolean bool = solveTheGame.isSolvable(board);
+			showMessage(String.format("The board is solvable: "+bool+"."));
+			repaint();
+		});
+		checkGame.setToolTipText("Check Game Status");
+		checkGame.setFocusPainted(false);
+		toolBar.add(checkGame);
+		toolBar.addSeparator();
+
+
+		// Creates the JButton Solve Game
+		JButton solveGame = new JButton(SolveGameIcon);
+		solveGame.setFocusPainted(false);
+		solveGame.addActionListener(e -> {
+			solveTheGame.solveBoard(board);
+			repaint();
+		});
+		solveGame.setToolTipText("Solve the Game ");
+		solveGame.setFocusPainted(false);
+		toolBar.add(solveGame);
+		toolBar.addSeparator();
 
 		JPanel toolBar2 = new JPanel();
 		toolBar2.setLayout(new BoxLayout(toolBar2, BoxLayout.PAGE_AXIS));
 		toolBar2.add(toolBar);
 
 	}
-
-
-
-
 	public void keyTyped(KeyEvent e){
-
 	}
 
 
