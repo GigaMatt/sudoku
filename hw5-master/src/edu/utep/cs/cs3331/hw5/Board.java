@@ -1,7 +1,16 @@
-package edu.utep.cs.cs3331.sudoku2D;
+/*
+ * CS 3331
+ * Homework 5
+ * @author Anthony Ayo
+ * @author Anthony Moran
+ * @author Matthew Montoya
+ * @author Enrique Salcido
 
-/**@author Anthony Moran */
+ * Purpose: To practice implementing Java Networking
+ * Last Modified: 1 May 2018
+ */
 
+package edu.utep.cs.cs3331.hw5;
 import java.util.ArrayList;
 import java.util.List;
 

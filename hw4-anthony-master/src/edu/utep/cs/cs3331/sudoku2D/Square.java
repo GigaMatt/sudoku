@@ -1,4 +1,4 @@
-package edu.utep.cs.cs3331.sudoku2D;
+package edu.utep.cs.cs3331.hw5;
 
 /**@author Anthony Moran */
 

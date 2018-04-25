@@ -1,7 +1,16 @@
-package edu.utep.cs.cs3331.sudoku2D;
+/*
+ * CS 3331
+ * Homework 5
+ * @author Anthony Ayo
+ * @author Anthony Moran
+ * @author Matthew Montoya
+ * @author Enrique Salcido
 
-/**@author Anthony Moran */
+ * Purpose: To practice implementing Java Networking
+ * Last Modified: 1 May 2018
+ */
 
+package edu.utep.cs.cs3331.hw5;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -132,7 +141,7 @@ public class BoardPanel extends JPanel {
 				Square s = board.contents.get(j*board.size()+i);
 				int value = board.contents.get(i*board.size()+j).getValue();
 				if(value != 0) {
-					if(s.set) g.setColor(Color.RED); //if the space is set, make the string color red
+					if(s.set) g.setColor(Color.BLACK); //if the space is set, make the string color red
 					g.drawString(Integer.toString(value), 2*dim.width/(5*board.size()) + 
 							j*squareSize, 7*dim.height/(11*board.size()) + i*squareSize);
 					g.setColor(Color.BLACK);

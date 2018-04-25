@@ -1,7 +1,18 @@
-package edu.utep.cs.cs3331.sudoku2D;
+/*
+ * CS 3331
+ * Homework 5
+ * @author Anthony Ayo
+ * @author Anthony Moran
+ * @author Matthew Montoya
+ * @author Enrique Salcido
 
-/**@author Anthony Moran */
+ * Purpose: To practice implementing Java Networking
+ * Last Modified: 1 May 2018
+ */
 
+//TODO @Matt Add JMenuButtons, JMenuItems for New Game, Quit, etc.
+
+package edu.utep.cs.cs3331.hw5;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -49,38 +60,32 @@ public class SudokuDialog extends JFrame {
 
     /** Default dimension of the dialog. */
     private final static Dimension DEFAULT_SIZE = new Dimension(320, 420);
-
     private final static String IMAGE_DIR = "/image/";
-
     /** Sudoku board. */
     private Board board = new Board();
-
     /** Special panel to display a Sudoku board. */
     private BoardPanel boardPanel;
-
     /** Message bar to display various messages. */
     private JLabel msgBar = new JLabel("");
-    
     /** So we know what number was clicked and the size of the board.*/
     private int size = 0;
-    
     /** So we know if the board has been clicked when clicking on numbers*/
     private boolean clickedBoard = false;
     /** Last clicked position on board*/
     private int x=0,y=0;
-    
     int newSize = 4, difficulty = 1;
     /** Stores the buttons created in UI so that it can be freely edited*/
     private JPanel numButtons = null;
-    
     private BTSolver solver = new BTSolver(board);
     /** Used for picking random squares to make blank*/
     private Random r = new Random();
 
+    
     /** Create a new dialog. */
     public SudokuDialog() {
     	this(DEFAULT_SIZE);
     }
+    
     
     /** Create a new dialog of the given screen dimension. */
     public SudokuDialog(Dimension dim) {
@@ -92,11 +97,10 @@ public class SudokuDialog extends JFrame {
         this.size = 9;
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureUI();
-        //setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
-        //setResizable(false);
     }
+    
 
     /**
      * Callback to be invoked when a square of the board is clicked.
@@ -104,14 +108,14 @@ public class SudokuDialog extends JFrame {
      * @param y 0-based column index of the clicked square.
      */
     private void boardClicked(int x, int y) {
-    	if(board.contents.get(x*board.size()+y).set) { //makes it so you can't click on set boards
+    	if(board.contents.get(x*board.size()+y).set) {		//makes it so you can't click on set boards
     		showMessage("Can't edit this entry.");
     	}
     	else{
-    		if((this.x != x) || (this.y != y)) { //new space clicked, set old space to board color
+    		if((this.x != x) || (this.y != y)) {			//new space clicked, set old space to board color
     			board.contents.get(this.x*board.size()+this.y).setColor(new Color(247, 223, 150));
     		}
-    		//set new space color to magenta
+    		//set new space color
     		clickedBoard = true;
     		this.x = x;
     		this.y = y;
@@ -120,6 +124,8 @@ public class SudokuDialog extends JFrame {
         	showMessage(String.format("Board clicked: x = %d, y = %d",  y+1, x+1));
     	}
     }
+    
+    
     /** Checks if board is solved */
     private void checkSolved() {
 		if(board.isSolved()) {
@@ -131,8 +137,8 @@ public class SudokuDialog extends JFrame {
 	        }
 	        else System.exit(0);
 		}
-		
 	}
+    
 
 	/**
      * Callback to be invoked when a number button is clicked.
@@ -140,15 +146,17 @@ public class SudokuDialog extends JFrame {
      */
     private void numberClicked(int number) {
     	if(clickedBoard) {
-    		if(board.change(y, x, number)) { //if the board was clicked and there was a change
-    			undos.push(new Move(y,x,number)); //add move to undo stack (the undo and redo parts can be omitted)
-    			solver.b = board; //update solver's board
+    		if(board.change(y, x, number)) {			//if the board was clicked and there was a change
+    			undos.push(new Move(y,x,number)); 		//add move to undo stack (the undo and redo parts can be omitted)
+    			solver.b = board; 						//update solver's board
     			showMessage("Added " + number + " to location (" + (y+1) + "," + (x+1) + ")");
     			boardPanel.repaint();
-    			checkSolved(); //check if the board is now solved
+    			checkSolved(); 							//check if the board is now solved
     		} else showMessage("Conflict putting " + number + " in location (" + (y+1) + "," + (x+1) + ")");
     	}
     }
+    
+    
     /** Undo previous move, may not always work*/
     private void undo() {
     	if(undos.isEmpty()) msgBar.setText("Nothing to undo");
@@ -157,7 +165,7 @@ public class SudokuDialog extends JFrame {
     		redos.push(move1);
     		if(undos.isEmpty()) board.change(move1.x,move1.y,0); //undo first move, essentially reset space to 0
     		else {
-    			Move move2 = undos.peek(); //another move was made before, see what it was
+    			Move move2 = undos.peek(); 						//another move was made before, see what it was
     			//if it was the same square, we change the value back to what it was previously
     			if((move1.x == move2.x) && (move1.y == move2.y)) board.change(move1.x,move1.y,move2.value);
     			//otherwise, we change the current square back to 0
@@ -165,16 +173,19 @@ public class SudokuDialog extends JFrame {
     		}
     	}
     }
+    
+    
     /** Redo previous move, may not always work*/
     private void redo() {
     	if(redos.isEmpty()) msgBar.setText("Nothing to redo");
-    	else { //a move was previously undone
-    		Move move1 = redos.pop(); //get what the move was and reapply it, this may be where the problem is but idk
+    	else { 							//a move was previously undone
+    		Move move1 = redos.pop(); 	//get what the move was and reapply it, this may be where the problem is but idk
     		board.change(move1.x, move1.y, move1.value); 
     		//push move back to the undo stack
     		undos.push(move1);
     	}
     }
+    
     
     private void createNewGame(int size, int difficulty) {
     	this.size = size;
@@ -191,8 +202,7 @@ public class SudokuDialog extends JFrame {
     	board = removeEntries(board,difficulty);
     	lastCheckedSol = solver.solve(board.clone());
     	boardPanel.setBoard(board);
-    	//set which buttons can be pressed based on board size, can be applied when clicking on a square to show what
-    	//the current valid options are
+    	//set which buttons can be pressed based on board size, can be applied when clicking on a square to show what the current valid options are
     	Component[] comp = numButtons.getComponents();
     	for (int i = 0;i<comp.length;i++) {
             if (comp[i] instanceof JButton) {
@@ -210,6 +220,8 @@ public class SudokuDialog extends JFrame {
         }
     	repaint();
     }
+    
+    
     /** Creates blanks on the board based on difficulty, chooses spaces randomly*/
     private Board removeEntries(Board b, int difficulty) {
     	int numNeeded = 0;
@@ -263,6 +275,7 @@ public class SudokuDialog extends JFrame {
     	}
     	return b;
     }
+    
 
     /**
      * Display the given string in the message bar.
@@ -272,6 +285,7 @@ public class SudokuDialog extends JFrame {
         msgBar.setText(msg);
     }
 
+    
     /** Configure the UI. */
     private void configureUI() {
         setIconImage(createImageIcon("sudoku.png").getImage());
@@ -309,6 +323,8 @@ public class SudokuDialog extends JFrame {
         });
         menu.add(menuItem);
     }
+    
+    
     /** Creates the tool bar */
     private JToolBar createToolBar() {
     	JToolBar tb = new JToolBar("Sudoku");
@@ -386,6 +402,8 @@ public class SudokuDialog extends JFrame {
     	tb.add(b6);
     	return tb;
     }
+    
+    
     /** Creates the confirmation panel for selecting a new game */
     private JDialog makeConfirmationPanel() {
     	JDialog confirmation = new JDialog();
@@ -452,6 +470,7 @@ public class SudokuDialog extends JFrame {
         confirmation.add(difDecisions,BorderLayout.CENTER);
         return confirmation;
     }
+    
       
     /** Create a control panel consisting of new and number buttons. */
     private JPanel makeControlPanel() {        
@@ -476,6 +495,7 @@ public class SudokuDialog extends JFrame {
         content.add(buttonAndTB);
         return content;
     }
+    
 
     /** Create an image icon from the given image file. */
     private ImageIcon createImageIcon(String filename) {
@@ -486,6 +506,7 @@ public class SudokuDialog extends JFrame {
         return null;
     }
 
+    
     public static void main(String[] args) {
         new SudokuDialog();
     }
