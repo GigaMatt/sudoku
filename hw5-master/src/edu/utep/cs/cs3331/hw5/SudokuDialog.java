@@ -21,11 +21,14 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.Stack;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -81,14 +84,16 @@ public class SudokuDialog extends JFrame {
     private Random r = new Random();
 
     
-    /** Create a new dialog. */
-    public SudokuDialog() {
+    /** Create a new dialog. 
+     * @throws IOException */
+    public SudokuDialog() throws IOException {
     	this(DEFAULT_SIZE);
     }
     
     
-    /** Create a new dialog of the given screen dimension. */
-    public SudokuDialog(Dimension dim) {
+    /** Create a new dialog of the given screen dimension. 
+     * @throws IOException */
+    public SudokuDialog(Dimension dim) throws IOException {
         super("Sudoku");
         setSize(dim);
         board = removeEntries(solver.genSolved9(),2);
@@ -284,10 +289,13 @@ public class SudokuDialog extends JFrame {
     private void showMessage(String msg) {
         msgBar.setText(msg);
     }
-
     
-    /** Configure the UI. */
-    private void configureUI() {
+    
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /** Configure the UI. 
+     * @throws IOException */
+    private void configureUI() throws IOException {
         setIconImage(createImageIcon("sudoku.png").getImage());
         setLayout(new BorderLayout());
         
@@ -307,22 +315,130 @@ public class SudokuDialog extends JFrame {
         
         //create menu bar
         JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Game");
+        JMenu fileMenu = new JMenu("File");
         setJMenuBar(menuBar);
-        menu.setMnemonic(KeyEvent.VK_G);
-        menu.getAccessibleContext().setAccessibleDescription("Game menu");
-        menuBar.add(menu);
-        JMenuItem menuItem = new JMenuItem("New game", KeyEvent.VK_N);
-        menuItem.setToolTipText("Play a new game");
-        menuItem.setIcon(createImageIcon("playbutton.png"));
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
-
+        fileMenu.setMnemonic(KeyEvent.VK_G);
+        fileMenu.getAccessibleContext().setAccessibleDescription("File menu");
+        menuBar.add(fileMenu);
+        
+        
+		JMenuItem newGame = new JMenuItem("New Game", KeyEvent.VK_N);
+		KeyStroke ctrlNKeyStroke = KeyStroke.getKeyStroke("control N");
+		ImageIcon newGameIcon = new ImageIcon(createImageIcon("play1_resized.png").getImage());
+		newGame.setIcon(newGameIcon);
+		newGame.setToolTipText("Play a new game");
+		newGame.setAccelerator(ctrlNKeyStroke);
         JDialog confirmation = makeConfirmationPanel();
-        menuItem.addActionListener(e -> {
+        newGame.addActionListener(e -> {
         	confirmation.setVisible(true);
         });
-        menu.add(menuItem);
+		fileMenu.add(newGame);
+		fileMenu.addSeparator();
+		
+
+		//JMenuItem SOLVE_PUZZLE
+		JMenuItem solvePuzzle = new JMenuItem("Solve Puzzle", KeyEvent.VK_S);
+		KeyStroke ctrlSKeyStroke = KeyStroke.getKeyStroke("control S");
+		ImageIcon solvePuzzleIcon = new ImageIcon(createImageIcon("bulb_resized.png").getImage());
+		solvePuzzle.setIcon(solvePuzzleIcon);
+		solvePuzzle.setToolTipText("Solve the puzzle for me");
+		solvePuzzle.setAccelerator(ctrlSKeyStroke);
+
+		solvePuzzle.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				//board = solver.solveBoard(board);
+				//boardPanel.setBoard(board);
+				repaint();	
+			}
+		});
+
+		fileMenu.add(solvePuzzle);
+		fileMenu.addSeparator();
+
+
+		//JMenuItem TEST_SOLVEABILITY
+		JMenuItem testSolveability = new JMenuItem("Check Progress", KeyEvent.VK_C);
+		KeyStroke ctrlCKeyStroke = KeyStroke.getKeyStroke("control C");
+		ImageIcon solveableIcon =  new ImageIcon(createImageIcon("questionMark_resized.png").getImage());
+		testSolveability.setIcon(solveableIcon);
+		testSolveability.setToolTipText("Check if my progress is solveable");
+		testSolveability.setAccelerator(ctrlCKeyStroke);
+		testSolveability.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				//boolean bool = solver.isSolveable(board);
+				//showMessage(String.format("The board is solvable: "+bool+"."));
+			}
+		});
+		fileMenu.add(testSolveability);
+		fileMenu.addSeparator();
+
+
+		//JMenuItem EXIT
+		JMenuItem exit = new JMenuItem("Quit Game", KeyEvent.VK_Q);
+		KeyStroke ctrlQKeyStroke = KeyStroke.getKeyStroke("control Q");
+		ImageIcon exitIcon =  new ImageIcon(createImageIcon("door_resized.png").getImage());
+		
+		exit.setIcon(exitIcon);
+		exit.setToolTipText("Quit the game");
+		exit.setAccelerator(ctrlQKeyStroke);
+		fileMenu.add(exit);
+		fileMenu.addSeparator();
+
+
+		class exitaction implements ActionListener{
+			public void actionPerformed (ActionEvent e){
+				System.exit(0);
+			}
+		}
+		exit.addActionListener(new exitaction());
+
+
+
+		JMenu edit = new JMenu("Edit");
+		fileMenu.setMnemonic(KeyEvent.VK_G);
+		fileMenu.getAccessibleContext().setAccessibleDescription("Game Menu");
+		menuBar.add(edit);
+
+
+		//JMenuItem UNDO
+		JMenuItem undo = new JMenuItem("Undo", KeyEvent.VK_U);
+		KeyStroke ctrlUKeyStroke = KeyStroke.getKeyStroke("control U");
+		ImageIcon undoIcon =  new ImageIcon(createImageIcon("undo_resized.png").getImage());
+		
+		undo.setIcon(undoIcon);
+		undo.setToolTipText("Undo last move");
+		undo.setAccelerator(ctrlUKeyStroke);
+		edit.add(undo);
+		edit.addSeparator();
+
+
+		//JMenuItem REDO
+		JMenuItem redo = new JMenuItem("Redo");
+		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke("control R");
+		ImageIcon redoIcon =  new ImageIcon(createImageIcon("redo_resized.png").getImage());
+		redo.setIcon(redoIcon);
+		redo.setToolTipText("Redo last move");
+		redo.setAccelerator(ctrlRKeyStroke);
+		edit.add(redo);
+		edit.addSeparator();
+        
+        
+        /*
+        JMenuItem newGame = new JMenuItem("New game", KeyEvent.VK_N);
+        newGame.setToolTipText("Play a new game");
+        newGame.setIcon(createImageIcon("playbutton.png"));
+        newGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
+
+        JDialog confirmation = makeConfirmationPanel();
+        newGame.addActionListener(e -> {
+        	confirmation.setVisible(true);
+        });
+        fileMenu.add(newGame);
+        */
+
     }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     
     /** Creates the tool bar */
@@ -507,7 +623,7 @@ public class SudokuDialog extends JFrame {
     }
 
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new SudokuDialog();
     }
 }

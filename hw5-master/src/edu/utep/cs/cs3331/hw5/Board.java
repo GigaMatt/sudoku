@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Board {
 	/** For easy access to the size of the Sudoku Board.*/
-	private int size;
+	int size;
 	
 	/** For easy access to the square root of the size of the Sudoku Board.*/
 	private int sqrt;
