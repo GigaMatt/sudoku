@@ -1,6 +1,8 @@
 package HW5;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -10,7 +12,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.border.TitledBorder;
 
 import HW5.NetworkAdapter.MessageType;
 import edu.utep.cs.cs3331.sudoku2D.SudokuDialog;
@@ -20,6 +24,7 @@ public class Main extends SudokuDialog implements NetworkAdapter.MessageListener
 	private JButton networkButton;
 	private ImageIcon NETWORK_OFF,NETWORK_ON;
 	private NetworkAdapter network;
+	private JTextField textField;
 	
 	@Override
 	protected JToolBar createToolBar() {
@@ -62,16 +67,29 @@ public class Main extends SudokuDialog implements NetworkAdapter.MessageListener
 		JDialog confirmation = new JDialog();
 		confirmation.setTitle("Connection");
 		confirmation.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    	confirmation.setSize(250, 250);
+    	confirmation.setSize(250, 250);//maybe should make a little bigger
     	confirmation.setLayout(new BorderLayout());
-    	JDialog player = new JDialog(); //put in north section of confirmation
-    	player.setLayout(new BorderLayout());
-    	player.setTitle("Player settings");
-    	JDialog peer = new JDialog();//put in center section of confirmation
-    	peer.setLayout(new BorderLayout());
-    	peer.setTitle("Peer settings");
-		//code here to look like cheon's connection confirmation panel
-    	//figure out what/how to put the text box in the south section of confirmation
+    	//player section of connection panel
+    	JPanel player = new JPanel(new BorderLayout());
+    	TitledBorder border = new TitledBorder("Player settings");
+        border.setTitleJustification(TitledBorder.CENTER);
+        border.setTitlePosition(TitledBorder.TOP);
+        player.setBorder(border);
+        //peer section of connection panel
+    	JPanel peer = new JPanel(new BorderLayout());
+    	TitledBorder border1 = new TitledBorder("Peer settings");
+        border1.setTitleJustification(TitledBorder.CENTER);
+        border1.setTitlePosition(TitledBorder.TOP);
+        peer.setBorder(border1);
+        //setup the text box, this is going to be where the socket output is placed, will be edited later
+        textField = new JTextField();
+        textField.setPreferredSize(new Dimension(240,100));
+    	textField.setEditable(false); //makes it so that the user can't edit the field but the program still can
+    	textField.setBackground(Color.WHITE);
+    	//add everything and return
+    	confirmation.add(player,BorderLayout.NORTH);
+    	confirmation.add(peer,BorderLayout.CENTER);
+    	confirmation.add(textField,BorderLayout.SOUTH);
 		return confirmation;
 	}
 	
