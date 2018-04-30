@@ -115,7 +115,7 @@ public class BoardPanel extends JPanel {
         	Square s = board.contents.get(i);
         	if(!s.getColor().equals(boardColor)) {
         		if(s.set) continue;
-        		else g.setColor(Color.MAGENTA);
+        		else g.setColor(Color.GREEN);
         		g.fillRect(s.x*squareSize, s.y*squareSize, squareSize, squareSize);
         		g.setColor(Color.BLACK);
         	}
