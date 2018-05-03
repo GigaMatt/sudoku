@@ -1,6 +1,13 @@
+/**
+ * CS3331
+ * @version 5.0 (05/02/2018)
+ * 
+ * @author Anthony Ayo 
+ * @author Anthony Moran
+ * @author Enrique Salcido
+ * @author Matthew Montoya
+ **/
 package edu.utep.cs.cs3331.sudoku2D;
-
-/**@author Anthony Moran */
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -8,7 +15,7 @@ import java.util.Random;
 
 public class BTSolver implements Solver{
 	Random r = new Random(); //used to randomly arrange a newly generated solved board
-	Board b = new Board();
+	public Board b = new Board();
 	
 	public Board solve(Board b) {
 		if(isSolveable(b)) {
@@ -24,12 +31,23 @@ public class BTSolver implements Solver{
 	public BTSolver(Board b) {
 		this.b = b;
 	}
-	//naive check for if a board is solvable
+
+	/*
+	 * Naive check for if a board is solvable
+	 * @see edu.utep.cs.cs3331.sudoku2D.Solver#isSolveable(edu.utep.cs.cs3331.sudoku2D.Board)
+	 * @param b the board we are checking
+	 * @return whether or not the board is solvable
+	 */
 	public boolean isSolveable(Board b) {
 		if(!hasOptions()) return false;
 		else return true;
 	}
-	//Back tracking implementation of solving a board, sometimes can be a little slow for some reason
+	
+	/**
+	 * Back tracking implementation of solving a board
+	 * @param b the board we are checking
+	 * @return whether or not the board is solvable
+	 */
 	private boolean BTSolve(Board b) {
 		if(b.isSolved()) return true; //board is solved, return
 		if(!isSolveable(b)) return false; //board is not solvable, return and try other options
@@ -48,7 +66,12 @@ public class BTSolver implements Solver{
 		return false; //checked all possible values for square s, board must be unsolvable
 	}
 	
-	private Square getNextSmallestBlank(Board b) { //returns the square with the least amount of options
+	/**
+	 * Returns the square with the least amount of options
+	 * @param b the board which we are checking
+	 * @return the square with the least amount of options
+	 */
+	private Square getNextSmallestBlank(Board b) {
 		ArrayList<Integer> options = getEntryOptions();
 		int min = Integer.MAX_VALUE;
 		Square curr = new Square();
@@ -62,7 +85,11 @@ public class BTSolver implements Solver{
 		return curr;
 	}
 	
-	private boolean hasOptions() { //checks that all blank spaces has options
+	/**
+	 * Checks that all blank spaces has options
+	 * @return true/false if options are available
+	 */
+	private boolean hasOptions() {
 		ArrayList<Integer> options = getEntryOptions();
 		for(int i=0;i<options.size();i++) {
 			if((options.get(i) == 0) && (b.contents.get(i).getValue() == 0)) return false;
@@ -70,7 +97,11 @@ public class BTSolver implements Solver{
 		return true;
 	}
 	
-	private ArrayList<Integer> getEntryOptions() { //get the amount of options for each space
+	/**
+	 * Get the amount of options for each space
+	 * @return an arraylist with each space's options.
+	 */
+	private ArrayList<Integer> getEntryOptions() {
 		ArrayList<Integer> options = new ArrayList<Integer>();
 		for(int i=0;i<b.contents.size();i++) {
 			int num = 0;
@@ -88,11 +119,19 @@ public class BTSolver implements Solver{
 		return options;
 	}
 	
-	private void makeNormalColors(Board b) { //makes it so all spaces are the same color of the board
+	/**
+	 * Makes it so all spaces are the same color of the board
+	 * @param b the board we intend to edit
+	 */
+	private void makeNormalColors(Board b) {
 		for(int i=0;i<b.contents.size();i++) b.contents.get(i).setColor(new Color(247, 223, 150));
 	}
 	
-	public Board genSolved9() { //generates and permutes a solved 9x9 board
+	/**
+	 * Generates and permutes a solved 9x9 board
+	 * @return a solved board
+	 */
+	public Board genSolved9() {
 		b = new Board(9);
 		b = solve(b);
 		int[] locs = new int[3];
@@ -160,7 +199,12 @@ public class BTSolver implements Solver{
 		}
 		return b;
 	}
-	//gets a random permutation of locations for the 3 rows
+	
+	/**
+	 * Gets a random permutation of locations for the 3 rows
+	 * @param locs array of locations
+	 * @return an integer array of locations
+	 */
 	private int[] createNewLocs(int[] locs) {
 		int loc1 = r.nextInt(3)+1; //where first row goes
 		int loc2 = r.nextInt(2)+1; //where second row goes
@@ -183,7 +227,11 @@ public class BTSolver implements Solver{
 		int[] locs2 = {loc1,loc2,loc3};
 		return locs2;
 	}
-	//generate a solved 4x4 and permute it
+	
+	/**
+	 * Generate a solved 4x4 and permute it
+	 * @return a 4x4 solved board
+	 */
 	public Board genSolved4() {
 		b = new Board(4);
 		b = solve(b);
@@ -244,7 +292,12 @@ public class BTSolver implements Solver{
 		}
 		return b;
 	}
-	//method to switch two rows for permuting the 4x4
+	
+	/**
+	 * Method to switch two rows for permuting the 4x4
+	 * @param rows the rows we intend to switch
+	 * @return an ArrayList with the switched rows
+	 */
 	private ArrayList<Square> switchRows(ArrayList<Square> rows){
 		ArrayList<Square> rows2 = new ArrayList<Square>();
 		for(int i=1;i>=0;i--) {
@@ -254,7 +307,16 @@ public class BTSolver implements Solver{
 		}
 		return rows2;
 	}
-	//switch around the 3 given rows based on the provided locations for row1, row2, row3
+	
+	
+	/**
+	 * Switch around the 3 given rows based on the provided locations for row1, row2, row3
+	 * @param rows the ArrayList of squares with the rows we will edit
+	 * @param loc1 the first location row
+	 * @param loc2 the second location row
+	 * @param loc3 the third location row
+	 * @return an ArrayList with the switched rows
+	 */
 	private ArrayList<Square> switch3Rows(ArrayList<Square> rows, int loc1, int loc2, int loc3){
 		ArrayList<Square> rows2 = new ArrayList<Square>();
 		if(loc1 == 1) {//row 1 goes first

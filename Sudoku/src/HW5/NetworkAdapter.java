@@ -1,5 +1,5 @@
 package HW5;
-
+//TODO make new cases in enumeration and write message for when the solved button is clicked
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -150,9 +150,15 @@ import java.util.concurrent.LinkedBlockingQueue;
  * </pre>
  *
  * @author cheon
+/**
+ * CS3331
+ * @version 5.0 (05/02/2018)
+ * @author Anthony Ayo 
+ * @author Anthony Moran
+ * @author Enrique Salcido
+ * @author Matthew Montoya
  * @see MessageType
- * @see MessageListener
- */
+ * @see MessageListener */
 
 public class NetworkAdapter {
 

@@ -1,6 +1,15 @@
+/**
+ * CS3331
+ * @version 5.0 (05/02/2018)
+ * 
+ * @author Anthony Ayo 
+ * @author Anthony Moran
+ * @author Enrique Salcido
+ * @author Matthew Montoya
+ **/
+
 package edu.utep.cs.cs3331.sudoku2D;
 
-/**@author Anthony Moran */
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,7 +174,10 @@ public class Board {
 		return false;
 	}
 	
-	//clones the original board so we can manipulate it without affecting the original board
+	/**
+	 * Clones the original board so we can manipulate it without affecting the original board
+	 * @return the temporary board
+	 */
 	public Board clone() {
 		Board temp = new Board(this.size);
 		temp.contents.clear();

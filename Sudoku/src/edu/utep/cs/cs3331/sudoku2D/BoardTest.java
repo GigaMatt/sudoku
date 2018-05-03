@@ -1,3 +1,13 @@
+/**
+ * CS3331
+ * @version 5.0 (05/02/2018)
+ * 
+ * @author Anthony Ayo 
+ * @author Anthony Moran
+ * @author Enrique Salcido
+ * @author Matthew Montoya
+ **/
+
 package edu.utep.cs.cs3331.sudoku2D;
 
 import static org.junit.jupiter.api.Assertions.*;

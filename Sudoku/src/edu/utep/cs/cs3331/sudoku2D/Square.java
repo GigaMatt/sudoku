@@ -1,6 +1,15 @@
+/**
+ * CS3331
+ * @version 5.0 (05/02/2018)
+ * 
+ * @author Anthony Ayo 
+ * @author Anthony Moran
+ * @author Enrique Salcido
+ * @author Matthew Montoya
+ **/
+
 package edu.utep.cs.cs3331.sudoku2D;
 
-/**@author Anthony Moran */
 
 import java.awt.Color;
 
@@ -45,10 +54,18 @@ public class Square {
 		this.color = color;
 	}
 	
+	/**
+	 * Gets the color of the square
+	 * @return the color of the square 
+	 */
 	public Color getColor() {
 		return color;
 	}
-	//create a clone of the current square so the clone can be edited without affecting this square
+	
+	/**
+	 * create a clone of the current square so the clone can be edited without affecting this square
+	 * @return the clone of the square
+	 */
 	public Square clone() {
 		Square tmp = new Square();
 		tmp.x = this.x;

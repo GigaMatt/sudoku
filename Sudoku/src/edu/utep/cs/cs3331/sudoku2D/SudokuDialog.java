@@ -1,7 +1,18 @@
+/**
+ * CS3331
+ * @version 5.0 (05/02/2018)
+ * @author Yoonsik Cheon
+ * A dialog template for playing simple Sudoku games.
+ * You need to write code for three callback methods:
+ * newClicked(int), numberClicked(int) and boardClicked(int,int).
+ * 
+ * @author Anthony Ayo 
+ * @author Anthony Moran
+ * @author Enrique Salcido
+ * @author Matthew Montoya
+ **/
+
 package edu.utep.cs.cs3331.sudoku2D;
-
-/**@author Anthony Moran */
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -9,9 +20,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
@@ -30,22 +41,15 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
-/**
- * A dialog template for playing simple Sudoku games.
- * You need to write code for three callback methods:
- * newClicked(int), numberClicked(int) and boardClicked(int,int).
- *
- * @author Yoonsik Cheon
- */
 @SuppressWarnings("serial")
 public class SudokuDialog extends JFrame {
 	
 	/** Storage for board last created from solve() so that if a board is unsolvable we sub in this one */
-	Board lastCheckedSol = null;
+	protected Board lastCheckedSol = null;
 	
 	/** Keep track of moves done and what can be undone/redone */
-	Stack<Move> redos = new Stack<Move>();
-	Stack<Move> undos = new Stack<Move>();
+	protected Stack<Move> redos = new Stack<Move>();
+	protected Stack<Move> undos = new Stack<Move>();
 
     /** Default dimension of the dialog. */
     private final static Dimension DEFAULT_SIZE = new Dimension(320, 420);
@@ -53,27 +57,27 @@ public class SudokuDialog extends JFrame {
     private final static String IMAGE_DIR = "/image/";
 
     /** Sudoku board. */
-    private Board board = new Board();
+    protected Board board = new Board();
 
     /** Special panel to display a Sudoku board. */
-    private BoardPanel boardPanel;
+    protected BoardPanel boardPanel;
 
     /** Message bar to display various messages. */
-    private JLabel msgBar = new JLabel("");
+    protected JLabel msgBar = new JLabel("");
     
     /** So we know what number was clicked and the size of the board.*/
     private int size = 0;
     
     /** So we know if the board has been clicked when clicking on numbers*/
-    private boolean clickedBoard = false;
+    protected boolean clickedBoard = false;
     /** Last clicked position on board*/
-    private int x=0,y=0;
+    protected int x=0,y=0;
     
-    int newSize = 4, difficulty = 1;
+    protected int newSize = 4, difficulty = 1;
     /** Stores the buttons created in UI so that it can be freely edited*/
     private JPanel numButtons = null;
     
-    private BTSolver solver = new BTSolver(board);
+    protected BTSolver solver = new BTSolver(board);
     /** Used for picking random squares to make blank*/
     private Random r = new Random();
 
@@ -82,7 +86,9 @@ public class SudokuDialog extends JFrame {
     	this(DEFAULT_SIZE);
     }
     
-    /** Create a new dialog of the given screen dimension. */
+    /** Create a new dialog of the given screen dimension. 
+     * @param dim the dimensions for the Sudoku board
+     * */
     public SudokuDialog(Dimension dim) {
         super("Sudoku");
         setSize(dim);
@@ -92,10 +98,8 @@ public class SudokuDialog extends JFrame {
         this.size = 9;
         boardPanel = new BoardPanel(board, this::boardClicked);
         configureUI();
-        //setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
-        //setResizable(false);
     }
 
     /**
@@ -121,7 +125,7 @@ public class SudokuDialog extends JFrame {
     	}
     }
     /** Checks if board is solved */
-    private void checkSolved() {
+    protected void checkSolved() {
 		if(board.isSolved()) {
 			int response = JOptionPane.showConfirmDialog(null,"Congratulations, you solved the board!" + 
 																" Would you like to start a new game?" +
@@ -138,7 +142,7 @@ public class SudokuDialog extends JFrame {
      * Callback to be invoked when a number button is clicked.
      * @param number Clicked number (1-9), or 0 for "X".
      */
-    private void numberClicked(int number) {
+    protected void numberClicked(int number) {
     	if(clickedBoard) {
     		if(board.change(y, x, number)) { //if the board was clicked and there was a change
     			undos.push(new Move(y,x,number)); //add move to undo stack (the undo and redo parts can be omitted)
@@ -176,7 +180,13 @@ public class SudokuDialog extends JFrame {
     	}
     }
     
-    private void createNewGame(int size, int difficulty) {
+    /**
+     * Creates a new game with a specified size and difficulty 
+     * 
+     * @param size the size of the board
+     * @param difficulty the difficulty of the board
+     */
+    protected void createNewGame(int size, int difficulty) {
     	this.size = size;
     	clickedBoard = false;
     	undos.clear();
@@ -210,7 +220,13 @@ public class SudokuDialog extends JFrame {
         }
     	repaint();
     }
-    /** Creates blanks on the board based on difficulty, chooses spaces randomly*/
+    
+    /**
+     *Creates blanks on the board based on difficulty, chooses spaces randomly
+     * @param b the Sudoku board we're editing
+     * @param difficulty the player's desired level of difficulty
+     * @return the Sudoku board
+     */
     private Board removeEntries(Board b, int difficulty) {
     	int numNeeded = 0;
     	if(b.size() == 4) {
@@ -268,48 +284,153 @@ public class SudokuDialog extends JFrame {
      * Display the given string in the message bar.
      * @param msg Message to be displayed.
      */
-    private void showMessage(String msg) {
+    protected void showMessage(String msg) {
         msgBar.setText(msg);
     }
 
     /** Configure the UI. */
-    private void configureUI() {
-        setIconImage(createImageIcon("sudoku.png").getImage());
-        setLayout(new BorderLayout());
-        
-        JPanel buttons = makeControlPanel();
-        // boarder: top, left, bottom, right
-        buttons.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
-        add(buttons, BorderLayout.NORTH);
-        
-        JPanel board = new JPanel();
-        board.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
-        board.setLayout(new GridLayout(1,1));
-        board.add(boardPanel);
-        add(board, BorderLayout.CENTER);
-        
-        msgBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
-        add(msgBar, BorderLayout.SOUTH);
-        
-        //create menu bar
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Game");
-        setJMenuBar(menuBar);
-        menu.setMnemonic(KeyEvent.VK_G);
-        menu.getAccessibleContext().setAccessibleDescription("Game menu");
-        menuBar.add(menu);
-        JMenuItem menuItem = new JMenuItem("New game", KeyEvent.VK_N);
-        menuItem.setToolTipText("Play a new game");
-        menuItem.setIcon(createImageIcon("playbutton.png"));
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
+    protected void configureUI(){
+		setIconImage(createImageIcon("sudoku.png").getImage());
+		setLayout(new BorderLayout());
 
-        JDialog confirmation = makeConfirmationPanel();
-        menuItem.addActionListener(e -> {
-        	confirmation.setVisible(true);
-        });
-        menu.add(menuItem);
-    }
-    /** Creates the tool bar */
+		JPanel buttons = makeControlPanel();
+		//top, left, bottom, right
+		buttons.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
+		add(buttons, BorderLayout.NORTH);
+
+		JPanel jp_board = new JPanel();
+		jp_board.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
+		jp_board.setLayout(new GridLayout(1,1));
+		jp_board.add(boardPanel);
+		add(jp_board, BorderLayout.CENTER);
+
+		msgBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
+		add(msgBar, BorderLayout.SOUTH);
+
+		//create menu bar
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		setJMenuBar(menuBar);
+		fileMenu.setMnemonic(KeyEvent.VK_G);
+		fileMenu.getAccessibleContext().setAccessibleDescription("File menu");
+		menuBar.add(fileMenu);
+
+
+		JMenuItem newGame = new JMenuItem("New Game", KeyEvent.VK_N);
+		KeyStroke ctrlNKeyStroke = KeyStroke.getKeyStroke("control N");
+		ImageIcon newGameIcon = new ImageIcon(createImageIcon("play1_resized.png").getImage());
+		newGame.setIcon(newGameIcon);
+		newGame.setToolTipText("Play a new game");
+		newGame.setAccelerator(ctrlNKeyStroke);
+		JDialog confirmation = makeConfirmationPanel();
+		newGame.addActionListener(e -> {
+			confirmation.setVisible(true);
+		});
+		fileMenu.add(newGame);
+		fileMenu.addSeparator();
+
+
+		//JMenuItem SOLVE_PUZZLE
+		JMenuItem solvePuzzle = new JMenuItem("Solve Puzzle", KeyEvent.VK_S);
+		KeyStroke ctrlSKeyStroke = KeyStroke.getKeyStroke("control S");
+		ImageIcon solvePuzzleIcon = new ImageIcon(createImageIcon("bulb_resized.png").getImage());
+		solvePuzzle.setIcon(solvePuzzleIcon);
+		solvePuzzle.setToolTipText("Solve the puzzle for me");
+		solvePuzzle.setAccelerator(ctrlSKeyStroke);
+		
+		solvePuzzle.addActionListener(e ->{ //solves game, if not solvable then displays that last generated solved board
+			Board tmp = solver.solve(board);
+			if(tmp == null) board = lastCheckedSol;
+			boardPanel.setBoard(board);
+			boardPanel.repaint();
+			msgBar.setText("Solved");
+			repaint();
+		});
+		fileMenu.add(solvePuzzle);
+		fileMenu.addSeparator();
+
+
+		//JMenuItem TEST_SOLVEABILITY
+		JMenuItem testSolveability = new JMenuItem("Check Progress", KeyEvent.VK_C);
+		KeyStroke ctrlCKeyStroke = KeyStroke.getKeyStroke("control C");
+		ImageIcon solveableIcon =  new ImageIcon(createImageIcon("questionMark_resized.png").getImage());
+		testSolveability.setIcon(solveableIcon);
+		testSolveability.setToolTipText("Check if my progress is solveable");
+		testSolveability.setAccelerator(ctrlCKeyStroke);
+		testSolveability.addActionListener(e ->{ //checks if board is solvable
+			if(!solver.isSolveable(board)) msgBar.setText("Not solvable");
+			else { //passed naive test for checking if board is not solvable
+				Board tmp = board.clone(); //clone board so we don't edit the current board
+				msgBar.setText("Checking for solution");
+				tmp = solver.solve(tmp);
+				solver.b = board;
+				if(tmp == null) msgBar.setText("Not solvable");
+				else { //solution found, store created solution for later use if needed
+					lastCheckedSol = tmp;
+					msgBar.setText("Still solvable");
+				}
+			}
+		});
+		testSolveability.setToolTipText("Check if game is solvable");
+		fileMenu.add(testSolveability);
+		fileMenu.addSeparator();
+
+
+		//JMenuItem EXIT
+		JMenuItem exit = new JMenuItem("Quit Game", KeyEvent.VK_Q);
+		KeyStroke ctrlQKeyStroke = KeyStroke.getKeyStroke("control Q");
+		ImageIcon exitIcon =  new ImageIcon(createImageIcon("door_resized.png").getImage());
+
+		exit.setIcon(exitIcon);
+		exit.setToolTipText("Quit the game");
+		exit.setAccelerator(ctrlQKeyStroke);
+		fileMenu.add(exit);
+		fileMenu.addSeparator();
+		exit.addActionListener(e->{System.exit(0);});
+
+
+
+		JMenu edit = new JMenu("Edit");
+		fileMenu.setMnemonic(KeyEvent.VK_G);
+		fileMenu.getAccessibleContext().setAccessibleDescription("Game Menu");
+		menuBar.add(edit);
+
+
+		//JMenuItem UNDO
+		JMenuItem undo = new JMenuItem("Undo", KeyEvent.VK_U);
+		KeyStroke ctrlUKeyStroke = KeyStroke.getKeyStroke("control U");
+		ImageIcon undoIcon =  new ImageIcon(createImageIcon("undo_resized.png").getImage());
+		undo.addActionListener(e -> {
+			undo();
+			repaint();
+		});
+
+		undo.setIcon(undoIcon);
+		undo.setToolTipText("Undo previous move");
+		undo.setAccelerator(ctrlUKeyStroke);
+		edit.add(undo);
+		edit.addSeparator();
+
+
+		//JMenuItem REDO
+		JMenuItem redo = new JMenuItem("Redo");
+		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke("control R");
+		ImageIcon redoIcon =  new ImageIcon(createImageIcon("redo_resized.png").getImage());
+		redo.setIcon(redoIcon);
+		redo.addActionListener(e -> {
+			redo();
+			repaint();
+		});
+		redo.setToolTipText("Redo previous move");
+		redo.setAccelerator(ctrlRKeyStroke);
+		edit.add(redo);
+		edit.addSeparator();
+	}
+    
+    /**
+     * Creates the tool bar
+     * @return the board's toolbar
+     */
     protected JToolBar createToolBar() {
     	JToolBar tb = new JToolBar("Sudoku");
     	tb.setFloatable(false);
@@ -387,8 +508,13 @@ public class SudokuDialog extends JFrame {
     	tb.add(b6);
     	return tb;
     }
-    /** Creates the confirmation panel for selecting a new game */
-    private JDialog makeConfirmationPanel() {
+    
+    
+    /**
+     * Creates the confirmation panel for selecting a new game
+     * @return the JDialog with the confirmation panel of messages
+     */
+    protected JDialog makeConfirmationPanel() {
     	JDialog confirmation = new JDialog();
     	JLabel settings = new JLabel("Current size and difficulty: " + newSize + " , " + difficulty);
     	confirmation.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -454,8 +580,11 @@ public class SudokuDialog extends JFrame {
         return confirmation;
     }
       
-    /** Create a control panel consisting of new and number buttons. */
-    private JPanel makeControlPanel() {        
+    /** 
+     * Create a control panel consisting of new and number buttons. 
+     * @return the JDialog with the confirmation panel of new number buttons
+     */
+    protected JPanel makeControlPanel() {        
     	// buttons labeled 1, 2, ..., 9, and X.
     	JPanel buttonAndTB = new JPanel(new BorderLayout()); //used for creating a nice look for toolbar/number bar
     	buttonAndTB.add(createToolBar(),BorderLayout.NORTH);
@@ -478,7 +607,11 @@ public class SudokuDialog extends JFrame {
         return content;
     }
 
-    /** Create an image icon from the given image file. */
+    /**
+     * Create an image icon from the given image file.
+     * @param filename the directory name of the file
+     * @return the image icons to be displayed on the board
+     */
     protected ImageIcon createImageIcon(String filename) {
         URL imageUrl = getClass().getResource(IMAGE_DIR + filename);
         if (imageUrl != null) {
@@ -487,8 +620,38 @@ public class SudokuDialog extends JFrame {
         return null;
     }
 
+    /**
+     * Fill numbers on the board
+     * @param x the x position value on the board
+     * @param y the y position value on the board
+     * @param n the integer value that will be inserted in the x-y coordinate
+     */
     protected void fillNumber(int x, int y, int n) {
     	board.change(x, y, n); //may need to be adjusted to take care of the swapping in x and y values
+    }
+    
+    /**
+     * Get the status of the board with respect to non-zeros
+     * @return an integer array representation of the no zero elements in the board
+     */
+    protected int[] boardStatus() {
+    	ArrayList<Integer> nonZeroSpaces = new ArrayList<Integer>();
+    	int[] nonZeros = null;
+    	for(int i=0;i<board.contents.size();i++) {
+    		Square s = board.contents.get(i);
+    		if(s.getValue() != 0) { //if the element is non zero, store x,y,value,set in the list
+    			nonZeroSpaces.add(s.y);
+    			nonZeroSpaces.add(s.x);
+    			nonZeroSpaces.add(s.getValue());
+    			if(s.set) nonZeroSpaces.add(1); //position is set
+    			else nonZeroSpaces.add(0); //position is not set
+    		}
+    	}
+    	nonZeros = new int[nonZeroSpaces.size()];
+    	for(int i=0;i<nonZeros.length;i++) { //change list into array
+    		nonZeros[i] = nonZeroSpaces.get(i);
+    	}
+    	return nonZeros;
     }
     
     public static void main(String[] args) {

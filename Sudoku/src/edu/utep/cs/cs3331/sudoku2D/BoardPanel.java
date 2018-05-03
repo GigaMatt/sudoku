@@ -1,6 +1,13 @@
+/**
+ * CS3331
+ * @version 5.0 (05/02/2018)
+ * 
+ * @author Anthony Ayo 
+ * @author Anthony Moran
+ * @author Enrique Salcido
+ * @author Matthew Montoya
+ **/
 package edu.utep.cs.cs3331.sudoku2D;
-
-/**@author Anthony Moran */
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -78,7 +85,10 @@ public class BoardPanel extends JPanel {
     	return xx * 100 + yy;
     }
 
-    /** Draw the associated board. */
+    /**
+     * Draw the associated board.
+     * @param g graphics that will be worked on
+     **/
     @Override
     public void paint(Graphics g) {
         super.paint(g); 
@@ -115,7 +125,7 @@ public class BoardPanel extends JPanel {
         	Square s = board.contents.get(i);
         	if(!s.getColor().equals(boardColor)) {
         		if(s.set) continue;
-        		else g.setColor(Color.MAGENTA);
+        		else g.setColor(Color.GREEN);
         		g.fillRect(s.x*squareSize, s.y*squareSize, squareSize, squareSize);
         		g.setColor(Color.BLACK);
         	}
@@ -126,6 +136,11 @@ public class BoardPanel extends JPanel {
         
     }
 
+    /**
+     * Displays the board for viewing
+     * @param g graphics that will be worked on
+     * @param dim dimension of the board
+     */
     public void displayBoard(Graphics g, Dimension dim) {
     	for(int i=0;i<board.size();i++) {
         	for(int j=0;j<board.size();j++) {
