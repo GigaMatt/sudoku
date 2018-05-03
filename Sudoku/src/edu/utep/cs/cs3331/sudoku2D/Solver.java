@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * CS3331
  * @version 5.0 (05/02/2018)
@@ -7,6 +8,9 @@
  * @author Enrique Salcido
  * @author Matthew Montoya
  **/
+=======
+
+>>>>>>> cc7e9cbb29317e108b926f317a288831730824f6
 package edu.utep.cs.cs3331.sudoku2D;
 
 public interface Solver {	

@@ -289,7 +289,11 @@ public class SudokuDialog extends JFrame {
     }
 
     /** Configure the UI. */
+<<<<<<< HEAD
     protected void configureUI(){
+=======
+    private void configureUI(){
+>>>>>>> cc7e9cbb29317e108b926f317a288831730824f6
 		setIconImage(createImageIcon("sudoku.png").getImage());
 		setLayout(new BorderLayout());
 
@@ -426,11 +430,15 @@ public class SudokuDialog extends JFrame {
 		edit.add(redo);
 		edit.addSeparator();
 	}
+<<<<<<< HEAD
     
     /**
      * Creates the tool bar
      * @return the board's toolbar
      */
+=======
+    /** Creates the tool bar */
+>>>>>>> cc7e9cbb29317e108b926f317a288831730824f6
     protected JToolBar createToolBar() {
     	JToolBar tb = new JToolBar("Sudoku");
     	tb.setFloatable(false);
@@ -630,18 +638,27 @@ public class SudokuDialog extends JFrame {
     	board.change(x, y, n); //may need to be adjusted to take care of the swapping in x and y values
     }
     
+<<<<<<< HEAD
     /**
      * Get the status of the board with respect to non-zeros
      * @return an integer array representation of the no zero elements in the board
      */
     protected int[] boardStatus() {
+=======
+    protected int[] boardStatus() { //get an int[] representation of the no zero elements in the board
+>>>>>>> cc7e9cbb29317e108b926f317a288831730824f6
     	ArrayList<Integer> nonZeroSpaces = new ArrayList<Integer>();
     	int[] nonZeros = null;
     	for(int i=0;i<board.contents.size();i++) {
     		Square s = board.contents.get(i);
     		if(s.getValue() != 0) { //if the element is non zero, store x,y,value,set in the list
+<<<<<<< HEAD
     			nonZeroSpaces.add(s.y);
     			nonZeroSpaces.add(s.x);
+=======
+    			nonZeroSpaces.add(s.x);
+    			nonZeroSpaces.add(s.y);
+>>>>>>> cc7e9cbb29317e108b926f317a288831730824f6
     			nonZeroSpaces.add(s.getValue());
     			if(s.set) nonZeroSpaces.add(1); //position is set
     			else nonZeroSpaces.add(0); //position is not set
