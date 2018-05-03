@@ -511,7 +511,7 @@ public class NetworkAdapter {
      *
      * @see #writeJoin()
      */
-    public void writeJoinAck(int size, int... squares) {
+    public void writeJoinAck(int size, int... squares) { //maybe can pass an int[]
     	StringBuilder builder = new StringBuilder(MessageType.JOIN_ACK.header);
     	builder.append("1,"); 
     	builder.append(size);
