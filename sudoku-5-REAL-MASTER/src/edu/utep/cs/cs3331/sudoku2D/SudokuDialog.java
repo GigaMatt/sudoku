@@ -12,6 +12,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
@@ -53,7 +54,7 @@ public class SudokuDialog extends JFrame {
     private final static String IMAGE_DIR = "/image/";
 
     /** Sudoku board. */
-    private Board board = new Board();
+    protected Board board = new Board();
 
     /** Special panel to display a Sudoku board. */
     private BoardPanel boardPanel;
@@ -133,7 +134,17 @@ public class SudokuDialog extends JFrame {
 		}
 		
 	}
-
+    
+    protected int[] boardStatus() {
+		ArrayList temp = new ArrayList();
+		
+		for(int i = 0; i < board.contents.size(); i++) {
+			if(board.contents.get(i).value != 0)
+		}
+		
+		return boardArray;
+	}
+    
 	/**
      * Callback to be invoked when a number button is clicked.
      * @param number Clicked number (1-9), or 0 for "X".
