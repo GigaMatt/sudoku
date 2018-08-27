@@ -1,4 +1,4 @@
-package edu.utep.cs.cs3331.hw5;
+package edu.utep.cs.cs3331.sudoku2D;
 
 /**@author Anthony Moran
  * Used for easy tracking of what moves were done, includes their x,y location and value that was changed

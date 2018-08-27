@@ -28,7 +28,7 @@ public class Square {
 	//FINISH THIS
 	public boolean canBeChanged;
 	
-	public Set<Integer> possibleValues = new HashSet(Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8,9}));
+	public Set<Integer> possibleValues = new HashSet<Integer>(Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8,9}));
 	
 	public Square() {
 		x = 0;

@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - JFrame1",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "mainClass": "sudoku.dialog.JFrame1",
+            "args": "",
+            "projectName": "hw-4-new-master"
+        }
+    ]
+}
